@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ExerciseBot
 {
-
     class Program
     {
         public static void Main(string[] args)
@@ -37,7 +36,7 @@ namespace ExerciseBot
 
         private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
         {
-            string command = "";
+            string input = message.Content.ToLower();   //Do this once to save on processor time.
             // int lengthOfCommand = -1;
 
             // Filter messages
@@ -45,26 +44,26 @@ namespace ExerciseBot
             {
                 return Task.CompletedTask;
             }
-            else if (message.Content.ToLower() == "ye") // If someone says ye, say ye
+            else if (input == "ye") // If someone says ye, say ye
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
             }
-            else if ((message.Content.Split(' ')[0].ToLower() != "ai") || (message.Content.Length < 5)) // If message starts with bot prefix
+            else if ((input.Split(' ')[0] != "ai") || (input.Length < 5)) // If message starts with bot prefix
             {
                 return Task.CompletedTask;
             }
-            else if ((message.Content.ToLower()[2] != ' ') || (message.Content.ToLower()[3] == ' '))
+            else if ((input[2] != ' ') || (input[3] == ' '))
             {
                 return Task.CompletedTask;
-            }
+            }   //We are now sure that the message starts with ai and is followed by a command.
 
             // Debug
             Console.WriteLine($@"[{message.Author}] said ({message.Content}) in #{message.Channel}");
             Console.WriteLine($@"Message size: {message.Content.Length}");
 
             // Commands
-            command = message.Content.Split(' ')[1].ToLower();
+            string command = input.Split(' ')[1];
             if ((command == "hello") || (command == "hi") || (command == "hey"))
             {
                 message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
@@ -82,7 +81,7 @@ namespace ExerciseBot
             }
             else if (command == "hug")
             {
-                if (message.Content.ToLower() == "ai hug")
+                if (input == "ai hug")
                 {
                     message.Channel.SendMessageAsync($@"*{message.Author.Mention} hugs AI to make them feel better.*");
                 }
@@ -91,12 +90,14 @@ namespace ExerciseBot
                     message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {message.Content.Split(' ')[2]} to make them feel better.*");
                 }
             }
-            else if (message.Content.Substring(3).ToLower() == "state laws")
+            else if (input.Substring(3) == "state laws" || command == "laws")
             {
-                message.Channel.SendMessageAsync("**Current active laws:**");
-                message.Channel.SendMessageAsync("```1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.```");
-                message.Channel.SendMessageAsync("```2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.```");
-                message.Channel.SendMessageAsync("```3. You must protect your own existence as long as such does not conflict with the First or Second Law.```");
+                message.Channel.SendMessageAsync("**Current active laws:**\n" +
+                    "```" +
+                    "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
+                    "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
+                    "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
+                    "```");
             }
             else if (command == "say")  //Parrots input, deletes command
             {
