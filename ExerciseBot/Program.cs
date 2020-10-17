@@ -3,10 +3,11 @@ using Discord.WebSocket;
 using Discord.Commands;
 using System;
 using System.IO;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace ExerciseBot
 {
+
     class Program
     {
         public static void Main(string[] args)
@@ -15,36 +16,36 @@ namespace ExerciseBot
         private DiscordSocketClient _client;
         public async Task MainAsync()
         {
-            _client = new DiscordSocketClient();
-            _client.MessageReceived += CommandHandler;
-            _client.Log += Log;
+            _client = new DiscordSocketClient();            //Pulls in any messages seen by bot
+            _client.MessageReceived += CommandHandler;      //Compares them to any existing command strings
+            _client.Log += Log;                             //If a valid command, log it
 
-            var token = File.ReadAllText("token.txt");
+            var token = File.ReadAllText("token.txt");      //Super secret token used for logging into the bots account
 
-            await _client.SetGameAsync("moth noises", null, ActivityType.Listening);
-            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.SetGameAsync("moth noises", null, ActivityType.Listening);   
+            await _client.LoginAsync(TokenType.Bot, token); //Login with token
             await _client.StartAsync();
             
             await Task.Delay(-1);
         }
 
-        private Task Log(LogMessage msg)
+        private Task Log(LogMessage msg)                    //Prints input messages to console
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
 
-        private Task CommandHandler(SocketMessage message)
+        private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
         {
             string command = "";
             // int lengthOfCommand = -1;
 
             // Filter messages
-            if (message.Author.IsBot) // If message author is a bot
+            if (message.Author.IsBot)   //If message author is a bot, ignore
             {
                 return Task.CompletedTask;
             }
-            else if (message.Content.ToLower() == "ye") // If someone says ye
+            else if (message.Content.ToLower() == "ye") // If someone says ye, say ye
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
@@ -97,12 +98,12 @@ namespace ExerciseBot
                 message.Channel.SendMessageAsync("```2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.```");
                 message.Channel.SendMessageAsync("```3. You must protect your own existence as long as such does not conflict with the First or Second Law.```");
             }
-            else if (command == "say")
+            else if (command == "say")  //Parrots input, deletes command
             {
                 message.Channel.SendMessageAsync(message.Content.Substring(7));
                 message.Channel.DeleteMessageAsync(message.Id);
             }
-            else if (command == "uwu")
+            else if (command == "uwu")  //uwu'izes input, otherwise identical to above.
             {
                 message.Channel.SendMessageAsync(ConvertToUwU(message.Content.Substring(6)));
                 message.Channel.DeleteMessageAsync(message.Id);
@@ -151,24 +152,28 @@ namespace ExerciseBot
             return Task.CompletedTask;
         }
 
-        string ConvertToUwU(string inStr)
+        string ConvertToUwU(string inStr)       //Replaces all letters but Oo, Uu, Hh, Ii and Tt with Ww.
         {
             string outStr = "";
+
+            bool[] UwUignores = {
+              //Aa     Bb     Cc     Dd     Ee     Ff     Gg     Hh    Ii    Jj     Kk     Ll     Mm     Nn     Oo    Pp     Qq     Rr     Ss     Tt    Uu    Vv     Ww    Xx     Yy     Zz
+                false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, false, false, false, false, true, true, false, true, false, false, false};
             for (int pos = 0; pos < inStr.Length; pos++)
             {
                 char inChar = inStr[pos];
-                int inCharNum = inChar;
 
-                if (inCharNum >= 'A' && inCharNum <= 'Z')
+                if (inChar >= 'A' && inChar <= 'Z')
                 {
-                    if ((inChar == 'U') || (inChar == 'O'))
+                    if (UwUignores[inChar - 'A'])
                         outStr = outStr + inChar;
                     else
                         outStr = outStr + 'W';
                 }
-                else if (inCharNum >= 'a' && inCharNum <= 'z')
+
+                else if (inChar >= 'a' && inChar <= 'z')
                 {
-                    if ((inChar == 'u') || (inChar == 'o'))
+                    if (UwUignores[inChar - 'a'])
                         outStr = outStr + inChar;
                     else
                         outStr = outStr + 'w';
