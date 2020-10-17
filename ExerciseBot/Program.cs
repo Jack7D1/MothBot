@@ -63,7 +63,7 @@ namespace ExerciseBot
             Console.WriteLine($@"Message size: {message.Content.Length}");
 
             // Commands
-            string command = input.Split(' ')[1];
+            string command = message.Content.Split(' ')[1].ToLower();
             if ((command == "hello") || (command == "hi") || (command == "hey"))
             {
                 message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
