@@ -19,3 +19,4 @@ H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.csproj.CopyComplete
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.dll
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.pdb
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.genruntimeconfig.cache
+H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.csprojAssemblyReference.cache

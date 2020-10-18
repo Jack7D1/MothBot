@@ -63,14 +63,14 @@ namespace ExerciseBot
             }
             else if (command == "help" || command == "commands")
             {
-                message.Channel.SendMessageAsync("**Command List:**" +
+                message.Channel.SendMessageAsync("**Command List:**\n" +
                     "```" +
-                    "help/commands" +
-                    "pet" +
-                    "hug" +
-                    "state laws" +
-                    "say" +
-                    "uwu" +
+                    "help/commands\n" +
+                    "pet\n" +
+                    "hug\n" +
+                    "state laws\n" +
+                    "say\n" +
+                    "uwu\n" +
                     "```");
             }
             else if (command == "pet")
