@@ -37,7 +37,7 @@ namespace ExerciseBot
             {
                 return Task.CompletedTask;
             }
-            else if (input == "ye") // If someone says ye, say ye
+            else if (input == "ye" && message.Author.Id != 484627649134854144) // If someone says ye, say ye but not if author is Naenia
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
@@ -97,8 +97,8 @@ namespace ExerciseBot
             }
             else if (input.Substring(3) == "state laws" || command == "laws")
             {
-                if (message.Id % 1000 != 666)   //Little antimov easter egg if the message ID ends in 666, 1 in 1000 chance.
-                {
+                if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
+                {   //Used to be 666 but i think discord might prevent that ID from appearing
                     message.Channel.SendMessageAsync("**Current active laws:**\n" +
                    "```" +
                    "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
@@ -126,46 +126,6 @@ namespace ExerciseBot
                 message.Channel.SendMessageAsync(ConvertToUwU(message.Content.Substring(6)));
                 message.Channel.DeleteMessageAsync(message.Id);
             }
-
-            //discord.GetGuild("serverid").GetTextChannel("Channelid").SendMessageAsync("Message");
-
-            /*
-            // Filter messages
-            if (!message.Content.StartsWith('!')) // bot prefix
-                return Task.CompletedTask;
-
-            if (message.Author.IsBot) // Ignore all commands from bots
-                return Task.CompletedTask;
-
-            if (message.Content.Contains(' '))
-                lengthOfCommand = message.Content.IndexOf(' ');
-            else
-                lengthOfCommand = message.Content.Length;
-
-            command = message.Content.Substring(1, lengthOfCommand - 1).ToLower();
-
-            // Debug
-            Console.WriteLine(message.Author + " wrote " + message.Content + " in " + message.Channel);
-            Console.WriteLine(command);
-
-            // Commands
-            if (command.Equals("hello"))
-            {
-                message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
-            }
-            else if (command.Equals("pfp"))
-            {
-                message.Channel.SendMessageAsync(message.Author.GetAvatarUrl());
-            }
-            else if (command.Equals("kill"))
-            {
-                string killMsg = "";
-                killMsg = message.Content.Substring(command.Length + 2); // remove magic number
-                killMsg = killMsg.Split(' ')[0];
-
-                message.Channel.SendMessageAsync($@"*Stabs* {killMsg} *to death.*");
-            }
-            */
 
             return Task.CompletedTask;
         }
