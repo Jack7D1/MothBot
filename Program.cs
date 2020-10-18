@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Threading.Tasks;
 
@@ -125,6 +126,10 @@ namespace ExerciseBot
             {
                 message.Channel.SendMessageAsync(ConvertToUwU(message.Content.Substring(6)));
                 message.Channel.DeleteMessageAsync(message.Id);
+            }
+            else if (command == "rogue" || command == "malf")   //u gay
+            {
+                message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
             }
 
             return Task.CompletedTask;
