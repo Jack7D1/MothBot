@@ -38,7 +38,7 @@ namespace ExerciseBot
             {
                 return Task.CompletedTask;
             }
-            else if (input == "ye" && message.Author.Id != 484627649134854144) // If someone says ye, say ye but not if author is Naenia
+            else if (input == "ye" && message.Id % 100 == 0) // If someone says ye, say ye, but only 1/100 times
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
