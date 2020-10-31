@@ -1,6 +1,7 @@
-﻿using Discord;
+﻿//#define DEBUG   //Debug flag, if defined; runs the bot in non-servicing debug mode.
+
+using Discord;
 using Discord.WebSocket;
-using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Threading.Tasks;
 
@@ -8,21 +9,35 @@ namespace ExerciseBot
 {
     internal class Program
     {
+        public const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
+
+        public static string var0 = "", var1 = "9cYh=219fOQ5eB72SIIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1NjU2NTM4.X4RYMzZnZjgK",
+            var3 = "zQ.LVJ6CSQRvrDHZHVlaWdmCg==", var4 = "NzY1MjAyOTczNDZmR3Z3Z1cnc=";
+
         private DiscordSocketClient _client;
 
-        public static void Main(string[] args)
-                    => new Program().MainAsync().GetAwaiter().GetResult();
+        public static void Main(string[] args)  //Initialization
+        {
+            var0 = var4.Substring(0, 14) + var2.Substring(8, 15) + var3.Substring(0, 15) + var1.Substring(9, 15);
+            var1 = null; var2 = null; var3 = null; var4 = null;
+            //Keep at bottom of init
+            new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
+        }
 
         public async Task MainAsync()
         {
-            _client = new DiscordSocketClient();            //Pulls in any messages seen by bot
-            _client.MessageReceived += CommandHandler;      //Compares them to any existing command strings
+            _client = new DiscordSocketClient();            //_Client is the discord socket
+            _client.MessageReceived += CommandHandler;      //Handling seen messages
             _client.Log += Log;                             //If a valid command, log it
+            await _client.LoginAsync(TokenType.Bot, var0);
+            var0 = null;
 
-            string token = "NzY1MjAyOTczNDk1NjU2NTM4.X4RYzQ.LVJ6CSQRvrDHOQ5eB72SIIs7Mtw";  //Super secret token, donut share
-
-            await _client.SetGameAsync("moth noises", null, ActivityType.Listening);
-            await _client.LoginAsync(TokenType.Bot, token); //Login with token
+#if (DEBUG) //Place normal code that sets status in #else, debug overwrite statuses will go above.
+            await _client.SetStatusAsync(UserStatus.DoNotDisturb);
+            await _client.SetGameAsync("Moff brain fixing, not available", null, ActivityType.Playing);
+#else
+            await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
+#endif
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -31,47 +46,54 @@ namespace ExerciseBot
         private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
         {
             string input = message.Content.ToLower();   //Do this once to save on processor time.
-            // int lengthOfCommand = -1;
 
             // Filter messages
             if (message.Author.IsBot)   //If message author is a bot, ignore
             {
                 return Task.CompletedTask;
             }
-            else if (input == "ye" && message.Id % 100 == 0) // If someone says ye, say ye, but only 1/100 times
+            else if (input == "ye" && message.Id % 100 == 0) //If someone says ye, say ye, but with a 1/100 chance
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
             }
-            else if ((input.Split(' ')[0] != "ai") || (input.Length < 5)) // If message starts with bot prefix
+            //All non prefix dependant directives go above
+            else if ((input.Split(' ')[0] != PREFIX) || (input.Length < PREFIX.Length + 3)) //Filter out messages not containing prefix
             {
                 return Task.CompletedTask;
             }
-            else if ((input[2] != ' ') || (input[3] == ' '))
+            else if ((input[2] != ' ') || (input[3] == ' '))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
             {
                 return Task.CompletedTask;
-            }   //We are now sure that the message starts with ai and is followed by a command.
-
-            // Debug
+            }
+            //We are now sure that the message starts with ai and is followed by a command.
+            //Write the incoming command to console
             Console.WriteLine($@"[{message.Author}] said ({message.Content}) in #{message.Channel}");
             Console.WriteLine($@"Message size: {message.Content.Length}");
 
-            // Commands
+            //Begin comparing command to any known directives.
+            //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             string command = message.Content.Split(' ')[1].ToLower();
             if ((command == "hello") || (command == "hi") || (command == "hey"))
             {
                 message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
             }
+#if (DEBUG)
+            else if (true)
+                message.Channel.SendMessageAsync("Debug mode enabled, complex directives disabled.");
+
+#else
             else if (command == "help" || command == "commands")
             {
                 message.Channel.SendMessageAsync("**Command List:**\n" +
                     "```" +
+
                     "help/commands\n" +
                     "pet\n" +
                     "hug\n" +
                     "state laws\n" +
                     "say\n" +
-                    "uwu\n" +
+
                     "```");
             }
             else if (command == "pet")
@@ -82,7 +104,7 @@ namespace ExerciseBot
                 }
                 else
                 {
-                    message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {message.Content.Split(' ')[2]}.*");
+                    message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
                 }
             }
             else if (command == "hug")
@@ -93,7 +115,7 @@ namespace ExerciseBot
                 }
                 else
                 {
-                    message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {message.Content.Split(' ')[2]} to make them feel better.*");
+                    message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
                 }
             }
             else if (input.Substring(3) == "state laws" || command == "laws")
@@ -117,32 +139,30 @@ namespace ExerciseBot
                    "```");
                 }
             }
-            else if (command == "say")  //Parrots input, deletes command
+            else if (command == "say")  //Parrots input
             {
-                message.Channel.SendMessageAsync(message.Content.Substring(7));
-                message.Channel.DeleteMessageAsync(message.Id);
+                message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
             }
-            else if (command == "uwu")  //uwu'izes input, otherwise identical to above.
+            else if (command == "uwu")  //uwu'izes input
             {
-                message.Channel.SendMessageAsync(ConvertToUwU(message.Content.Substring(6)));
-                message.Channel.DeleteMessageAsync(message.Id);
+                message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
             }
-            else if (command == "rogue" || command == "malf")   //u gay
+            else if (PREFIX == "ai" && (command == "rogue" || command == "malf"))   //u gay
             {
                 message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
             }
-
+#endif
             return Task.CompletedTask;
         }
 
-        private string ConvertToUwU(string inStr)       //Replaces all letters but Oo, Uu, Hh, Ii and Tt with Ww.
+        private string ConvertToUwU(string inStr = "")       //Replaces all letters but Oo, Uu, Hh, Ii and Tt with Ww.
         {
             string outStr = "";
 
             bool[] UwUignores = {
               //Aa     Bb     Cc     Dd     Ee     Ff     Gg     Hh    Ii    Jj     Kk     Ll     Mm     Nn     Oo    Pp     Qq     Rr     Ss     Tt    Uu    Vv     Ww    Xx     Yy     Zz
                 false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, false, false, false, false, true, true, false, true, false, false, false};
-            for (int pos = 0; pos < inStr.Length; pos++)
+            for (ushort pos = 0; pos < inStr.Length; pos++)
             {
                 char inChar = inStr[pos];
 
@@ -167,10 +187,54 @@ namespace ExerciseBot
             return outStr;
         }
 
-        private Task Log(LogMessage msg)                    //Prints input messages to console
+        private Task Log(LogMessage msg)    //Prints input messages to console
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
+        }
+
+        private string ScrubAnyRolePings(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        {
+            inStr = inStr.ToLower();    //Ensure no capitols are present
+            string outStr = inStr;
+            //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
+            if (inStr.Contains("@everyone") || inStr.Contains("@here")) //Scrubbing is easy and predefined for these.
+            {
+                outStr = inStr.Replace('@', ' ');
+            }
+            //Scrubbing requires finding the authors's name for these
+            else if (inStr.Contains("<@&")) //<@& is the prefix for role pings
+            {
+                while (true) //Find all occurances of '<@&', select up to the next '>' and simply remove it.
+                {
+                    int strPtr0 = 0;
+                    //Set strPtr0 to the next occurance of '<@&' or when reached end of string.
+                    while (strPtr0 < inStr.Length)
+                    {
+                        if (inStr[strPtr0] == '<' && inStr[strPtr0 + 1] == '@' && inStr[strPtr0 + 2] == '&')
+                            break;
+
+                        strPtr0++;
+                    }
+
+                    int strPtr1 = strPtr0 + 1;
+                    //Set strPtr1 to next occurance of > after strPtr0
+                    while (strPtr1 < inStr.Length)
+                    {
+                        if (inStr[strPtr1] == '>')
+                            break;
+                        strPtr1++;
+                    }
+
+                    //Remove this section between strPtr0 to strPtr1 inclusive
+                    string strFirst = inStr.Substring(0, strPtr0);  //Valid string before remove target
+                    string strSecond = inStr.Substring(strPtr1 + 1);                    //Valid string afterwards
+                    outStr = strFirst + strSecond;  //Remove this from the output string and continue.
+                    if (strPtr0 <= inStr.Length || strPtr1 <= inStr.Length) //Break loop if at end of string
+                        break;
+                }
+            }
+            return outStr;
         }
     }
 }
