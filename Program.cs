@@ -142,10 +142,12 @@ namespace ExerciseBot
             else if (command == "say")  //Parrots input
             {
                 message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
+                message.DeleteAsync();
             }
             else if (command == "uwu")  //uwu'izes input
             {
                 message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
+                message.DeleteAsync();
             }
             else if (PREFIX == "ai" && (command == "rogue" || command == "malf"))   //u gay
             {
@@ -195,8 +197,8 @@ namespace ExerciseBot
 
         private string ScrubAnyRolePings(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
         {
-            inStr = inStr.ToLower();    //Ensure no capitols are present
             string outStr = inStr;
+            inStr = inStr.ToLower();    //Ensure no capitals are present
             //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
             if (inStr.Contains("@everyone") || inStr.Contains("@here")) //Scrubbing is easy and predefined for these.
             {
