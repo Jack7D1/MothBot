@@ -147,7 +147,7 @@ namespace MothBot
             else if (command == "minesweeper")
             {
                 var mineSweeper = new MineSweeper();
-                mineSweeper.PrintMinesweeper(24, 8, 8, message); //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
+                mineSweeper.PrintMinesweeper(16, 8, 8, message); //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
             }
             return Task.CompletedTask;
         }
@@ -338,7 +338,7 @@ namespace MothBot
                 }
             }
 
-            private string GetMineMap(int gridWidth, int gridHeight) //Prints and spoilers game to console accordingly.
+            private string GetMineMap(int gridWidth, int gridHeight) //Prints and spoilers game and returns as string
             {
                 string mineMap = "";
                 for (int y = 0; y < gridHeight; y++)
@@ -363,8 +363,7 @@ namespace MothBot
             {
                 PopulateBombs(bombs, gridWidth, gridHeight);
                 PopulateNums(gridWidth, gridHeight);
-                string mineMap = GetMineMap(gridWidth, gridHeight);
-                srcMsg.Channel.SendMessageAsync(mineMap);
+                srcMsg.Channel.SendMessageAsync(GetMineMap(gridWidth, gridHeight));
             }
         }
     }
