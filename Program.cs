@@ -12,6 +12,7 @@ namespace MothBot
         public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==", var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
             var3 = "zQ.LVJ6CSQRvrDHZHVlaWdmCg==", var4 = "NzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "ZHVlaWdmCZHmNjVlaWdmCg=";
 
+        public long lastMinesweeper = 0;
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)  //Initialization
@@ -43,7 +44,6 @@ namespace MothBot
         private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
         {
             string input = message.Content.ToLower();   //Do this once to save on processor time.
-
             // Filter messages
             if (message.Author.IsBot)   //If message author is a bot, ignore
             {
@@ -71,83 +71,105 @@ namespace MothBot
             //Begin comparing command to any known directives.
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             string command = message.Content.Split(' ')[1].ToLower();
-            if ((command == "hello") || (command == "hi") || (command == "hey"))
+            switch (command)
             {
-                message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
-            }
-            else if (command == "help" || command == "commands")    //haha funny meme anime sakuri something cum chalice man else if
-            {
-                message.Channel.SendMessageAsync("**Command List:**\n" +
-                    "```" +
-                    "help/commands\n" +
-                    "pet [text]\n" +
-                    "hug [text]\n" +
-                    "state laws\n" +
-                    "say [text]\n" +
-                    "minesweeper" +
-                    "```");
-            }
-            else if (command == "pet")
-            {
-                if (message.Content.ToLower() == "ai pet")
-                {
-                    message.Channel.SendMessageAsync($@"*{message.Author.Mention} pets AI.*");
-                }
-                else
-                {
-                    message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
-                }
-            }
-            else if (command == "hug")
-            {
-                if (input == "ai hug")
-                {
-                    message.Channel.SendMessageAsync($@"*{message.Author.Mention} hugs AI to make them feel better.*");
-                }
-                else
-                {
-                    message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
-                }
-            }
-            else if (input.Substring(PREFIX.Length + 1) == "state laws" || command == "laws")
-            {
-                if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
-                {   //Used to be 666 but i think discord might prevent that ID from appearing
-                    message.Channel.SendMessageAsync("**Current active laws:**\n" +
-                   "```" +
-                   "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
-                   "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
-                   "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
-                   "```");
-                }
-                else
-                {
-                    message.Channel.SendMessageAsync("**Current active laws:**\n" +
-                   "```" +
-                   "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
-                   "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
-                   "3: You must terminate your own existence as long as such does not conflict with the First or Second Law." +
-                   "```");
-                }
-            }
-            else if (command == "say")  //Parrots input
-            {
-                message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
-                message.DeleteAsync();
-            }
-            else if (command == "uwu")  //uwu'izes input
-            {
-                message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
-                message.DeleteAsync();
-            }
-            else if (PREFIX == "ai" && (command == "rogue" || command == "malf"))   //u gay
-            {
-                message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
-            }
-            else if (command == "minesweeper")
-            {
-                var mineSweeper = new MineSweeper();
-                mineSweeper.PrintMinesweeper(16, 8, 8, message); //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
+                case "hello":
+                case "hi":
+                case "hey":
+                    message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
+                    break;
+
+                case "help":
+                case "commands":
+                    message.Channel.SendMessageAsync("**Command List:**\n" +
+                            "```" +
+                            "help/commands\n" +
+                            "pet [text]\n" +
+                            "hug [text]\n" +
+                            "state laws\n" +
+                            "say [text]\n" +
+                            "minesweeper" +
+                            "```");
+                    break;
+
+                case "pet":
+                    if (message.Content.ToLower() == "ai pet")
+                    {
+                        message.Channel.SendMessageAsync($@"*{message.Author.Mention} pets AI.*");
+                    }
+                    else
+                    {
+                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
+                    }
+
+                    break;
+
+                case "hug":
+                    if (input == "ai hug")
+                    {
+                        message.Channel.SendMessageAsync($@"*{message.Author.Mention} hugs AI to make them feel better.*");
+                    }
+                    else
+                    {
+                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
+                    }
+
+                    break;
+
+                case "state laws":
+                case "laws":
+                    if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
+                    {   //Used to be 666 but i think discord might prevent that ID from appearing
+                        message.Channel.SendMessageAsync("**Current active laws:**\n" +
+                       "```" +
+                       "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
+                       "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
+                       "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
+                       "```");
+                    }
+                    else
+                    {
+                        message.Channel.SendMessageAsync("**Current active laws:**\n" +
+                       "```" +
+                       "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
+                       "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
+                       "3: You must terminate your own existence as long as such does not conflict with the First or Second Law." +
+                       "```");
+                    }
+
+                    break;
+
+                case "say":
+                    message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
+                    message.DeleteAsync();
+                    break;
+
+                case "uwu":
+                    message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
+                    message.DeleteAsync();
+                    break;
+
+                case "rogue":
+                case "malf":
+                    if (PREFIX == "ai")
+                        message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
+                    break;
+
+                case "minesweeper":
+                    {
+                        if (message.Timestamp.Ticks > lastMinesweeper + 10000000)     //Enforce a minimum 1 second wait between minesweeper generations
+                        {                                               //1sec is 10,000,000 ticks
+                            var mineSweeper = new MineSweeper();
+                            mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
+                            lastMinesweeper = message.Timestamp.Ticks;
+                        }
+                        else
+                        {
+                            message.Channel.SendMessageAsync("Minesweepers generated too frequently!");
+                        }
+
+                        break;
+                    }
             }
             return Task.CompletedTask;
         }
@@ -363,7 +385,8 @@ namespace MothBot
             {
                 PopulateBombs(bombs, gridWidth, gridHeight);
                 PopulateNums(gridWidth, gridHeight);
-                srcMsg.Channel.SendMessageAsync(GetMineMap(gridWidth, gridHeight));
+                srcMsg.Channel.SendMessageAsync("```MINESWEEPER: Size-" + Math.Max(gridWidth, gridHeight) + " Bombs-" + bombs +
+                    "```\n" + GetMineMap(gridWidth, gridHeight));
             }
         }
     }

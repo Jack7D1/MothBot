@@ -8,6 +8,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <OutputPath>deploy\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>debug/</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>debug/\MothBot.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
   </ItemGroup>
