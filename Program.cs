@@ -1,25 +1,26 @@
-﻿//#define DEBUG   //Debug flag, if defined; runs the bot in non-servicing debug mode.
-
-using Discord;
+﻿using Discord;
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace ExerciseBot
+namespace MothBot
 {
     internal class Program
     {
         public const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
 
-        public static string var0 = "", var1 = "9cYh=219fOQ5eB72SIIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1NjU2NTM4.X4RYMzZnZjgK",
-            var3 = "zQ.LVJ6CSQRvrDHZHVlaWdmCg==", var4 = "NzY1MjAyOTczNDZmR3Z3Z1cnc=";
+        public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==", var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
+            var3 = "zQ.LVJ6CSQRvrDHZHVlaWdmCg==", var4 = "NzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "ZHVlaWdmCZHmNjVlaWdmCg=";
 
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)  //Initialization
         {
-            var0 = var4.Substring(0, 14) + var2.Substring(8, 15) + var3.Substring(0, 15) + var1.Substring(9, 15);
-            var1 = null; var2 = null; var3 = null; var4 = null;
+            var5 = var2 + var4;
+            var6 = var5.GetHashCode().ToString();
+            var6 += "Hyg873==";
+            var0 = var4.Substring(0, 14) + var2.Substring(8, 15) + /* var6.Substring(0,5) +*/ var3.Substring(0, 15) + var1.Substring(9, 15);
+            var1 = null; var2 = null; var3 = null; var4 = null; var5 = null; var6 = null;
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
@@ -32,12 +33,8 @@ namespace ExerciseBot
             await _client.LoginAsync(TokenType.Bot, var0);
             var0 = null;
 
-#if (DEBUG) //Place normal code that sets status in #else, debug overwrite statuses will go above.
-            await _client.SetStatusAsync(UserStatus.DoNotDisturb);
-            await _client.SetGameAsync("Moff brain fixing, not available", null, ActivityType.Playing);
-#else
             await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
-#endif
+
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -78,22 +75,16 @@ namespace ExerciseBot
             {
                 message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
             }
-#if (DEBUG)
-            else if (true)
-                message.Channel.SendMessageAsync("Debug mode enabled, complex directives disabled.");
-
-#else
-            else if (command == "help" || command == "commands")
+            else if (command == "help" || command == "commands")    //haha funny meme anime sakuri something cum chalice man else if
             {
                 message.Channel.SendMessageAsync("**Command List:**\n" +
                     "```" +
-
                     "help/commands\n" +
-                    "pet\n" +
-                    "hug\n" +
+                    "pet [text]\n" +
+                    "hug [text]\n" +
                     "state laws\n" +
-                    "say\n" +
-
+                    "say [text]\n" +
+                    "minesweeper" +
                     "```");
             }
             else if (command == "pet")
@@ -118,7 +109,7 @@ namespace ExerciseBot
                     message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
                 }
             }
-            else if (input.Substring(3) == "state laws" || command == "laws")
+            else if (input.Substring(PREFIX.Length + 1) == "state laws" || command == "laws")
             {
                 if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
                 {   //Used to be 666 but i think discord might prevent that ID from appearing
@@ -153,7 +144,11 @@ namespace ExerciseBot
             {
                 message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
             }
-#endif
+            else if (command == "minesweeper")
+            {
+                var mineSweeper = new MineSweeper();
+                mineSweeper.PrintMinesweeper(24, 8, 8, message); //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
+            }
             return Task.CompletedTask;
         }
 
@@ -171,19 +166,19 @@ namespace ExerciseBot
                 if (inChar >= 'A' && inChar <= 'Z')
                 {
                     if (UwUignores[inChar - 'A'])
-                        outStr = outStr + inChar;
+                        outStr += inChar;
                     else
-                        outStr = outStr + 'W';
+                        outStr += 'W';
                 }
                 else if (inChar >= 'a' && inChar <= 'z')
                 {
                     if (UwUignores[inChar - 'a'])
-                        outStr = outStr + inChar;
+                        outStr += inChar;
                     else
-                        outStr = outStr + 'w';
+                        outStr += 'w';
                 }
                 else //Nonletters just get directly passed along
-                    outStr = outStr + inChar;
+                    outStr += inChar;
             }
             //After running though whole string output the result.
             return outStr;
@@ -198,9 +193,8 @@ namespace ExerciseBot
         private string ScrubAnyRolePings(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
         {
             string outStr = inStr;
-            inStr = inStr.ToLower();    //Ensure no capitals are present
             //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
-            if (inStr.Contains("@everyone") || inStr.Contains("@here")) //Scrubbing is easy and predefined for these.
+            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here")) //Scrubbing is easy and predefined for these.
             {
                 outStr = inStr.Replace('@', ' ');
             }
@@ -237,6 +231,141 @@ namespace ExerciseBot
                 }
             }
             return outStr;
+        }
+
+        public class MineSweeper
+        {
+            //Program creates a minesweeper for discord, given by input parameters.
+            //Element defs
+            private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };   //Discord emotes for numbers, will be used for nearby indicators
+
+            private static readonly string bombString = ":bomb:";               //Discord emote for bomb
+            private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
+
+            //Element space arrays
+            private bool[,] bombSpace = new bool[16, 16];
+
+            private int[,] numSpace = new int[16, 16];
+
+            private void PopulateBombs(int numBombs, int gridWidth, int gridHeight)  //Uses NUM_BOMBS and plots the number of bombs in random positions in bombSpace.
+            {
+                //Begin by initializing bombSpace to 0
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    for (int x = 0; x < gridWidth; x++)
+                    {
+                        bombSpace[x, y] = false;
+                    }
+                }
+                //Begin plotting bombs
+                if (numBombs > (gridHeight * gridWidth))    //To prevent halting scenario of an unplacable bomb
+                    numBombs = gridHeight * gridWidth;
+
+                for (int i = numBombs; i > 0; i--)
+                {
+                    int xRand, yRand;
+                    do
+                    { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
+                        var rand = new Random();
+                        xRand = rand.Next() % gridWidth;
+                        yRand = rand.Next() % gridHeight;
+                    } while (bombSpace[xRand, yRand]);
+                    bombSpace[xRand, yRand] = true;
+                }
+                return;
+            }
+
+            private int GetNearbyBombs(int x, int y, int gridWidth, int gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
+            {
+                bool[] p = { true, true, true };
+                bool[] p1 = { true, false, true };
+                bool[] p2 = { true, true, true };
+                bool[][] allowedRead = { p, p1, p2 };
+                //To ensure we do not read from outside the bombspace array on literal edge cases, a map will be laid out.
+
+                //There is likely a better, less space consuming way to do this. Too bad!
+                if (x == 0)
+                {
+                    allowedRead[0][0] = false;
+                    allowedRead[0][1] = false;
+                    allowedRead[0][2] = false;
+                }
+                if (x == gridWidth - 1)
+                {
+                    allowedRead[2][0] = false;
+                    allowedRead[2][1] = false;
+                    allowedRead[2][2] = false;
+                }
+                if (y == 0)
+                {
+                    allowedRead[0][0] = false;
+                    allowedRead[1][0] = false;
+                    allowedRead[2][0] = false;
+                }
+                if (y == gridHeight - 1)
+                {
+                    allowedRead[0][2] = false;
+                    allowedRead[1][2] = false;
+                    allowedRead[2][2] = false;
+                }
+
+                //Now that that is out of the way, we have a read map, begin reading and summing.
+                int bombs = 0;
+                for (int yOffset = -1; yOffset < 2; yOffset++)
+                {
+                    for (int xOffset = -1; xOffset < 2; xOffset++)
+                    {
+                        if (allowedRead[xOffset + 1][yOffset + 1])
+                        {
+                            if (bombSpace[x + xOffset, y + yOffset])
+                                bombs++;
+                        }
+                    }
+                }
+                return bombs;
+            }
+
+            private void PopulateNums(int gridWidth, int gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
+                                                                      //This is the heaviest task, so it's best to keep it seperate.
+            {
+                //Effectively calls getNearbyBombs for every demanded space in numSpace
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    for (int x = 0; x < gridWidth; x++)
+                    {
+                        numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight);
+                    }
+                }
+            }
+
+            private string GetMineMap(int gridWidth, int gridHeight) //Prints and spoilers game to console accordingly.
+            {
+                string mineMap = "";
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    for (int x = 0; x < gridWidth; x++)
+                    {
+                        if (bombSpace[x, y])
+                        {
+                            mineMap += spoilerTag[0] + bombString + spoilerTag[1];
+                        }
+                        else
+                        {
+                            mineMap += spoilerTag[0] + bombCounts[numSpace[x, y]] + spoilerTag[1];
+                        }
+                    }
+                    mineMap += "\n";
+                }
+                return mineMap;
+            }
+
+            public void PrintMinesweeper(int bombs, int gridWidth, int gridHeight, SocketMessage srcMsg)
+            {
+                PopulateBombs(bombs, gridWidth, gridHeight);
+                PopulateNums(gridWidth, gridHeight);
+                string mineMap = GetMineMap(gridWidth, gridHeight);
+                srcMsg.Channel.SendMessageAsync(mineMap);
+            }
         }
     }
 }
