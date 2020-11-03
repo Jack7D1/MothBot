@@ -22,3 +22,5 @@ obj/project.assets.json
 obj/MothBot.csproj.nuget.dgspec.json
 obj/Release/netcoreapp3.1/MothBot.assets.cache
 obj/Release/netcoreapp3.1/MothBot.csprojAssemblyReference.cache
+.vs/MothBot/DesignTimeBuild/.dtbcache.v2
+.vs/MothBot/v16/.suo
