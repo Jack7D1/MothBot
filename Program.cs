@@ -164,7 +164,7 @@ namespace MothBot
                 case "minesweeper":
                     {
                         if (message.Timestamp.Ticks > lastMinesweeper + 10000000)   //Enforce a minimum 1 second wait between minesweeper generations
-                        {                                                           //1sec is 10,000,000 ticks
+                        {                                                           //1 sec is 10,000,000 ticks
                             var mineSweeper = new MineSweeper();
                             mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
                             lastMinesweeper = message.Timestamp.Ticks;
@@ -274,29 +274,25 @@ namespace MothBot
 
             for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
             {
-                int linkIndex = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
-                if (linkIndex == -1 || linkIndex >= webData.Length)
+                int linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
+                if (linkPtr == -1 || linkPtr >= webData.Length)
                     break;
 
                 link = "https://i.imgur.com/";
                 for (int j = 0; j < 7; j++)
                 {
-                    link += webData[linkIndex + j];
+                    link += webData[linkPtr + j];
+                    if (!((webData[linkPtr + j] >= '0' && webData[linkPtr + j] <= '9') || (webData[linkPtr + j] >= 'a' && webData[linkPtr + j] <= 'z') || (webData[linkPtr + j] >= 'A' && webData[linkPtr + j] <= 'Z')))
+                    {
+                        Console.WriteLine("Invalid result found, returning null");
+                        return null;    //Return null if the link would contain invalid characters
+                    }
                 }
                 link += ".jpg";
 
-                webData = webData.Substring(linkIndex);
+                webData = webData.Substring(linkPtr);
             }
-            //Checks to see if the link recieved is valid, if not, sets link to null.
-            //Imgur IDs can only contain numbers and letters
-            for (int i = 0; i < link.Length; i++)
-            {
-                if (!((link[i] > '0' && link[i] < '9') || (link[i] > 'a' && link[i] < 'z') || (link[i] > 'A' && link[i] < 'Z')))
-                {
-                    link = null;
-                    break;
-                }
-            }
+
             return link;
         }
 
