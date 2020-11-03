@@ -4,3 +4,4 @@ debug/
 *.suo
 obj
 GlobalSuppressions.cs
+deploy/netcoreapp3.1/MothBot.runtimeconfig.dev.json

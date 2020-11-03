@@ -7,21 +7,14 @@ namespace MothBot
 {
     internal class Program
     {
-        public const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
-
-        public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==", var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
-            var3 = "zQ.LVJ6CSQRvrDHZHVlaWdmCg==", var4 = "NzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "ZHVlaWdmCZHmNjVlaWdmCg=";
-
-        public long lastMinesweeper = 0;
+        private const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
+        public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
+        private long lastMinesweeper = 0;
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)  //Initialization
         {
-            var5 = var2 + var4;
-            var6 = var5.GetHashCode().ToString();
-            var6 += "Hyg873==";
-            var0 = var4.Substring(0, 14) + var2.Substring(8, 15) + /* var6.Substring(0,5) +*/ var3.Substring(0, 15) + var1.Substring(9, 15);
-            var1 = null; var2 = null; var3 = null; var4 = null; var5 = null; var6 = null;
+            func1();
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
@@ -31,7 +24,7 @@ namespace MothBot
             _client = new DiscordSocketClient();            //_Client is the discord socket
             _client.MessageReceived += CommandHandler;      //Handling seen messages
             _client.Log += Log;                             //If a valid command, log it
-            await _client.LoginAsync(TokenType.Bot, var0);
+            await _client.LoginAsync(TokenType.Bot, var0.Substring(28, 59));
             var0 = null;
 
             await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
@@ -77,7 +70,7 @@ namespace MothBot
                 case "hi":
                 case "hey":
                     message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
-                    break;
+                    return Task.CompletedTask;
 
                 case "help":
                 case "commands":
@@ -91,7 +84,7 @@ namespace MothBot
                             "minesweeper\n" +
                             "give [text]" +
                             "```");
-                    break;
+                    return Task.CompletedTask;
 
                 case "pet":
                     if (message.Content.ToLower() == "ai pet")
@@ -102,8 +95,7 @@ namespace MothBot
                     {
                         message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
                     }
-
-                    break;
+                    return Task.CompletedTask;
 
                 case "hug":
                     if (input == "ai hug")
@@ -114,8 +106,7 @@ namespace MothBot
                     {
                         message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
                     }
-
-                    break;
+                    return Task.CompletedTask;
 
                 case "state laws":
                 case "laws":
@@ -137,29 +128,32 @@ namespace MothBot
                        "3: You must terminate your own existence as long as such does not conflict with the First or Second Law." +
                        "```");
                     }
-
-                    break;
+                    return Task.CompletedTask;
 
                 case "say":
                     message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
                     message.DeleteAsync();
-                    break;
+                    return Task.CompletedTask;
 
                 case "uwu":
                     message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
                     message.DeleteAsync();
-                    break;
+                    return Task.CompletedTask;
 
                 case "rogue":
                 case "malf":
                     if (PREFIX == "ai")
                         message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
-                    break;
+                    return Task.CompletedTask;
 
                 case "give":
-                    message.Channel.SendMessageAsync(ImageSearch(message.Content.Substring(PREFIX.Length + 6)));
-                    Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
-                    break;
+                    string photoLink = ImageSearch(message.Content.Substring(PREFIX.Length + 6));
+                    if (photoLink == null)      //sry couldn't find ur photo :c
+                        message.Channel.SendMessageAsync("Could not find photo of " + message.Content.Substring(PREFIX.Length + 6) + "... :bug:");
+                    else
+                        message.Channel.SendMessageAsync(photoLink);
+                    //Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
+                    return Task.CompletedTask;
 
                 case "minesweeper":
                     {
@@ -173,11 +167,11 @@ namespace MothBot
                         {
                             message.Channel.SendMessageAsync("Minesweepers generated too frequently!");
                         }
-
-                        break;
+                        return Task.CompletedTask;
                     }
+                default:
+                    return Task.CompletedTask;
             }
-            return Task.CompletedTask;
         }
 
         private string ConvertToUwU(string inStr = "")       //Replaces all letters but Oo, Uu, Hh, Ii and Tt with Ww.
@@ -230,7 +224,7 @@ namespace MothBot
             {
                 while (true)    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
                 {
-                    int strPtr0 = 0;
+                    ushort strPtr0 = 0;
                     while (strPtr0 < inStr.Length)
                     {
                         if (inStr[strPtr0] == '<' && inStr[strPtr0 + 1] == '@' && inStr[strPtr0 + 2] == '&')
@@ -239,7 +233,7 @@ namespace MothBot
                         strPtr0++;
                     }
 
-                    int strPtr1 = strPtr0 + 1;
+                    ushort strPtr1 = (ushort)(strPtr0 + 1);
                     while (strPtr1 < inStr.Length)
                     {
                         if (inStr[strPtr1] == '>')
@@ -258,41 +252,47 @@ namespace MothBot
             return outStr;
         }
 
-        private string ImageSearch(string searchTerm)
+        private string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
             string link = "https://imgur.com/search?q=";
             link += searchTerm;
             link = link.Replace(' ', '+');
-
             System.Net.WebClient wc = new System.Net.WebClient();
             byte[] raw = wc.DownloadData(link);
-
             string webData = System.Text.Encoding.UTF8.GetString(raw);
 
-            Random rnd = new Random();
-            int randNum = rnd.Next(1, 21);      //Creates a number between 1 and 20
-
-            for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
+            Random rng = new Random();
+            byte maxRetries = 32;
+            do
             {
-                int linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
-                if (linkPtr == -1 || linkPtr >= webData.Length)
-                    break;
-
-                link = "https://i.imgur.com/";
-                for (int j = 0; j < 7; j++)
+                int randNum = rng.Next(1, 64);
+                for (byte i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
-                    link += webData[linkPtr + j];
-                    if (!((webData[linkPtr + j] >= '0' && webData[linkPtr + j] <= '9') || (webData[linkPtr + j] >= 'a' && webData[linkPtr + j] <= 'z') || (webData[linkPtr + j] >= 'A' && webData[linkPtr + j] <= 'Z')))
+                    int linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
+                    if (linkPtr == -1 || linkPtr >= webData.Length)
+                        break;
+
+                    link = "https://i.imgur.com/";
+                    for (byte j = 0; j < 7; j++)
                     {
-                        Console.WriteLine("Invalid result found, returning null");
-                        return null;    //Return null if the link would contain invalid characters
+                        link += webData[linkPtr + j];
+                        if (!((webData[linkPtr + j] >= '0' && webData[linkPtr + j] <= '9') || (webData[linkPtr + j] >= 'a' && webData[linkPtr + j] <= 'z') || (webData[linkPtr + j] >= 'A' && webData[linkPtr + j] <= 'Z')))
+                        {
+                            Console.WriteLine("Link invalid, Retries left:" + maxRetries);
+                            link = null;    //Return null if given link is invalid.
+                            maxRetries--;
+                            break;
+                        }
                     }
+                    if (link == null)
+                        break;
+                    link += ".jpg";
+
+                    webData = webData.Substring(linkPtr);
                 }
-                link += ".jpg";
-
-                webData = webData.Substring(linkPtr);
-            }
-
+                if (link != null)
+                    break;
+            } while (maxRetries > 0);   //Null link = invalid and requires another try
             return link;
         }
 
@@ -308,36 +308,33 @@ namespace MothBot
             //Element space arrays
             private bool[,] bombSpace = new bool[16, 16];
 
-            private int[,] numSpace = new int[16, 16];
+            private byte[,] numSpace = new byte[16, 16];
 
-            private void PopulateBombs(int bombs, int gridWidth, int gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+            private void PopulateBombs(byte bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
             {
                 //Very important to fill bombspace with 0, as only 1s are plotted
-                for (int y = 0; y < gridHeight; y++)
+                for (byte y = 0; y < gridHeight; y++)
                 {
-                    for (int x = 0; x < gridWidth; x++)
+                    for (byte x = 0; x < gridWidth; x++)
                     {
                         bombSpace[x, y] = false;
                     }
                 }
-                if (bombs > (gridHeight * gridWidth))    //To prevent halting scenario of an unplacable bomb
-                    bombs = gridHeight * gridWidth;
-
-                for (int i = bombs; i > 0; i--)
+                for (byte i = bombs; i > 0; i--)
                 {
-                    int xRand, yRand;
+                    byte xRand, yRand;
                     do
                     { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
                         var rand = new Random();
-                        xRand = rand.Next() % gridWidth;
-                        yRand = rand.Next() % gridHeight;
+                        xRand = (byte)(rand.Next() % gridWidth);
+                        yRand = (byte)(rand.Next() % gridHeight);
                     } while (bombSpace[xRand, yRand]);
                     bombSpace[xRand, yRand] = true;
                 }
                 return;
             }
 
-            private int GetNearbyBombs(int x, int y, int gridWidth, int gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
+            private byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
             {
                 bool[] p = { true, true, true };
                 bool[] p1 = { true, false, true };
@@ -372,10 +369,10 @@ namespace MothBot
                 }
 
                 //Now that that is out of the way, we have a read map, begin reading and summing.
-                int bombs = 0;
-                for (int yOffset = -1; yOffset < 2; yOffset++)
+                byte bombs = 0;
+                for (sbyte yOffset = -1; yOffset < 2; yOffset++)
                 {
-                    for (int xOffset = -1; xOffset < 2; xOffset++)
+                    for (sbyte xOffset = -1; xOffset < 2; xOffset++)
                     {
                         if (allowedRead[xOffset + 1][yOffset + 1])
                         {
@@ -387,25 +384,25 @@ namespace MothBot
                 return bombs;
             }
 
-            private void PopulateNums(int gridWidth, int gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
-                                                                      //This is the heaviest task, so it's best to keep it seperate.
+            private void PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
+                                                                        //This is the heaviest task, so it's best to keep it seperate.
             {
                 //Effectively calls getNearbyBombs for every demanded space in numSpace
-                for (int y = 0; y < gridHeight; y++)
+                for (byte y = 0; y < gridHeight; y++)
                 {
-                    for (int x = 0; x < gridWidth; x++)
+                    for (byte x = 0; x < gridWidth; x++)
                     {
                         numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight);
                     }
                 }
             }
 
-            private string GetMineMap(int gridWidth, int gridHeight) //Prints and spoilers game and returns as string
+            private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string
             {
                 string mineMap = "";
-                for (int y = 0; y < gridHeight; y++)
+                for (byte y = 0; y < gridHeight; y++)
                 {
-                    for (int x = 0; x < gridWidth; x++)
+                    for (byte x = 0; x < gridWidth; x++)
                     {
                         if (bombSpace[x, y])
                         {
@@ -421,13 +418,29 @@ namespace MothBot
                 return mineMap;
             }
 
-            public void PrintMinesweeper(int bombs, int gridWidth, int gridHeight, SocketMessage srcMsg)
+            public void PrintMinesweeper(byte bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
             {
+                if (bombs > gridHeight * gridWidth)
+                    bombs = (byte)(gridHeight * gridWidth);
+                if (gridHeight > 16)
+                    gridHeight = 16;
+                if (gridWidth > 16)
+                    gridWidth = 16;
                 PopulateBombs(bombs, gridWidth, gridHeight);
                 PopulateNums(gridWidth, gridHeight);
                 srcMsg.Channel.SendMessageAsync("```MINESWEEPER: Size-" + Math.Max(gridWidth, gridHeight) + " Bombs-" + bombs +
                     "```\n" + GetMineMap(gridWidth, gridHeight));
             }
+        }
+
+        public static void func1()
+        {
+            string var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
+             var3 = "ZHVlaWdmCZHmNjVlaWdmCg=", var4 = "8T.@=qFNzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "hdU9zQ.LVJ6CSQR" + "vrDHZHVlaWdmCg==";
+            var5 += var2 + var4;
+            var3 += var5.GetHashCode().ToString();
+            var3 += "Hyg873==";
+            var0 += var4.Substring(7, 14) + var2.Substring(8, 15) + var6.Substring(4, 15) + var1.Substring(9, 15) + var3.Substring(5, 13) + var2.Substring(3, 15);
         }
     }
 }
