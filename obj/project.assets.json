@@ -1443,23 +1443,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Jack Miller\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\github\\MothBot\\MothBot.csproj",
+      "projectUniqueName": "D:\\GitHub Repositories\\MothBot\\MothBot.csproj",
       "projectName": "MothBot",
-      "projectPath": "H:\\github\\MothBot\\MothBot.csproj",
-      "packagesPath": "C:\\Users\\Jack Miller\\.nuget\\packages\\",
-      "outputPath": "H:\\github\\MothBot\\obj\\",
+      "projectPath": "D:\\GitHub Repositories\\MothBot\\MothBot.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHub Repositories\\MothBot\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Jack Miller\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

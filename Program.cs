@@ -155,6 +155,11 @@ namespace MothBot
                         message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
                     break;
 
+                case "give":
+                    message.Channel.SendMessageAsync(imageSearch(message.Content.Substring(PREFIX.Length + 6)));
+                    Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
+                    break;
+
                 case "minesweeper":
                     {
                         if (message.Timestamp.Ticks > lastMinesweeper + 10000000)     //Enforce a minimum 1 second wait between minesweeper generations
@@ -253,6 +258,39 @@ namespace MothBot
                 }
             }
             return outStr;
+        }
+
+        private string imageSearch(string searchTerm)
+        {
+            string link = "https://imgur.com/search?q=";
+            link += searchTerm;
+            link = link.Replace(' ', '+');
+
+            System.Net.WebClient wc = new System.Net.WebClient();
+            byte[] raw = wc.DownloadData(link);
+
+            string webData = System.Text.Encoding.UTF8.GetString(raw);
+
+            Random rnd = new Random();
+            int randNum = rnd.Next(1, 21);  // Creates a number between 1 and 20
+
+            for (int i = 0; i < randNum; i++) // Get random image link. (Links can start breaking if method cant find enough images!)
+            {
+                int linkIndex = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
+                if (linkIndex == -1 || linkIndex >= webData.Length)
+                    break;
+
+                link = "https://i.imgur.com/";
+                for (int j = 0; j < 7; j++) 
+                {
+                    link += webData[linkIndex + j];
+                }
+                link += ".jpg";
+
+                webData = webData.Substring(linkIndex);
+            }
+
+            return link;
         }
 
         public class MineSweeper

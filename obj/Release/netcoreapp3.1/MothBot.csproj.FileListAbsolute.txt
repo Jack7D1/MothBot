@@ -20,3 +20,25 @@ H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.csproj.CopyComplete
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.dll
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.pdb
 H:\github\MothBot\obj\Release\netcoreapp3.1\MothBot.genruntimeconfig.cache
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.exe
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.deps.json
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.runtimeconfig.json
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.runtimeconfig.dev.json
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\MothBot.pdb
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Discord.Net.Commands.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Discord.Net.Core.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Discord.Net.Rest.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Discord.Net.Webhook.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Discord.Net.WebSocket.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\Newtonsoft.Json.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\System.Interactive.Async.dll
+D:\GitHub Repositories\MothBot\deploy\netcoreapp3.1\System.Linq.Async.dll
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.csprojAssemblyReference.cache
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.AssemblyInfoInputs.cache
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.AssemblyInfo.cs
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.csproj.CoreCompileInputs.cache
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.csproj.CopyComplete
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.dll
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.pdb
+D:\GitHub Repositories\MothBot\obj\Release\netcoreapp3.1\MothBot.genruntimeconfig.cache
