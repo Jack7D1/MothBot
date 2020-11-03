@@ -3,3 +3,4 @@
 debug/
 *.suo
 obj
+GlobalSuppressions.cs

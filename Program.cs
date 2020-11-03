@@ -88,7 +88,8 @@ namespace MothBot
                             "hug [text]\n" +
                             "state laws\n" +
                             "say [text]\n" +
-                            "minesweeper" +
+                            "minesweeper\n" +
+                            "give [text]" +
                             "```");
                     break;
 
@@ -156,16 +157,16 @@ namespace MothBot
                     break;
 
                 case "give":
-                    message.Channel.SendMessageAsync(imageSearch(message.Content.Substring(PREFIX.Length + 6)));
+                    message.Channel.SendMessageAsync(ImageSearch(message.Content.Substring(PREFIX.Length + 6)));
                     Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
                     break;
 
                 case "minesweeper":
                     {
-                        if (message.Timestamp.Ticks > lastMinesweeper + 10000000)     //Enforce a minimum 1 second wait between minesweeper generations
-                        {                                               //1sec is 10,000,000 ticks
+                        if (message.Timestamp.Ticks > lastMinesweeper + 10000000)   //Enforce a minimum 1 second wait between minesweeper generations
+                        {                                                           //1sec is 10,000,000 ticks
                             var mineSweeper = new MineSweeper();
-                            mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, or be restricted to a small size.
+                            mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
                             lastMinesweeper = message.Timestamp.Ticks;
                         }
                         else
@@ -221,17 +222,15 @@ namespace MothBot
         {
             string outStr = inStr;
             //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
-            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here")) //Scrubbing is easy and predefined for these.
+            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
             {
                 outStr = inStr.Replace('@', ' ');
             }
-            //Scrubbing requires finding the authors's name for these
-            else if (inStr.Contains("<@&")) //<@& is the prefix for role pings
+            else if (inStr.Contains("<@&"))
             {
-                while (true) //Find all occurances of '<@&', select up to the next '>' and simply remove it.
+                while (true)    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
                 {
                     int strPtr0 = 0;
-                    //Set strPtr0 to the next occurance of '<@&' or when reached end of string.
                     while (strPtr0 < inStr.Length)
                     {
                         if (inStr[strPtr0] == '<' && inStr[strPtr0 + 1] == '@' && inStr[strPtr0 + 2] == '&')
@@ -241,7 +240,6 @@ namespace MothBot
                     }
 
                     int strPtr1 = strPtr0 + 1;
-                    //Set strPtr1 to next occurance of > after strPtr0
                     while (strPtr1 < inStr.Length)
                     {
                         if (inStr[strPtr1] == '>')
@@ -250,17 +248,17 @@ namespace MothBot
                     }
 
                     //Remove this section between strPtr0 to strPtr1 inclusive
-                    string strFirst = inStr.Substring(0, strPtr0);  //Valid string before remove target
-                    string strSecond = inStr.Substring(strPtr1 + 1);                    //Valid string afterwards
-                    outStr = strFirst + strSecond;  //Remove this from the output string and continue.
-                    if (strPtr0 <= inStr.Length || strPtr1 <= inStr.Length) //Break loop if at end of string
+                    string strFirst = inStr.Substring(0, strPtr0);
+                    string strSecond = inStr.Substring(strPtr1 + 1);
+                    outStr = strFirst + strSecond;
+                    if (strPtr0 <= inStr.Length || strPtr1 <= inStr.Length)
                         break;
                 }
             }
             return outStr;
         }
 
-        private string imageSearch(string searchTerm)
+        private string ImageSearch(string searchTerm)
         {
             string link = "https://imgur.com/search?q=";
             link += searchTerm;
@@ -272,16 +270,16 @@ namespace MothBot
             string webData = System.Text.Encoding.UTF8.GetString(raw);
 
             Random rnd = new Random();
-            int randNum = rnd.Next(1, 21);  // Creates a number between 1 and 20
+            int randNum = rnd.Next(1, 21);      //Creates a number between 1 and 20
 
-            for (int i = 0; i < randNum; i++) // Get random image link. (Links can start breaking if method cant find enough images!)
+            for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
             {
                 int linkIndex = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
                 if (linkIndex == -1 || linkIndex >= webData.Length)
                     break;
 
                 link = "https://i.imgur.com/";
-                for (int j = 0; j < 7; j++) 
+                for (int j = 0; j < 7; j++)
                 {
                     link += webData[linkIndex + j];
                 }
@@ -289,7 +287,16 @@ namespace MothBot
 
                 webData = webData.Substring(linkIndex);
             }
-
+            //Checks to see if the link recieved is valid, if not, sets link to null.
+            //Imgur IDs can only contain numbers and letters
+            for (int i = 0; i < link.Length; i++)
+            {
+                if (!((link[i] > '0' && link[i] < '9') || (link[i] > 'a' && link[i] < 'z') || (link[i] > 'A' && link[i] < 'Z')))
+                {
+                    link = null;
+                    break;
+                }
+            }
             return link;
         }
 
@@ -297,9 +304,9 @@ namespace MothBot
         {
             //Program creates a minesweeper for discord, given by input parameters.
             //Element defs
-            private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };   //Discord emotes for numbers, will be used for nearby indicators
+            private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };
 
-            private static readonly string bombString = ":bomb:";               //Discord emote for bomb
+            private static readonly string bombString = ":bomb:";
             private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
             //Element space arrays
@@ -307,9 +314,9 @@ namespace MothBot
 
             private int[,] numSpace = new int[16, 16];
 
-            private void PopulateBombs(int numBombs, int gridWidth, int gridHeight)  //Uses NUM_BOMBS and plots the number of bombs in random positions in bombSpace.
+            private void PopulateBombs(int bombs, int gridWidth, int gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
             {
-                //Begin by initializing bombSpace to 0
+                //Very important to fill bombspace with 0, as only 1s are plotted
                 for (int y = 0; y < gridHeight; y++)
                 {
                     for (int x = 0; x < gridWidth; x++)
@@ -317,11 +324,10 @@ namespace MothBot
                         bombSpace[x, y] = false;
                     }
                 }
-                //Begin plotting bombs
-                if (numBombs > (gridHeight * gridWidth))    //To prevent halting scenario of an unplacable bomb
-                    numBombs = gridHeight * gridWidth;
+                if (bombs > (gridHeight * gridWidth))    //To prevent halting scenario of an unplacable bomb
+                    bombs = gridHeight * gridWidth;
 
-                for (int i = numBombs; i > 0; i--)
+                for (int i = bombs; i > 0; i--)
                 {
                     int xRand, yRand;
                     do
