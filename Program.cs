@@ -16,7 +16,7 @@ namespace MothBot
 
         public static void Main(string[] args)  //Initialization
         {
-            func1();
+            Func1();
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
@@ -99,7 +99,7 @@ namespace MothBot
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
+                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {_sanitize.ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
                     }
                     return Task.CompletedTask;
 
@@ -110,7 +110,7 @@ namespace MothBot
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
+                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {_sanitize.ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
                     }
                     return Task.CompletedTask;
 
@@ -137,12 +137,12 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "say":
-                    message.Channel.SendMessageAsync(ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
+                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
                 case "uwu":
-                    message.Channel.SendMessageAsync(ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
+                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
@@ -153,7 +153,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "give":
-                    string photoLink = ImageSearch(message.Content.Substring(PREFIX.Length + 6));
+                    string photoLink = _imageSearch.ImageSearch(message.Content.Substring(PREFIX.Length + 6));
                     if (photoLink == null)      //sry couldn't find ur photo :c
                         message.Channel.SendMessageAsync("Could not find photo of " + message.Content.Substring(PREFIX.Length + 6) + "... :bug:");
                     else
@@ -210,7 +210,7 @@ namespace MothBot
             return Task.CompletedTask;
         }
 
-        public static void func1()
+        public static void Func1()
         {
             string var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
              var3 = "ZHVlaWdmCZHmNjVlaWdmCg=", var4 = "8T.@=qFNzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "hdU9zQ.LVJ6CSQR" + "vrDHZHVlaWdmCg==";
