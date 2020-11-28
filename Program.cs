@@ -9,7 +9,9 @@ namespace MothBot
     {
         private const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
         public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
-        private long lastMinesweeper = 0;
+        private modules.Minesweeper _mineSweeper;
+        private modules.Imagesearch _imageSearch;
+        private modules.Sanitize _sanitize;
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)  //Initialization
@@ -26,6 +28,10 @@ namespace MothBot
             _client.Log += Log;                             //If a valid command, log it
             await _client.LoginAsync(TokenType.Bot, var0.Substring(28, 59));
             var0 = null;
+
+            _mineSweeper = new modules.Minesweeper();
+            _imageSearch = new modules.Imagesearch();
+            _sanitize = new modules.Sanitize();
 
             await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
 
@@ -157,16 +163,8 @@ namespace MothBot
 
                 case "minesweeper":
                     {
-                        if (message.Timestamp.Ticks > lastMinesweeper + 10000000)   //Enforce a minimum 1 second wait between minesweeper generations
-                        {                                                           //1 sec is 10,000,000 ticks
-                            var mineSweeper = new MineSweeper();
-                            mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
-                            lastMinesweeper = message.Timestamp.Ticks;
-                        }
-                        else
-                        {
-                            message.Channel.SendMessageAsync("Minesweepers generated too frequently!");
-                        }
+                        _mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
+
                         return Task.CompletedTask;
                     }
                 default:
@@ -210,227 +208,6 @@ namespace MothBot
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
-        }
-
-        private string ScrubAnyRolePings(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
-        {
-            string outStr = inStr;
-            //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
-            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
-            {
-                outStr = inStr.Replace('@', ' ');
-            }
-            else if (inStr.Contains("<@&"))
-            {
-                while (true)    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
-                {
-                    ushort strPtr0 = 0;
-                    while (strPtr0 < inStr.Length)
-                    {
-                        if (inStr[strPtr0] == '<' && inStr[strPtr0 + 1] == '@' && inStr[strPtr0 + 2] == '&')
-                            break;
-
-                        strPtr0++;
-                    }
-
-                    ushort strPtr1 = (ushort)(strPtr0 + 1);
-                    while (strPtr1 < inStr.Length)
-                    {
-                        if (inStr[strPtr1] == '>')
-                            break;
-                        strPtr1++;
-                    }
-
-                    //Remove this section between strPtr0 to strPtr1 inclusive
-                    string strFirst = inStr.Substring(0, strPtr0);
-                    string strSecond = inStr.Substring(strPtr1 + 1);
-                    outStr = strFirst + strSecond;
-                    if (strPtr0 <= inStr.Length || strPtr1 <= inStr.Length)
-                        break;
-                }
-            }
-            return outStr;
-        }
-
-        private string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
-        {
-            string link = "https://imgur.com/search?q=";
-            link += searchTerm;
-            link = link.Replace(' ', '+');
-            System.Net.WebClient wc = new System.Net.WebClient();
-            byte[] raw = wc.DownloadData(link);
-            string webData = System.Text.Encoding.UTF8.GetString(raw);
-
-            Random rng = new Random();
-            byte maxRetries = 32;
-            do
-            {
-                int randNum = rng.Next(1, 64);
-                for (byte i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
-                {
-                    int linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
-                    if (linkPtr == -1 || linkPtr >= webData.Length)
-                        break;
-
-                    link = "https://i.imgur.com/";
-                    for (byte j = 0; j < 7; j++)
-                    {
-                        link += webData[linkPtr + j];
-                        if (!((webData[linkPtr + j] >= '0' && webData[linkPtr + j] <= '9') || (webData[linkPtr + j] >= 'a' && webData[linkPtr + j] <= 'z') || (webData[linkPtr + j] >= 'A' && webData[linkPtr + j] <= 'Z')))
-                        {
-                            Console.WriteLine("Link invalid, Retries left:" + maxRetries);
-                            link = null;    //Return null if given link is invalid.
-                            maxRetries--;
-                            break;
-                        }
-                    }
-                    if (link == null)
-                        break;
-                    link += ".jpg";
-
-                    webData = webData.Substring(linkPtr);
-                }
-                if (link != null)
-                    break;
-            } while (maxRetries > 0);   //Null link = invalid and requires another try
-            return link;
-        }
-
-        public class MineSweeper
-        {
-            //Program creates a minesweeper for discord, given by input parameters.
-            //Element defs
-            private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };
-
-            private static readonly string bombString = ":bomb:";
-            private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
-
-            //Element space arrays
-            private bool[,] bombSpace = new bool[16, 16];
-
-            private byte[,] numSpace = new byte[16, 16];
-
-            private void PopulateBombs(byte bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
-            {
-                //Very important to fill bombspace with 0, as only 1s are plotted
-                for (byte y = 0; y < gridHeight; y++)
-                {
-                    for (byte x = 0; x < gridWidth; x++)
-                    {
-                        bombSpace[x, y] = false;
-                    }
-                }
-                for (byte i = bombs; i > 0; i--)
-                {
-                    byte xRand, yRand;
-                    do
-                    { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
-                        var rand = new Random();
-                        xRand = (byte)(rand.Next() % gridWidth);
-                        yRand = (byte)(rand.Next() % gridHeight);
-                    } while (bombSpace[xRand, yRand]);
-                    bombSpace[xRand, yRand] = true;
-                }
-                return;
-            }
-
-            private byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
-            {
-                bool[] p = { true, true, true };
-                bool[] p1 = { true, false, true };
-                bool[] p2 = { true, true, true };
-                bool[][] allowedRead = { p, p1, p2 };
-                //To ensure we do not read from outside the bombspace array on literal edge cases, a map will be laid out.
-
-                //There is likely a better, less space consuming way to do this. Too bad!
-                if (x == 0)
-                {
-                    allowedRead[0][0] = false;
-                    allowedRead[0][1] = false;
-                    allowedRead[0][2] = false;
-                }
-                if (x == gridWidth - 1)
-                {
-                    allowedRead[2][0] = false;
-                    allowedRead[2][1] = false;
-                    allowedRead[2][2] = false;
-                }
-                if (y == 0)
-                {
-                    allowedRead[0][0] = false;
-                    allowedRead[1][0] = false;
-                    allowedRead[2][0] = false;
-                }
-                if (y == gridHeight - 1)
-                {
-                    allowedRead[0][2] = false;
-                    allowedRead[1][2] = false;
-                    allowedRead[2][2] = false;
-                }
-
-                //Now that that is out of the way, we have a read map, begin reading and summing.
-                byte bombs = 0;
-                for (sbyte yOffset = -1; yOffset < 2; yOffset++)
-                {
-                    for (sbyte xOffset = -1; xOffset < 2; xOffset++)
-                    {
-                        if (allowedRead[xOffset + 1][yOffset + 1])
-                        {
-                            if (bombSpace[x + xOffset, y + yOffset])
-                                bombs++;
-                        }
-                    }
-                }
-                return bombs;
-            }
-
-            private void PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
-                                                                        //This is the heaviest task, so it's best to keep it seperate.
-            {
-                //Effectively calls getNearbyBombs for every demanded space in numSpace
-                for (byte y = 0; y < gridHeight; y++)
-                {
-                    for (byte x = 0; x < gridWidth; x++)
-                    {
-                        numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight);
-                    }
-                }
-            }
-
-            private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string
-            {
-                string mineMap = "";
-                for (byte y = 0; y < gridHeight; y++)
-                {
-                    for (byte x = 0; x < gridWidth; x++)
-                    {
-                        if (bombSpace[x, y])
-                        {
-                            mineMap += spoilerTag[0] + bombString + spoilerTag[1];
-                        }
-                        else
-                        {
-                            mineMap += spoilerTag[0] + bombCounts[numSpace[x, y]] + spoilerTag[1];
-                        }
-                    }
-                    mineMap += "\n";
-                }
-                return mineMap;
-            }
-
-            public void PrintMinesweeper(byte bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
-            {
-                if (bombs > gridHeight * gridWidth)
-                    bombs = (byte)(gridHeight * gridWidth);
-                if (gridHeight > 16)
-                    gridHeight = 16;
-                if (gridWidth > 16)
-                    gridWidth = 16;
-                PopulateBombs(bombs, gridWidth, gridHeight);
-                PopulateNums(gridWidth, gridHeight);
-                srcMsg.Channel.SendMessageAsync("```MINESWEEPER: Size-" + Math.Max(gridWidth, gridHeight) + " Bombs-" + bombs +
-                    "```\n" + GetMineMap(gridWidth, gridHeight));
-            }
         }
 
         public static void func1()
