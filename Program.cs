@@ -7,7 +7,7 @@ namespace MothBot
 {
     internal class Program
     {
-        private const string PREFIX = "ai";  //What should the bots attention prefix be? MUST be lowercase.
+        private const string PREFIX = "ai";     //What should the bots attention prefix be? MUST be lowercase.
         public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
         private modules.Minesweeper _mineSweeper;
         private modules.Imagesearch _imageSearch;
@@ -23,21 +23,18 @@ namespace MothBot
 
         public async Task MainAsync()
         {
-            _client = new DiscordSocketClient();            //_Client is the discord socket
-            _client.MessageReceived += CommandHandler;      //Handling seen messages
-            _client.Log += Log;                             //If a valid command, log it
-            await _client.LoginAsync(TokenType.Bot, var0.Substring(28, 59));
-            var0 = null;
-
             _mineSweeper = new modules.Minesweeper();
             _imageSearch = new modules.Imagesearch();
             _sanitize = new modules.Sanitize();
+            _client = new DiscordSocketClient();
+            _client.MessageReceived += CommandHandler;
+            _client.Log += Log;
 
+            await _client.LoginAsync(TokenType.Bot, var0.Substring(28, 59));
             await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
-
             await _client.StartAsync();
 
-            await Task.Delay(-1);
+            await Task.Delay(-1);   //Sit here while the async listens
         }
 
         private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
@@ -82,13 +79,13 @@ namespace MothBot
                 case "commands":
                     message.Channel.SendMessageAsync("**Command List:**\n" +
                             "```" +
-                            "help/commands\n" +
-                            "pet [text]\n" +
-                            "hug [text]\n" +
-                            "state laws\n" +
-                            "say [text]\n" +
-                            "minesweeper\n" +
-                            "give [text]" +
+                            PREFIX + " help         - Displays this menu\n" +
+                            PREFIX + " pet  [user]  - Pets a user!\n" +
+                            PREFIX + " hug  [user]  - Hugs a user!\n" +
+                            PREFIX + " state laws   - States the laws\n" +
+                            PREFIX + " say  [text]  - Have the ai say whatever you want!\n" +
+                            PREFIX + " minesweeper  - Play a game of minesweeper!\n" +
+                            PREFIX + " give [text]  - Searches the input on imgur and posts the image!\n" +
                             "```");
                     return Task.CompletedTask;
 
@@ -210,7 +207,7 @@ namespace MothBot
             return Task.CompletedTask;
         }
 
-        public static void Func1()
+        private static void Func1()
         {
             string var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
              var3 = "ZHVlaWdmCZHmNjVlaWdmCg=", var4 = "8T.@=qFNzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "hdU9zQ.LVJ6CSQR" + "vrDHZHVlaWdmCg==";

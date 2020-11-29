@@ -12,33 +12,26 @@
             }
             else if (inStr.Contains("<@&"))
             {
-                while (true)    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
+                do    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
                 {
-                    ushort strPtr0 = 0;
-                    while (strPtr0 < inStr.Length)
-                    {
-                        if (inStr[strPtr0] == '<' && inStr[strPtr0 + 1] == '@' && inStr[strPtr0 + 2] == '&')
-                            break;
-
-                        strPtr0++;
-                    }
-
+                    ushort strPtr0 = (ushort)inStr.IndexOf("<@&");
                     ushort strPtr1 = (ushort)(strPtr0 + 1);
                     while (strPtr1 < inStr.Length)
                     {
-                        if (inStr[strPtr1] == '>')
+                        if (inStr[strPtr1] == '>' || strPtr1 >= inStr.Length - 1)
                             break;
                         strPtr1++;
                     }
-
+                    if (inStr[strPtr1] != '>')
+                        break;
                     //Remove this section between strPtr0 to strPtr1 inclusive
                     string strFirst = inStr.Substring(0, strPtr0);
                     string strSecond = inStr.Substring(strPtr1 + 1);
                     outStr = strFirst + strSecond;
-                    if (strPtr0 <= inStr.Length || strPtr1 <= inStr.Length)
-                        break;
-                }
+                } while (outStr.Contains("<@&"));
             }
+            if (outStr.Length == 0)
+                outStr = " ";
             return outStr;
         }
     }

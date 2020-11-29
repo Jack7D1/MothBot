@@ -6,6 +6,7 @@ namespace MothBot.modules
     internal class Minesweeper
     {
         public long lastMinesweeper = 0;
+        private Random _rand = new Random();
 
         //Program creates a minesweeper for discord, given by input parameters.
         //Element defs
@@ -34,9 +35,8 @@ namespace MothBot.modules
                 byte xRand, yRand;
                 do
                 { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
-                    var rand = new Random();
-                    xRand = (byte)(rand.Next() % gridWidth);
-                    yRand = (byte)(rand.Next() % gridHeight);
+                    xRand = (byte)(_rand.Next() % gridWidth);
+                    yRand = (byte)(_rand.Next() % gridHeight);
                 } while (bombSpace[xRand, yRand]);
                 bombSpace[xRand, yRand] = true;
             }
@@ -129,7 +129,7 @@ namespace MothBot.modules
 
         public void PrintMinesweeper(byte bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
         {
-            if (srcMsg.Timestamp.Ticks < lastMinesweeper + 100000000) //1 sec is 10,000,000 ticks
+            if (srcMsg.Timestamp.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
             {
                 srcMsg.Channel.SendMessageAsync("Minesweepers generated too frequently!");
                 return;
