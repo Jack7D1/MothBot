@@ -111,8 +111,8 @@ namespace MothBot
                     }
                     return Task.CompletedTask;
 
-                case "state laws":
                 case "laws":
+                case "state":
                     if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
                     {   //Used to be 666 but i think discord might prevent that ID from appearing
                         message.Channel.SendMessageAsync("**Current active laws:**\n" +
