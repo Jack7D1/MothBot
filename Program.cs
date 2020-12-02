@@ -7,12 +7,13 @@ namespace MothBot
 {
     internal class Program
     {
-        private const string PREFIX = "ai";     //What should the bots attention prefix be? MUST be lowercase.
         public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
-        private modules.Minesweeper _mineSweeper;
-        private modules.Imagesearch _imageSearch;
-        private modules.Sanitize _sanitize;
+        public string PREFIX = "ai";     //What should the bots attention prefix be? MUST be lowercase.
         private DiscordSocketClient _client;
+        private modules.Imagesearch _imageSearch;
+        private modules.Minesweeper _mineSweeper;
+        private modules.Sanitize _sanitize;
+        private modules.Utilities _utilities;
 
         public static void Main(string[] args)  //Initialization
         {
@@ -26,32 +27,46 @@ namespace MothBot
             _mineSweeper = new modules.Minesweeper();
             _imageSearch = new modules.Imagesearch();
             _sanitize = new modules.Sanitize();
+            _utilities = new modules.Utilities
+            {
+                _parent = this
+            };
             _client = new DiscordSocketClient();
             _client.MessageReceived += CommandHandler;
             _client.Log += Log;
 
             await _client.LoginAsync(TokenType.Bot, var0.Substring(28, 59));
-            await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.CustomStatus);
+            await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);
             await _client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens
         }
 
-        private Task CommandHandler(SocketMessage message)     //Checks input commands if they are a valid command string, executes code accordingly.
+        private static void Func1()
         {
-            string input = message.Content.ToLower();   //Do this once to save on processor time.
+            string var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
+             var3 = "ZHVlaWdmCZHmNjVlaWdmCg=", var4 = "8T.@=qFNzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "hdU9zQ.LVJ6CSQR" + "vrDHZHVlaWdmCg==";
+            var5 += var2 + var4;
+            var3 += var5.GetHashCode().ToString();
+            var3 += "Hyg873==";
+            var0 += var4.Substring(7, 14) + var2.Substring(8, 15) + var6.Substring(4, 15) + var1.Substring(9, 15) + var3.Substring(5, 13) + var2.Substring(3, 15);
+        }
+
+        private Task CommandHandler(SocketMessage message)
+        {
+            string input = message.Content.ToLower();
             // Filter messages
             if (message.Author.IsBot)   //If message author is a bot, ignore
             {
                 return Task.CompletedTask;
             }
-            else if (input == "ye" && message.Id % 100 == 0) //If someone says ye, say ye, but with a 1/100 chance
+            else if (input == "ye" && message.Id % 10 == 0) //If someone says ye, say ye, but with a 1/10 chance
             {
                 message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
             }
             //All non prefix dependant directives go above
-            else if ((input.Split(' ')[0] != PREFIX) || (input.Length < PREFIX.Length + 3)) //Filter out messages not containing prefix
+            else if ((input.Split(' ')[0] != PREFIX) || (input.Length < PREFIX.Length + 3))
             {
                 return Task.CompletedTask;
             }
@@ -60,11 +75,10 @@ namespace MothBot
                 return Task.CompletedTask;
             }
             //We are now sure that the message starts with ai and is followed by a command.
-            //Write the incoming command to console
             Console.WriteLine($@"[{message.Author}] said ({message.Content}) in #{message.Channel}");
             Console.WriteLine($@"Message size: {message.Content.Length}");
 
-            //Begin comparing command to any known directives.
+            //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             string command = message.Content.Split(' ')[1].ToLower();
             switch (command)
@@ -73,6 +87,17 @@ namespace MothBot
                 case "hi":
                 case "hey":
                     message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
+                    return Task.CompletedTask;
+
+                case "uwu":
+                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
+                    message.DeleteAsync();
+                    return Task.CompletedTask;
+
+                case "rogue":
+                case "malf":
+                    if (PREFIX == "ai")
+                        message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
                     return Task.CompletedTask;
 
                 case "help":
@@ -86,6 +111,7 @@ namespace MothBot
                             PREFIX + " say  [text]  - Have the ai say whatever you want!\n" +
                             PREFIX + " minesweeper  - Play a game of minesweeper!\n" +
                             PREFIX + " give [text]  - Searches the input on imgur and posts the image!\n" +
+                            PREFIX + " utility      - Utility functions, bot only responds to operators\n" +
                             "```");
                     return Task.CompletedTask;
 
@@ -138,15 +164,8 @@ namespace MothBot
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
-                case "uwu":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
-                    message.DeleteAsync();
-                    return Task.CompletedTask;
-
-                case "rogue":
-                case "malf":
-                    if (PREFIX == "ai")
-                        message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
+                case "minesweeper":
+                    _mineSweeper.PrintMinesweeper(_mineSweeper.defaultBombs, _mineSweeper.defaultGridsize, _mineSweeper.defaultGridsize, message);    //This is a processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
                     return Task.CompletedTask;
 
                 case "give":
@@ -158,12 +177,11 @@ namespace MothBot
                     //Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
                     return Task.CompletedTask;
 
-                case "minesweeper":
-                    {
-                        _mineSweeper.PrintMinesweeper(16, 8, 8, message);    //This is a very processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
+                case "utility":
+                    _utilities.CommandHandler(message);
+                    _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);
+                    return Task.CompletedTask;
 
-                        return Task.CompletedTask;
-                    }
                 default:
                     return Task.CompletedTask;
             }
@@ -205,16 +223,6 @@ namespace MothBot
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
-        }
-
-        private static void Func1()
-        {
-            string var1 = "9cYh=219f" + "OQ5eB72S" + "IIs7MtwNjVmYgoK", var2 = "3GcJk=A8k1" + "NjU2NTM4.X4RYMzZnZjgK",
-             var3 = "ZHVlaWdmCZHmNjVlaWdmCg=", var4 = "8T.@=qFNzY1MjAyOTczNDZmR3Z3Z1cnc=", var5 = "sMtwNjVmNjVmYgoK", var6 = "hdU9zQ.LVJ6CSQR" + "vrDHZHVlaWdmCg==";
-            var5 += var2 + var4;
-            var3 += var5.GetHashCode().ToString();
-            var3 += "Hyg873==";
-            var0 += var4.Substring(7, 14) + var2.Substring(8, 15) + var6.Substring(4, 15) + var1.Substring(9, 15) + var3.Substring(5, 13) + var2.Substring(3, 15);
         }
     }
 }

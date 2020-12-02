@@ -6,7 +6,9 @@ namespace MothBot.modules
     internal class Minesweeper
     {
         public long lastMinesweeper = 0;
-        private Random _rand = new Random();
+        public byte defaultGridsize = 8;
+        public ushort defaultBombs = 8;
+        private readonly Random _rand = new Random();
 
         //Program creates a minesweeper for discord, given by input parameters.
         //Element defs
@@ -16,11 +18,11 @@ namespace MothBot.modules
         private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
         //Element space arrays
-        private bool[,] bombSpace = new bool[64, 64];
+        private bool[,] bombSpace = new bool[255, 255];
 
-        private byte[,] numSpace = new byte[64, 64];
+        private byte[,] numSpace = new byte[255, 255];
 
-        private void PopulateBombs(byte bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+        private void PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
         {
             //Very important to fill bombspace with 0, as only 1s are plotted
             for (byte y = 0; y < gridHeight; y++)
@@ -30,7 +32,7 @@ namespace MothBot.modules
                     bombSpace[x, y] = false;
                 }
             }
-            for (byte i = bombs; i > 0; i--)
+            for (ushort i = bombs; i > 0; i--)
             {
                 byte xRand, yRand;
                 do
@@ -127,7 +129,7 @@ namespace MothBot.modules
             return mineMap;
         }
 
-        public void PrintMinesweeper(byte bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
+        public void PrintMinesweeper(ushort bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
         {
             if (srcMsg.Timestamp.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
             {

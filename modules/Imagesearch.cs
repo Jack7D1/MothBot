@@ -4,9 +4,9 @@ namespace MothBot.modules
 {
     internal class Imagesearch
     {
-        private string linkHeader = "https://i.imgur.com/";
-        private string linkFooter = ".jpg";
-        private string linkSearch = "https://imgur.com/search?q=";
+        private const string linkHeader = "https://i.imgur.com/";
+        private const string linkFooter = ".jpg";
+        private const string linkSearch = "https://imgur.com/search?q=";
         public byte maxRetries = 255;
         public bool enable_firstResultFallback = true;
         private System.Net.WebClient _webClient = new System.Net.WebClient();
