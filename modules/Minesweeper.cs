@@ -5,7 +5,7 @@ namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        public long lastMinesweeper = 0;
+        private long lastMinesweeper = 0;
         public byte defaultGridsize = 8;
         public ushort defaultBombs = 8;
         private readonly Random _rand = new Random();

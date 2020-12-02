@@ -8,7 +8,7 @@ namespace MothBot.modules
         private const string linkFooter = ".jpg";
         private const string linkSearch = "https://imgur.com/search?q=";
         public byte maxRetries = 255;
-        public bool enable_firstResultFallback = true;
+        public bool firstResultFallback = true;
         private readonly System.Net.WebClient _webClient = new System.Net.WebClient();
 
         public string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
@@ -42,7 +42,7 @@ namespace MothBot.modules
                 webData = webData.Substring(linkPtr + 32);
             } while (retries > 0);
 
-            if (!enable_firstResultFallback)
+            if (!firstResultFallback)
             {
                 Console.WriteLine("No valid results found, returning null.");
                 return null;
@@ -80,7 +80,7 @@ namespace MothBot.modules
 
         public void ToggleFallback()
         {
-            enable_firstResultFallback = !enable_firstResultFallback;
+            firstResultFallback = !firstResultFallback;
             return;
         }
     }

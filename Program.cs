@@ -75,7 +75,7 @@ namespace MothBot
                 return Task.CompletedTask;
             }
             //We are now sure that the message starts with ai and is followed by a command.
-            Console.WriteLine($@"[{message.Author}] said ({message.Content}) in #{message.Channel}");
+            Console.WriteLine($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
             Console.WriteLine($@"Message size: {message.Content.Length}");
 
             //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
@@ -165,7 +165,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "minesweeper":
-                    _mineSweeper.PrintMinesweeper(_mineSweeper.defaultBombs, _mineSweeper.defaultGridsize, _mineSweeper.defaultGridsize, message);    //This is a processor intensive function and should be restricted in how frequently it can be used, and/or be restricted to a small size.
+                    _mineSweeper.PrintMinesweeper(_mineSweeper.defaultBombs, _mineSweeper.defaultGridsize, _mineSweeper.defaultGridsize, message);
                     return Task.CompletedTask;
 
                 case "give":
