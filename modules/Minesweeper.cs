@@ -18,9 +18,9 @@ namespace MothBot.modules
         private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
         //Element space arrays
-        private readonly bool[,] bombSpace = new bool[255, 255];
+        private readonly bool[,] bombSpace = new bool[16, 16];
 
-        private readonly byte[,] numSpace = new byte[255, 255];
+        private readonly byte[,] numSpace = new byte[16, 16];
 
         private void PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
         {
@@ -138,12 +138,9 @@ namespace MothBot.modules
             }
             lastMinesweeper = srcMsg.Timestamp.Ticks;
 
-            if (bombs > gridHeight * gridWidth)
-                bombs = (byte)(gridHeight * gridWidth);
-            if (gridHeight > 16)
-                gridHeight = 16;
-            if (gridWidth > 16)
-                gridWidth = 16;
+            gridHeight = Math.Min(gridHeight, (byte)16);
+            gridWidth = Math.Min(gridWidth, (byte)16);
+            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
 
             PopulateBombs(bombs, gridWidth, gridHeight);
             PopulateNums(gridWidth, gridHeight);

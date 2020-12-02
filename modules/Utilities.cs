@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System;
 
 namespace MothBot.modules
@@ -8,8 +9,9 @@ namespace MothBot.modules
         public Program _parent;
 
         private readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
-            238735900597682177, //Dex
             206920373952970753, //Jack
+            144308736083755009, //Hirohito
+            238735900597682177, //Dex
             489965198531362838, //Argema
         };
 
@@ -31,7 +33,11 @@ namespace MothBot.modules
                 if (command.Contains('('))
                 {
                     keyword = command.Substring(0, command.IndexOf('('));
-                    arg = command[(command.IndexOf('(')+1)..command.IndexOf(')')];
+                    arg = command[(command.IndexOf('(') + 1)..command.IndexOf(')')];
+                }
+                else
+                {
+                    keyword = command;
                 }
             }
             string prefix = _parent.PREFIX + " utility ";
@@ -41,8 +47,11 @@ namespace MothBot.modules
                     src.Channel.SendMessageAsync("**Utility Command List:**\n" +
                              "```general:\n" +
                              prefix + "commands\n" +
+                             prefix + "showvars\n" +
                              prefix + "reboot\n" +
                              prefix + "gitpullandreboot\n" +
+                             prefix + "resetmodules\n" +
+                             prefix + "setprefix(string)\n" +
                              "```\n" +
 
                              "```modules.Imagesearch:\n" +
@@ -52,8 +61,17 @@ namespace MothBot.modules
 
                              "```modules.Minesweeper:\n" +
                              prefix + "minesweeper.setbombs(0-65335)\n" +
-                             prefix + "minesweeper.setsize(0-255)\n" +
+                             //prefix + "minesweeper.setsize(0-16)\n" +
                              "```");
+                    return;
+
+                case "showvars":
+                    src.Channel.SendMessageAsync("**Set Vars:**\n```" +
+                        $"FirstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
+                        $"maxRetries: {this._parent._imageSearch.maxRetries}\n" +
+                        $"defaultBombs: {this._parent._mineSweeper.defaultBombs}\n" +
+                        //$"defaultGridsize: {this._parent._mineSweeper.defaultGridsize}\n" +
+                        $"```");
                     return;
 
                 case "reboot":
@@ -62,6 +80,20 @@ namespace MothBot.modules
 
                 case "gitpullandreboot":
                     Placeholder(src);
+                    return;
+
+                case "resetmodules":
+                    Console.WriteLine("RESETTING MODULES");
+                    this._parent.InitModules();
+                    src.Channel.SendMessageAsync("Modules reset!");
+                    return;
+
+                case "setprefix":
+                    arg = arg.ToLower();    //JUST in case 
+                    this._parent.PREFIX = arg;
+                    Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
+                    src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
+                    this._parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
                     return;
 
                 case "imagesearch.togglefallback":
@@ -82,11 +114,11 @@ namespace MothBot.modules
                     Console.WriteLine("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
                     return;
 
-                case "minesweeper.setsize":
+                /*case "minesweeper.setsize":
                     this._parent._mineSweeper.defaultGridsize = byte.Parse(arg);
                     src.Channel.SendMessageAsync("defaultGridsize set to: " + this._parent._mineSweeper.defaultGridsize);
                     Console.WriteLine("defaultGridsize set to: " + this._parent._mineSweeper.defaultGridsize);
-                    return;
+                    return;*/
 
                 default:
                     Placeholder(src);

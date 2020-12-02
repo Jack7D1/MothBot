@@ -22,7 +22,7 @@ namespace MothBot
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
 
-        public async Task MainAsync()
+        public void InitModules()
         {
             _mineSweeper = new modules.Minesweeper();
             _imageSearch = new modules.Imagesearch();
@@ -31,6 +31,11 @@ namespace MothBot
             {
                 _parent = this
             };
+        }
+
+        private async Task MainAsync()
+        {
+            InitModules();
             _client = new DiscordSocketClient();
             _client.MessageReceived += CommandHandler;
             _client.Log += Log;
@@ -66,11 +71,11 @@ namespace MothBot
                 return Task.CompletedTask;
             }
             //All non prefix dependant directives go above
-            else if ((input.Split(' ')[0] != PREFIX) || (input.Length < PREFIX.Length + 3))
+            else if ((input.Split(' ')[0] != PREFIX))
             {
                 return Task.CompletedTask;
             }
-            else if ((input[2] != ' ') || (input[3] == ' '))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
+            else if (input[PREFIX.Length] != ' ')    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
             {
                 return Task.CompletedTask;
             }
@@ -179,7 +184,6 @@ namespace MothBot
 
                 case "utility":
                     _utilities.CommandHandler(message);
-                    _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);    // In case prefix was changed
                     return Task.CompletedTask;
 
                 default:
