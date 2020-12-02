@@ -1,38 +1,33 @@
-﻿namespace MothBot.modules
+﻿using Discord.WebSocket;
+
+namespace MothBot.modules
 {
     internal class Sanitize
     {
-        public string ScrubAnyRolePings(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        public string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
         {
-            string outStr = inStr;
-            //Blacklist for @everyone, @here and all role pings. Waste minimal processor time by simply skipping santization if these arent found.
+            //Blacklist for @everyone, @here.
             if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
             {
-                outStr = inStr.Replace('@', ' ');
+                return inStr.Replace("@everyone", "everyone").Replace("@here", "here");
             }
-            else if (inStr.Contains("<@&"))
+            else
+                return inStr;
+        }
+
+        public string ScrubRoleMentions(SocketMessage src)
+        {   //Removes any mentions for roles.
+            if (src.MentionedRoles.Count > 0)
             {
-                do    //Find all occurances of '<@&', select up to the next '>' and simply remove it.
+                string content = ScrubEveryoneandHereMentions(src.Content);
+                foreach (SocketRole offender in src.MentionedRoles)
                 {
-                    ushort strPtr0 = (ushort)inStr.IndexOf("<@&");
-                    ushort strPtr1 = (ushort)(strPtr0 + 1);
-                    while (strPtr1 < inStr.Length)
-                    {
-                        if (inStr[strPtr1] == '>' || strPtr1 >= inStr.Length - 1)
-                            break;
-                        strPtr1++;
-                    }
-                    if (inStr[strPtr1] != '>')
-                        break;
-                    //Remove this section between strPtr0 to strPtr1 inclusive
-                    string strFirst = inStr.Substring(0, strPtr0);
-                    string strSecond = inStr.Substring(strPtr1 + 1);
-                    outStr = strFirst + strSecond;
-                } while (outStr.Contains("<@&"));
+                    content = content.Replace($"<@&{offender.Id}>", offender.Name);
+                }
+                return content;
             }
-            if (outStr.Length == 0)
-                outStr = " ";
-            return outStr;
+            else
+                return ScrubEveryoneandHereMentions(src.Content);
         }
     }
 }

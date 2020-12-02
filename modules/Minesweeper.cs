@@ -1,14 +1,15 @@
 ﻿using Discord.WebSocket;
 using System;
+using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        private long lastMinesweeper = 0;
+        private static long lastMinesweeper = 0;
         public byte defaultGridsize = 8;
         public ushort defaultBombs = 8;
-        private readonly Random _rand = new Random();
+        private static readonly Random _rand = new Random();
 
         //Program creates a minesweeper for discord, given by input parameters.
         //Element defs
@@ -22,7 +23,7 @@ namespace MothBot.modules
 
         private readonly byte[,] numSpace = new byte[16, 16];
 
-        private void PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+        private Task PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
         {
             //Very important to fill bombspace with 0, as only 1s are plotted
             for (byte y = 0; y < gridHeight; y++)
@@ -42,7 +43,7 @@ namespace MothBot.modules
                 } while (bombSpace[xRand, yRand]);
                 bombSpace[xRand, yRand] = true;
             }
-            return;
+            return Task.CompletedTask;
         }
 
         private byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
@@ -95,7 +96,7 @@ namespace MothBot.modules
             return bombs;
         }
 
-        private void PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
+        private Task PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
                                                                     //This is the heaviest task, so it's best to keep it seperate.
         {
             //Effectively calls getNearbyBombs for every demanded space in numSpace
@@ -106,6 +107,7 @@ namespace MothBot.modules
                     numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight);
                 }
             }
+            return Task.CompletedTask;
         }
 
         private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string

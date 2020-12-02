@@ -36,6 +36,7 @@ namespace MothBot
         private async Task MainAsync()
         {
             InitModules();
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             _client = new DiscordSocketClient();
             _client.MessageReceived += CommandHandler;
             _client.Log += Log;
@@ -95,7 +96,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "uwu":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + "uwu ".Length))));
+                    message.Channel.SendMessageAsync(ConvertToUwU(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "uwu ".Length)));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
@@ -127,7 +128,7 @@ namespace MothBot
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {_sanitize.ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])}.*");
+                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]}.*");
                     }
                     return Task.CompletedTask;
 
@@ -138,14 +139,14 @@ namespace MothBot
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {_sanitize.ScrubAnyRolePings(message.Content.Split(' ')[PREFIX.Length])} to make them feel better.*");
+                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]} to make them feel better.*");
                     }
                     return Task.CompletedTask;
 
                 case "laws":
                 case "state":
-                    if (message.Id % 1000 != 0)   //Little antimov easter egg if the message ID ends in 000, 1 in 1000 chance.
-                    {   //Used to be 666 but i think discord might prevent that ID from appearing
+                    if (message.Id % 100 != 0)   //Little antimov easter egg if the message ID ends in 00, 1 in 100 chance.
+                    {
                         message.Channel.SendMessageAsync("**Current active laws:**\n" +
                        "```" +
                        "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
@@ -165,7 +166,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "say":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + "say ".Length)));
+                    message.Channel.SendMessageAsync(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "say ".Length));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
@@ -221,6 +222,11 @@ namespace MothBot
             }
             //After running though whole string output the result.
             return outStr;
+        }
+
+        private void OnProcessExit(object sender, EventArgs e)
+        {
+            _client.LogoutAsync();  //So mothbot doesn't hang out as a ghost for a few minutes.
         }
 
         private Task Log(LogMessage msg)    //Prints input messages to console

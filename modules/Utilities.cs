@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System;
+using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
@@ -8,7 +9,7 @@ namespace MothBot.modules
     {
         public Program _parent;
 
-        public bool confirmNoAccess = false;
+        public static bool confirmNoAccess = false;
 
         private readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
             206920373952970753, //Jack
@@ -17,21 +18,22 @@ namespace MothBot.modules
             489965198531362838, //Argema
         };
 
-        private string arg = "";
-        private string command = "";
-        private string keyword = "";
-        private bool shutdownEnabled = false;
+        private static bool shutdownEnabled = false;
+        private string command, keyword, arg;
 
-        public void CommandHandler(SocketMessage src)
+        public Task CommandHandler(SocketMessage src)
         {
+            command = "";
+            keyword = "";
+            arg = "";
             if (!IsOperator(src))   //You do not have permission
                 if (confirmNoAccess)
                 {
                     src.Channel.SendMessageAsync("You do not have access to Utilities.");
-                    return;
+                    return Task.CompletedTask;
                 }
                 else
-                    return;
+                    return Task.CompletedTask;
             if (src.Content.Length < (_parent.PREFIX + " utility ").Length)
             {
                 keyword = "commands";
@@ -39,7 +41,7 @@ namespace MothBot.modules
             else
             {
                 command = src.Content.ToLower().Substring(src.Content.ToLower().IndexOf("utility") + "utility ".Length); //We now have all text that follows the word 'utility'.
-                if (command.Contains('('))
+                if (command.Contains('(') && command.Contains(')'))
                 {
                     keyword = command.Substring(0, command.IndexOf('('));
                     arg = command[(command.IndexOf('(') + 1)..command.IndexOf(')')];
@@ -69,17 +71,17 @@ namespace MothBot.modules
                              "modules.Minesweeper:\n" +
                              prefix + "minesweeper.setbombs(0-65335)\n" +
                              //prefix + "minesweeper.setsize(0-16)\n" +
-                             "```````" +
+                             "``````" +
                              "dangerous:\n" +
                              prefix + "shutdown\n" +
                              "```");
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "togglenoaccess":
                     confirmNoAccess = !confirmNoAccess;
                     Console.WriteLine($"confirmNoAccess toggled to {confirmNoAccess}");
                     src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "showvars":
                     src.Channel.SendMessageAsync("**Set Vars:**\n" +
@@ -97,13 +99,13 @@ namespace MothBot.modules
                         $"minesweeper.defaultBombs(0-65335)\n" +
                         //$"minesweeper.defaultGridsize(0-16)\n" +
                         "```");
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "resetmodules":
                     Console.WriteLine("RESETTING MODULES");
                     this._parent.InitModules();
                     src.Channel.SendMessageAsync("Modules reset!");
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "setprefix":
                     arg = arg.ToLower();    //JUST in case
@@ -111,26 +113,26 @@ namespace MothBot.modules
                     Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
                     src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
                     this._parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "imagesearch.togglefallback":
                     this._parent._imageSearch.ToggleFallback();
                     src.Channel.SendMessageAsync("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
                     Console.WriteLine("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "imagesearch.maxretries":
                     this._parent._imageSearch.maxRetries = byte.Parse(arg);
                     src.Channel.SendMessageAsync("maxRetries set to: " + this._parent._imageSearch.maxRetries);
                     Console.WriteLine("maxRetries set to: " + this._parent._imageSearch.maxRetries);
-                    return;
+                    return Task.CompletedTask; ;
 
                 case "minesweeper.setbombs":
                     ushort Sarg = (ushort)Math.Abs(Math.Min(ushort.Parse(arg), ushort.MaxValue));
                     this._parent._mineSweeper.defaultBombs = Sarg;
                     src.Channel.SendMessageAsync("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
                     Console.WriteLine("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
-                    return;
+                    return Task.CompletedTask; ;
 
                 /*case "minesweeper.setsize":
                     this._parent._mineSweeper.defaultGridsize = byte.Parse(arg);
@@ -146,25 +148,26 @@ namespace MothBot.modules
                             Console.WriteLine($"SHUTTING DOWN: ordered by {src.Author.Username}");
                             src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
                             Environment.Exit(13);
-                            return;
+                            return Task.CompletedTask; ;
                         }
                         else
                         {
-                            src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to cancel.");
+                            shutdownEnabled = true;
+                            src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
                             Console.WriteLine($"{src.Author.Username} disabled shutdown safety.");
-                            return;
+                            return Task.CompletedTask; ;
                         }
                     }
                     else
                     {
                         shutdownEnabled = false;
-                        src.Channel.SendMessageAsync("Shutdown safety enabled, argument (confirm) to disable.");
-                        return;
+                        src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument (confirm) to disable.");
+                        return Task.CompletedTask; ;
                     }
 
                 default:
                     src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
-                    return;
+                    return Task.CompletedTask; ;
             }
         }
 

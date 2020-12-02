@@ -9,7 +9,7 @@ namespace MothBot.modules
         private const string linkSearch = "https://imgur.com/search?q=";
         public byte maxRetries = 255;
         public bool firstResultFallback = true;
-        private readonly System.Net.WebClient _webClient = new System.Net.WebClient();
+        private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
 
         public string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
