@@ -18,9 +18,9 @@ namespace MothBot.modules
         private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
         //Element space arrays
-        private bool[,] bombSpace = new bool[255, 255];
+        private readonly bool[,] bombSpace = new bool[255, 255];
 
-        private byte[,] numSpace = new byte[255, 255];
+        private readonly byte[,] numSpace = new byte[255, 255];
 
         private void PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
         {

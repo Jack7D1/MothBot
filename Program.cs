@@ -7,13 +7,13 @@ namespace MothBot
 {
     internal class Program
     {
-        public static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
+        private static string var0 = ".gdZabfUh73BDGLIBud7BsmKdj==";
         public string PREFIX = "ai";     //What should the bots attention prefix be? MUST be lowercase.
-        private DiscordSocketClient _client;
-        private modules.Imagesearch _imageSearch;
-        private modules.Minesweeper _mineSweeper;
-        private modules.Sanitize _sanitize;
-        private modules.Utilities _utilities;
+        public DiscordSocketClient _client;
+        public modules.Imagesearch _imageSearch;
+        public modules.Minesweeper _mineSweeper;
+        public modules.Sanitize _sanitize;
+        public modules.Utilities _utilities;
 
         public static void Main(string[] args)  //Initialization
         {
@@ -179,7 +179,7 @@ namespace MothBot
 
                 case "utility":
                     _utilities.CommandHandler(message);
-                    _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);
+                    _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);    // In case prefix was changed
                     return Task.CompletedTask;
 
                 default:
