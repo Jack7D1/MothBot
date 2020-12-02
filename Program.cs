@@ -95,7 +95,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "uwu":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + 4))));
+                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(ConvertToUwU(message.Content.Substring(PREFIX.Length + "uwu ".Length))));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 
@@ -165,7 +165,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "say":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + 4)));
+                    message.Channel.SendMessageAsync(_sanitize.ScrubAnyRolePings(message.Content.Substring(PREFIX.Length + "say ".Length)));
                     message.DeleteAsync();
                     return Task.CompletedTask;
 

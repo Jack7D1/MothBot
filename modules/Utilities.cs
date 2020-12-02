@@ -8,6 +8,8 @@ namespace MothBot.modules
     {
         public Program _parent;
 
+        public bool confirmNoAccess = false;
+
         private readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
             206920373952970753, //Jack
             144308736083755009, //Hirohito
@@ -15,14 +17,21 @@ namespace MothBot.modules
             489965198531362838, //Argema
         };
 
+        private string arg = "";
         private string command = "";
         private string keyword = "";
-        private string arg = "";
+        private bool shutdownEnabled = false;
 
         public void CommandHandler(SocketMessage src)
         {
             if (!IsOperator(src))   //You do not have permission
-                return;
+                if (confirmNoAccess)
+                {
+                    src.Channel.SendMessageAsync("You do not have access to Utilities.");
+                    return;
+                }
+                else
+                    return;
             if (src.Content.Length < (_parent.PREFIX + " utility ").Length)
             {
                 keyword = "commands";
@@ -45,41 +54,49 @@ namespace MothBot.modules
             {
                 case "commands":
                     src.Channel.SendMessageAsync("**Utility Command List:**\n" +
-                             "```general:\n" +
+                             "```" +
+                             "general:\n" +
                              prefix + "commands\n" +
+                             prefix + "togglenoaccess" +
                              prefix + "showvars\n" +
-                             prefix + "reboot\n" +
-                             prefix + "gitpullandreboot\n" +
                              prefix + "resetmodules\n" +
                              prefix + "setprefix(string)\n" +
-                             "```\n" +
-
-                             "```modules.Imagesearch:\n" +
+                             "``````" +
+                             "modules.Imagesearch:\n" +
                              prefix + "imagesearch.togglefallback\n" +
                              prefix + "imagesearch.maxretries(0-255)\n" +
-                             "```\n" +
-
-                             "```modules.Minesweeper:\n" +
+                             "``````" +
+                             "modules.Minesweeper:\n" +
                              prefix + "minesweeper.setbombs(0-65335)\n" +
                              //prefix + "minesweeper.setsize(0-16)\n" +
+                             "```````" +
+                             "dangerous:\n" +
+                             prefix + "shutdown\n" +
                              "```");
                     return;
 
+                case "togglenoaccess":
+                    confirmNoAccess = !confirmNoAccess;
+                    Console.WriteLine($"confirmNoAccess toggled to {confirmNoAccess}");
+                    src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
+                    return;
+
                 case "showvars":
-                    src.Channel.SendMessageAsync("**Set Vars:**\n```" +
-                        $"FirstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
-                        $"maxRetries: {this._parent._imageSearch.maxRetries}\n" +
-                        $"defaultBombs: {this._parent._mineSweeper.defaultBombs}\n" +
-                        //$"defaultGridsize: {this._parent._mineSweeper.defaultGridsize}\n" +
-                        $"```");
-                    return;
-
-                case "reboot":
-                    Placeholder(src);
-                    return;
-
-                case "gitpullandreboot":
-                    Placeholder(src);
+                    src.Channel.SendMessageAsync("**Set Vars:**\n" +
+                        "```" +
+                        "general:\n" +
+                        $"Current Prefix: \"{this._parent.PREFIX}\"\n" +
+                        $"confirmNoAccess: {confirmNoAccess}\n" +
+                        $"shutdownEnabled: {shutdownEnabled}\n" +
+                        "``````" +
+                        "modules.Imagesearch:\n" +
+                        $"imagesearch.firstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
+                        $"imagesearch.maxRetries: {this._parent._imageSearch.maxRetries}\n" +
+                        "``````" +
+                        "modules.Minesweeper:\n" +
+                        $"minesweeper.defaultBombs(0-65335)\n" +
+                        //$"minesweeper.defaultGridsize(0-16)\n" +
+                        "```");
                     return;
 
                 case "resetmodules":
@@ -89,7 +106,7 @@ namespace MothBot.modules
                     return;
 
                 case "setprefix":
-                    arg = arg.ToLower();    //JUST in case 
+                    arg = arg.ToLower();    //JUST in case
                     this._parent.PREFIX = arg;
                     Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
                     src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
@@ -109,7 +126,8 @@ namespace MothBot.modules
                     return;
 
                 case "minesweeper.setbombs":
-                    this._parent._mineSweeper.defaultBombs = ushort.Parse(arg);
+                    ushort Sarg = (ushort)Math.Abs(Math.Min(ushort.Parse(arg), ushort.MaxValue));
+                    this._parent._mineSweeper.defaultBombs = Sarg;
                     src.Channel.SendMessageAsync("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
                     Console.WriteLine("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
                     return;
@@ -120,9 +138,33 @@ namespace MothBot.modules
                     Console.WriteLine("defaultGridsize set to: " + this._parent._mineSweeper.defaultGridsize);
                     return;*/
 
+                case "shutdown":
+                    if (arg == "confirm")
+                    {
+                        if (shutdownEnabled)
+                        {
+                            Console.WriteLine($"SHUTTING DOWN: ordered by {src.Author.Username}");
+                            src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
+                            Environment.Exit(13);
+                            return;
+                        }
+                        else
+                        {
+                            src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to cancel.");
+                            Console.WriteLine($"{src.Author.Username} disabled shutdown safety.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        shutdownEnabled = false;
+                        src.Channel.SendMessageAsync("Shutdown safety enabled, argument (confirm) to disable.");
+                        return;
+                    }
+
                 default:
-                    Placeholder(src);
-                    break;
+                    src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
+                    return;
             }
         }
 
@@ -134,11 +176,6 @@ namespace MothBot.modules
                     return true;
             }
             return false;
-        }
-
-        private void Placeholder(SocketMessage src)
-        {
-            src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
         }
     }
 }
