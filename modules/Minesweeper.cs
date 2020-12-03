@@ -1,14 +1,12 @@
-﻿using Discord.WebSocket;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        private static long lastMinesweeper = 0;
-        public byte defaultGridsize = 8;
-        public ushort defaultBombs = 8;
+        public const ushort defaultBombs = 8;
+        public const byte defaultGridsize = 8;
         private static readonly Random _rand = new Random();
 
         //Program creates a minesweeper for discord, given by input parameters.
@@ -16,34 +14,67 @@ namespace MothBot.modules
         private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };
 
         private static readonly string bombString = ":bomb:";
-        private static readonly string[] spoilerTag = { "||", "||" };       //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
+        private static readonly string[] spoilerTag = { "||", "||" };
+        private static long lastMinesweeper = 0;
+        //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
         //Element space arrays
-        private readonly bool[,] bombSpace = new bool[16, 16];
+        private readonly bool[,] bombSpace = new bool[12, 12];
 
-        private readonly byte[,] numSpace = new byte[16, 16];
+        private readonly byte[,] numSpace = new byte[12, 12];
 
-        private Task PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+        public string GetMinesweeper(ushort bombs, byte gridWidth, byte gridHeight)
         {
-            //Very important to fill bombspace with 0, as only 1s are plotted
+            if (System.DateTime.Now.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
+                return "Minesweepers generated too frequently!";
+
+            lastMinesweeper = System.DateTime.Now.Ticks;
+
+            gridHeight = Math.Min(gridHeight, (byte)12);
+            gridWidth = Math.Min(gridWidth, (byte)12);
+            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
+
+            PopulateBombs(bombs, gridWidth, gridHeight);
+            PopulateNums(gridWidth, gridHeight);
+            return $"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
+                GetMineMap(gridWidth, gridHeight);
+        }
+
+        public string GetMinesweeper(ushort bombs, byte size)
+        {
+            if (System.DateTime.Now.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
+                return "Minesweepers generated too frequently!";
+
+            lastMinesweeper = System.DateTime.Now.Ticks;
+
+            size = Math.Min(size, (byte)12);
+            bombs = Math.Min(bombs, (ushort)(size * size));
+
+            PopulateBombs(bombs, size, size);
+            PopulateNums(size, size);
+            return $"```MINESWEEPER: Size-{size} Bombs-{bombs}```" +
+                GetMineMap(size, size);
+        }
+
+        private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string
+        {
+            string mineMap = "";
             for (byte y = 0; y < gridHeight; y++)
             {
                 for (byte x = 0; x < gridWidth; x++)
                 {
-                    bombSpace[x, y] = false;
+                    if (bombSpace[x, y])
+                    {
+                        mineMap += spoilerTag[0] + bombString + spoilerTag[1];
+                    }
+                    else
+                    {
+                        mineMap += spoilerTag[0] + bombCounts[numSpace[x, y]] + spoilerTag[1];
+                    }
                 }
+                mineMap += "\n";
             }
-            for (ushort i = bombs; i > 0; i--)
-            {
-                byte xRand, yRand;
-                do
-                { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
-                    xRand = (byte)(_rand.Next() % gridWidth);
-                    yRand = (byte)(_rand.Next() % gridHeight);
-                } while (bombSpace[xRand, yRand]);
-                bombSpace[xRand, yRand] = true;
-            }
-            return Task.CompletedTask;
+            return mineMap;
         }
 
         private byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
@@ -96,6 +127,29 @@ namespace MothBot.modules
             return bombs;
         }
 
+        private Task PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+        {
+            //Very important to fill bombspace with 0, as only 1s are plotted
+            for (byte y = 0; y < gridHeight; y++)
+            {
+                for (byte x = 0; x < gridWidth; x++)
+                {
+                    bombSpace[x, y] = false;
+                }
+            }
+            for (ushort i = bombs; i > 0; i--)
+            {
+                byte xRand, yRand;
+                do
+                { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
+                    xRand = (byte)(_rand.Next(0, gridWidth - 1));
+                    yRand = (byte)(_rand.Next(0, gridHeight - 1));
+                } while (bombSpace[xRand, yRand]);
+                bombSpace[xRand, yRand] = true;
+            }
+            return Task.CompletedTask;
+        }
+
         private Task PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
                                                                     //This is the heaviest task, so it's best to keep it seperate.
         {
@@ -108,46 +162,6 @@ namespace MothBot.modules
                 }
             }
             return Task.CompletedTask;
-        }
-
-        private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string
-        {
-            string mineMap = "";
-            for (byte y = 0; y < gridHeight; y++)
-            {
-                for (byte x = 0; x < gridWidth; x++)
-                {
-                    if (bombSpace[x, y])
-                    {
-                        mineMap += spoilerTag[0] + bombString + spoilerTag[1];
-                    }
-                    else
-                    {
-                        mineMap += spoilerTag[0] + bombCounts[numSpace[x, y]] + spoilerTag[1];
-                    }
-                }
-                mineMap += "\n";
-            }
-            return mineMap;
-        }
-
-        public void PrintMinesweeper(ushort bombs, byte gridWidth, byte gridHeight, SocketMessage srcMsg)
-        {
-            if (srcMsg.Timestamp.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
-            {
-                srcMsg.Channel.SendMessageAsync("Minesweepers generated too frequently!");
-                return;
-            }
-            lastMinesweeper = srcMsg.Timestamp.Ticks;
-
-            gridHeight = Math.Min(gridHeight, (byte)16);
-            gridWidth = Math.Min(gridWidth, (byte)16);
-            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
-
-            PopulateBombs(bombs, gridWidth, gridHeight);
-            PopulateNums(gridWidth, gridHeight);
-            srcMsg.Channel.SendMessageAsync("```MINESWEEPER: Size-" + Math.Max(gridWidth, gridHeight) + " Bombs-" + bombs +
-                "```\n" + GetMineMap(gridWidth, gridHeight));
         }
     }
 }

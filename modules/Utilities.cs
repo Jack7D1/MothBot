@@ -7,9 +7,9 @@ namespace MothBot.modules
 {
     internal class Utilities
     {
-        public Program _parent;
-
         public static bool confirmNoAccess = false;
+        public Program _parent;
+        private static bool shutdownEnabled = false;
 
         private readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
             206920373952970753, //Jack
@@ -18,7 +18,6 @@ namespace MothBot.modules
             489965198531362838, //Argema
         };
 
-        private static bool shutdownEnabled = false;
         private string command, keyword, arg;
 
         public Task CommandHandler(SocketMessage src)
@@ -59,7 +58,7 @@ namespace MothBot.modules
                              "```" +
                              "general:\n" +
                              prefix + "commands\n" +
-                             prefix + "togglenoaccess" +
+                             prefix + "togglenoaccessconfirmation\n" +
                              prefix + "showvars\n" +
                              prefix + "resetmodules\n" +
                              prefix + "setprefix(string)\n" +
@@ -68,16 +67,12 @@ namespace MothBot.modules
                              prefix + "imagesearch.togglefallback\n" +
                              prefix + "imagesearch.maxretries(0-255)\n" +
                              "``````" +
-                             "modules.Minesweeper:\n" +
-                             prefix + "minesweeper.setbombs(0-65335)\n" +
-                             //prefix + "minesweeper.setsize(0-16)\n" +
-                             "``````" +
                              "dangerous:\n" +
                              prefix + "shutdown\n" +
                              "```");
                     return Task.CompletedTask; ;
 
-                case "togglenoaccess":
+                case "togglenoaccessconfirmation":
                     confirmNoAccess = !confirmNoAccess;
                     Console.WriteLine($"confirmNoAccess toggled to {confirmNoAccess}");
                     src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
@@ -94,10 +89,6 @@ namespace MothBot.modules
                         "modules.Imagesearch:\n" +
                         $"imagesearch.firstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
                         $"imagesearch.maxRetries: {this._parent._imageSearch.maxRetries}\n" +
-                        "``````" +
-                        "modules.Minesweeper:\n" +
-                        $"minesweeper.defaultBombs(0-65335)\n" +
-                        //$"minesweeper.defaultGridsize(0-16)\n" +
                         "```");
                     return Task.CompletedTask; ;
 
@@ -126,19 +117,6 @@ namespace MothBot.modules
                     src.Channel.SendMessageAsync("maxRetries set to: " + this._parent._imageSearch.maxRetries);
                     Console.WriteLine("maxRetries set to: " + this._parent._imageSearch.maxRetries);
                     return Task.CompletedTask; ;
-
-                case "minesweeper.setbombs":
-                    ushort Sarg = (ushort)Math.Abs(Math.Min(ushort.Parse(arg), ushort.MaxValue));
-                    this._parent._mineSweeper.defaultBombs = Sarg;
-                    src.Channel.SendMessageAsync("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
-                    Console.WriteLine("defaultBombs set to: " + this._parent._mineSweeper.defaultBombs);
-                    return Task.CompletedTask; ;
-
-                /*case "minesweeper.setsize":
-                    this._parent._mineSweeper.defaultGridsize = byte.Parse(arg);
-                    src.Channel.SendMessageAsync("defaultGridsize set to: " + this._parent._mineSweeper.defaultGridsize);
-                    Console.WriteLine("defaultGridsize set to: " + this._parent._mineSweeper.defaultGridsize);
-                    return;*/
 
                 case "shutdown":
                     if (arg == "confirm")
