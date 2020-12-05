@@ -20,9 +20,9 @@ namespace MothBot.modules
             if (src.MentionedRoles.Count > 0)
             {
                 string content = ScrubEveryoneandHereMentions(src.Content);
-                foreach (SocketRole offender in src.MentionedRoles)
+                foreach (SocketRole mention in src.MentionedRoles)
                 {
-                    content = content.Replace($"<@&{offender.Id}>", offender.Name);
+                    content = content.Replace($"<@&{mention.Id}>", mention.Name);
                 }
                 return content;
             }

@@ -53,15 +53,20 @@ namespace MothBot.modules
             string prefix = _parent.PREFIX + " utility ";
             switch (keyword)    //Ensure switch is ordered similarly to command list
             {
+                //General
                 case "commands":
                     src.Channel.SendMessageAsync("**Utility Command List:**\n" +
                              "```" +
                              "general:\n" +
                              prefix + "commands\n" +
                              prefix + "togglenoaccessconfirmation\n" +
-                             prefix + "showvars\n" +
                              prefix + "resetmodules\n" +
                              prefix + "setprefix(string)\n" +
+                             "``````" +
+                             "debug info:\n" +
+                             prefix + "showvars\n" +
+                             prefix + "showguilds\n" +
+                             prefix + "ping\n" +
                              "``````" +
                              "modules.Imagesearch:\n" +
                              prefix + "imagesearch.togglefallback\n" +
@@ -70,14 +75,29 @@ namespace MothBot.modules
                              "dangerous:\n" +
                              prefix + "shutdown\n" +
                              "```");
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
 
                 case "togglenoaccessconfirmation":
                     confirmNoAccess = !confirmNoAccess;
                     Console.WriteLine($"confirmNoAccess toggled to {confirmNoAccess}");
                     src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
 
+                case "resetmodules":
+                    Console.WriteLine("RESETTING MODULES");
+                    this._parent.InitModules();
+                    src.Channel.SendMessageAsync("Modules reset!");
+                    return Task.CompletedTask;
+
+                case "setprefix":
+                    arg = arg.ToLower();    //JUST in case
+                    this._parent.PREFIX = arg;
+                    Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
+                    src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
+                    this._parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
+                    return Task.CompletedTask;
+
+                //Debug info
                 case "showvars":
                     src.Channel.SendMessageAsync("**Set Vars:**\n" +
                         "```" +
@@ -90,34 +110,37 @@ namespace MothBot.modules
                         $"imagesearch.firstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
                         $"imagesearch.maxRetries: {this._parent._imageSearch.maxRetries}\n" +
                         "```");
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
 
-                case "resetmodules":
-                    Console.WriteLine("RESETTING MODULES");
-                    this._parent.InitModules();
-                    src.Channel.SendMessageAsync("Modules reset!");
-                    return Task.CompletedTask; ;
+                case "showguilds":
+                    int i = 0;
+                    string guildstring = "";
+                    foreach (SocketGuild guild in this._parent._client.Guilds)
+                    {
+                        guildstring += $"GUILD {i + 1}: {guild.Name} [{guild.Id}]. Members: {guild.MemberCount}\n";
+                        i++;
+                    }
+                    src.Channel.SendMessageAsync(guildstring);
+                    return Task.CompletedTask;
 
-                case "setprefix":
-                    arg = arg.ToLower();    //JUST in case
-                    this._parent.PREFIX = arg;
-                    Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
-                    src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
-                    this._parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
-                    return Task.CompletedTask; ;
+                case "ping":
+                    src.Channel.SendMessageAsync($"Ping: {this._parent._client.Latency}ms");
+                    return Task.CompletedTask;
 
+                //modules.Imagesearch:
                 case "imagesearch.togglefallback":
                     this._parent._imageSearch.ToggleFallback();
                     src.Channel.SendMessageAsync("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
                     Console.WriteLine("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
 
                 case "imagesearch.maxretries":
                     this._parent._imageSearch.maxRetries = byte.Parse(arg);
                     src.Channel.SendMessageAsync("maxRetries set to: " + this._parent._imageSearch.maxRetries);
                     Console.WriteLine("maxRetries set to: " + this._parent._imageSearch.maxRetries);
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
 
+                //dangerous
                 case "shutdown":
                     if (arg == "confirm")
                     {
@@ -126,26 +149,26 @@ namespace MothBot.modules
                             Console.WriteLine($"SHUTTING DOWN: ordered by {src.Author.Username}");
                             src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
                             Environment.Exit(13);
-                            return Task.CompletedTask; ;
+                            return Task.CompletedTask;
                         }
                         else
                         {
                             shutdownEnabled = true;
                             src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
                             Console.WriteLine($"{src.Author.Username} disabled shutdown safety.");
-                            return Task.CompletedTask; ;
+                            return Task.CompletedTask;
                         }
                     }
                     else
                     {
                         shutdownEnabled = false;
                         src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument (confirm) to disable.");
-                        return Task.CompletedTask; ;
+                        return Task.CompletedTask;
                     }
 
                 default:
                     src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
-                    return Task.CompletedTask; ;
+                    return Task.CompletedTask;
             }
         }
 

@@ -9,6 +9,7 @@ namespace MothBot
     {
         public DiscordSocketClient _client;
         public modules.Imagesearch _imageSearch;
+        public modules.Logging _logging;
         public modules.Minesweeper _mineSweeper;
         public modules.Sanitize _sanitize;
         public modules.Utilities _utilities;
@@ -22,8 +23,10 @@ namespace MothBot
 
         public void InitModules()
         {
-            _mineSweeper = new modules.Minesweeper();
             _imageSearch = new modules.Imagesearch();
+            _logging = new modules.Logging();
+            _logging.Log($"System reset at [{System.DateTime.Now}]");
+            _mineSweeper = new modules.Minesweeper();
             _sanitize = new modules.Sanitize();
             _utilities = new modules.Utilities
             {
@@ -60,6 +63,7 @@ namespace MothBot
             //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             string command = message.Content.Split(' ')[1].ToLower();
+            _logging.Log(message);
             switch (command)
             {
                 case "hello":
@@ -197,19 +201,13 @@ namespace MothBot
             return outStr;
         }
 
-        private Task Log(LogMessage msg)    //Prints input messages to console
-        {
-            Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
-
         private async Task MainAsync()
         {
             InitModules();
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             _client = new DiscordSocketClient();
             _client.MessageReceived += CommandHandler;
-            _client.Log += Log;
+            _client.Log += _logging.Log;
 
             await _client.LoginAsync(TokenType.Bot, S());
             await _client.SetGameAsync("Prefix: " + PREFIX + ". Say '" + PREFIX + " help' for commands!", null, ActivityType.Playing);
@@ -221,6 +219,8 @@ namespace MothBot
         private void OnProcessExit(object sender, EventArgs e)
         {
             _client.LogoutAsync();  //So mothbot doesn't hang out as a ghost for a few minutes.
+            _logging.Log($"System shutdown at [{System.DateTime.Now}]");
+            _logging.Close();
         }
 
         private string S()
