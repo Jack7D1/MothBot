@@ -80,6 +80,7 @@ namespace MothBot.modules
                              prefix + "showvars\n" +
                              prefix + "showguilds\n" +
                              prefix + "ping\n" +
+                             prefix + "recentlogs\n" +
                              "``````" +
                              "modules.Imagesearch:\n" +
                              prefix + "imagesearch.togglefallback\n" +
@@ -95,12 +96,12 @@ namespace MothBot.modules
 
                 case "togglenoaccessconfirmation":
                     confirmNoAccess = !confirmNoAccess;
-                    _logging.LogConsoleAndFile($"confirmNoAccess toggled to {confirmNoAccess}");
+                    _logging.LogtoConsoleandFile($"confirmNoAccess toggled to {confirmNoAccess}");
                     src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
                     return Task.CompletedTask;
 
                 case "resetmodules":
-                    _logging.LogConsoleAndFile("RESETTING MODULES");
+                    _logging.LogtoConsoleandFile("RESETTING MODULES");
                     _parent.InitModules();
                     src.Channel.SendMessageAsync("Modules reset!");
                     return Task.CompletedTask;
@@ -108,7 +109,7 @@ namespace MothBot.modules
                 case "setprefix":
                     arg = arg.ToLower();    //JUST in case
                     _parent.PREFIX = arg;
-                    _logging.LogConsoleAndFile($"PREFIX CHANGED TO \"{_parent.PREFIX}\"");
+                    _logging.LogtoConsoleandFile($"PREFIX CHANGED TO \"{_parent.PREFIX}\"");
                     src.Channel.SendMessageAsync($"Prefix changed to {_parent.PREFIX}!");
                     _parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
                     return Task.CompletedTask;
@@ -132,38 +133,57 @@ namespace MothBot.modules
                     return Task.CompletedTask;
 
                 case "showguilds":
-                    int i = 0;
-                    string guildstring = "";
-                    foreach (SocketGuild guild in _parent._client.Guilds)
                     {
-                        guildstring += $"GUILD {i + 1}: {guild.Name} [{guild.Id}]. Members: {guild.MemberCount}\n";
-                        i++;
+                        string guildstring = "";
+
+                        byte i = 0;
+                        foreach (SocketGuild guild in _parent._client.Guilds)
+                        {
+                            guildstring += $"GUILD {i + 1}: {guild.Name} [{guild.Id}]. Members: {guild.MemberCount}\n";
+                            i++;
+                        }
+
+                        src.Channel.SendMessageAsync(guildstring);
+                        return Task.CompletedTask;
                     }
-                    src.Channel.SendMessageAsync(guildstring);
-                    return Task.CompletedTask;
 
                 case "ping":
                     src.Channel.SendMessageAsync($"Ping: {_parent._client.Latency}ms");
                     return Task.CompletedTask;
 
+                case "recentlogs":
+                    {
+                        string[] inlogs = _logging.GetLogs();
+                        string outstr = "**Recent Log Entries**```";
+                        for (byte i = 0; i < 255; i++)
+                        {
+                            outstr += $"{i + 1}: \"{inlogs[i]}\"\n";
+                            if (i < 255)
+                                if (inlogs[i + 1] == null)
+                                    break;
+                        }
+                        src.Channel.SendMessageAsync(outstr + "```");
+                        return Task.CompletedTask;
+                    }
+
                 //modules.Imagesearch:
                 case "imagesearch.togglefallback":
                     _imageSearch.ToggleFallback();
                     src.Channel.SendMessageAsync("firstResultFallback toggled to: " + _imageSearch.firstResultFallback);
-                    _logging.LogConsoleAndFile("firstResultFallback toggled to: " + _imageSearch.firstResultFallback);
+                    _logging.LogtoConsoleandFile("firstResultFallback toggled to: " + _imageSearch.firstResultFallback);
                     return Task.CompletedTask;
 
                 case "imagesearch.maxretries":
                     _imageSearch.maxRetries = byte.Parse(arg);
                     src.Channel.SendMessageAsync($"maxRetries set to: {_imageSearch.maxRetries}");
-                    _logging.LogConsoleAndFile($"maxRetries set to: {_imageSearch.maxRetries}");
+                    _logging.LogtoConsoleandFile($"maxRetries set to: {_imageSearch.maxRetries}");
                     return Task.CompletedTask;
 
                 //modules.Minesweeper:
                 case "minesweeper.setbombs":
                     _mineSweeper.defaultBombs = ushort.Parse(arg);
                     src.Channel.SendMessageAsync("minesweeper.defaultBombs set to: " + _mineSweeper.defaultBombs);
-                    _logging.LogConsoleAndFile($"defaultBombs set to: {_mineSweeper.defaultBombs}");
+                    _logging.LogtoConsoleandFile($"defaultBombs set to: {_mineSweeper.defaultBombs}");
                     return Task.CompletedTask;
 
                 //dangerous

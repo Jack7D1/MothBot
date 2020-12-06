@@ -25,7 +25,7 @@ namespace MothBot
         {
             _imageSearch = new modules.Imagesearch();
             _logging = new modules.Logging();
-            _logging.Log($"System reset at [{System.DateTime.Now}, UTC{System.TimeZoneInfo.Local.BaseUtcOffset.Hours}]");
+            _logging.Log($"System reset at [{System.DateTime.UtcNow}]");
             _mineSweeper = new modules.Minesweeper();
             _sanitize = new modules.Sanitize();
             _utilities = new modules.Utilities(this);
@@ -216,7 +216,7 @@ namespace MothBot
         private void OnProcessExit(object sender, EventArgs e)
         {
             _client.LogoutAsync();  //So mothbot doesn't hang out as a ghost for a few minutes.
-            _logging.Log($"System shutdown at [{System.DateTime.Now}, UTC{System.TimeZoneInfo.Local.BaseUtcOffset.Hours}]");
+            _logging.Log($"System shutdown at [{System.DateTime.UtcNow}]");
             _logging.Close();
         }
 
