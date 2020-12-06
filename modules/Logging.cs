@@ -34,5 +34,12 @@ namespace MothBot.modules
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
+
+        public Task LogConsoleAndFile(string str)
+        {
+            Console.WriteLine(str);
+            _log.WriteLineAsync(str);
+            return Task.CompletedTask;
+        }
     }
 }

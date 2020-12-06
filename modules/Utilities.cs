@@ -8,8 +8,12 @@ namespace MothBot.modules
     internal class Utilities
     {
         public static bool confirmNoAccess = false;
-        public Program _parent;
         private static bool shutdownEnabled = false;
+        private readonly Imagesearch _imageSearch;
+        private readonly Logging _logging;
+        private readonly Minesweeper _mineSweeper;
+        private readonly Program _parent;
+        private readonly Sanitize _sanitize;
 
         private readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
             206920373952970753, //Jack
@@ -19,6 +23,15 @@ namespace MothBot.modules
         };
 
         private string command, keyword, arg;
+
+        public Utilities(Program parentRef)
+        {
+            _parent = parentRef;
+            _imageSearch = _parent._imageSearch;
+            _logging = _parent._logging;
+            _mineSweeper = _parent._mineSweeper;
+            _sanitize = _parent._sanitize;
+        }
 
         public Task CommandHandler(SocketMessage src)
         {
@@ -72,6 +85,9 @@ namespace MothBot.modules
                              prefix + "imagesearch.togglefallback\n" +
                              prefix + "imagesearch.maxretries(0-255)\n" +
                              "``````" +
+                             "modules.Minesweeper:\n" +
+                             prefix + "minesweeper.setbombs(0-64)" +
+                             "``````" +
                              "dangerous:\n" +
                              prefix + "shutdown\n" +
                              "```");
@@ -79,22 +95,22 @@ namespace MothBot.modules
 
                 case "togglenoaccessconfirmation":
                     confirmNoAccess = !confirmNoAccess;
-                    Console.WriteLine($"confirmNoAccess toggled to {confirmNoAccess}");
+                    _logging.LogConsoleAndFile($"confirmNoAccess toggled to {confirmNoAccess}");
                     src.Channel.SendMessageAsync($"confirmNoAccess toggled to {confirmNoAccess}");
                     return Task.CompletedTask;
 
                 case "resetmodules":
-                    Console.WriteLine("RESETTING MODULES");
-                    this._parent.InitModules();
+                    _logging.LogConsoleAndFile("RESETTING MODULES");
+                    _parent.InitModules();
                     src.Channel.SendMessageAsync("Modules reset!");
                     return Task.CompletedTask;
 
                 case "setprefix":
                     arg = arg.ToLower();    //JUST in case
-                    this._parent.PREFIX = arg;
-                    Console.WriteLine($"PREFIX CHANGED TO \"{this._parent.PREFIX}\"");
-                    src.Channel.SendMessageAsync($"Prefix changed to {this._parent.PREFIX}!");
-                    this._parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
+                    _parent.PREFIX = arg;
+                    _logging.LogConsoleAndFile($"PREFIX CHANGED TO \"{_parent.PREFIX}\"");
+                    src.Channel.SendMessageAsync($"Prefix changed to {_parent.PREFIX}!");
+                    _parent._client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
                     return Task.CompletedTask;
 
                 //Debug info
@@ -102,20 +118,23 @@ namespace MothBot.modules
                     src.Channel.SendMessageAsync("**Set Vars:**\n" +
                         "```" +
                         "general:\n" +
-                        $"Current Prefix: \"{this._parent.PREFIX}\"\n" +
+                        $"Current Prefix: \"{_parent.PREFIX}\"\n" +
                         $"confirmNoAccess: {confirmNoAccess}\n" +
                         $"shutdownEnabled: {shutdownEnabled}\n" +
                         "``````" +
                         "modules.Imagesearch:\n" +
-                        $"imagesearch.firstResultFallback: {this._parent._imageSearch.firstResultFallback}\n" +
-                        $"imagesearch.maxRetries: {this._parent._imageSearch.maxRetries}\n" +
+                        $"imagesearch.firstResultFallback: {_imageSearch.firstResultFallback}\n" +
+                        $"imagesearch.maxRetries: {_imageSearch.maxRetries}\n" +
+                        "``````" +
+                        "modules.Minesweeper:\n" +
+                        $"minesweeper.defaultBombs: {_mineSweeper.defaultBombs}\n" +
                         "```");
                     return Task.CompletedTask;
 
                 case "showguilds":
                     int i = 0;
                     string guildstring = "";
-                    foreach (SocketGuild guild in this._parent._client.Guilds)
+                    foreach (SocketGuild guild in _parent._client.Guilds)
                     {
                         guildstring += $"GUILD {i + 1}: {guild.Name} [{guild.Id}]. Members: {guild.MemberCount}\n";
                         i++;
@@ -124,20 +143,27 @@ namespace MothBot.modules
                     return Task.CompletedTask;
 
                 case "ping":
-                    src.Channel.SendMessageAsync($"Ping: {this._parent._client.Latency}ms");
+                    src.Channel.SendMessageAsync($"Ping: {_parent._client.Latency}ms");
                     return Task.CompletedTask;
 
                 //modules.Imagesearch:
                 case "imagesearch.togglefallback":
-                    this._parent._imageSearch.ToggleFallback();
-                    src.Channel.SendMessageAsync("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
-                    Console.WriteLine("firstResultFallback toggled to: " + this._parent._imageSearch.firstResultFallback);
+                    _imageSearch.ToggleFallback();
+                    src.Channel.SendMessageAsync("firstResultFallback toggled to: " + _imageSearch.firstResultFallback);
+                    _logging.LogConsoleAndFile("firstResultFallback toggled to: " + _imageSearch.firstResultFallback);
                     return Task.CompletedTask;
 
                 case "imagesearch.maxretries":
-                    this._parent._imageSearch.maxRetries = byte.Parse(arg);
-                    src.Channel.SendMessageAsync("maxRetries set to: " + this._parent._imageSearch.maxRetries);
-                    Console.WriteLine("maxRetries set to: " + this._parent._imageSearch.maxRetries);
+                    _imageSearch.maxRetries = byte.Parse(arg);
+                    src.Channel.SendMessageAsync($"maxRetries set to: {_imageSearch.maxRetries}");
+                    _logging.LogConsoleAndFile($"maxRetries set to: {_imageSearch.maxRetries}");
+                    return Task.CompletedTask;
+
+                //modules.Minesweeper:
+                case "minesweeper.setbombs":
+                    _mineSweeper.defaultBombs = ushort.Parse(arg);
+                    src.Channel.SendMessageAsync("minesweeper.defaultBombs set to: " + _mineSweeper.defaultBombs);
+                    _logging.LogConsoleAndFile($"defaultBombs set to: {_mineSweeper.defaultBombs}");
                     return Task.CompletedTask;
 
                 //dangerous
