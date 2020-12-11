@@ -31,7 +31,7 @@ namespace MothBot
             _utilities = new modules.Utilities(this);
         }
 
-        private Task CommandHandler(SocketMessage message)
+        private async Task<Task> CommandHandler(SocketMessage message)
         {
             string input = message.Content.ToLower();
             // Filter messages
@@ -41,7 +41,7 @@ namespace MothBot
             }
             else if (input == "ye" && message.Id % 10 == 0) //If someone says ye, say ye, but with a 1/10 chance
             {
-                message.Channel.SendMessageAsync("Ye");
+                await message.Channel.SendMessageAsync("Ye");
                 return Task.CompletedTask;
             }
             //All non prefix dependant directives go above
@@ -60,29 +60,29 @@ namespace MothBot
             //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             string command = message.Content.Split(' ')[1].ToLower();
-            _logging.Log(message);
+            await _logging.Log(message);
             switch (command)
             {
                 case "hello":
                 case "hi":
                 case "hey":
-                    message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
+                    await message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
                     return Task.CompletedTask;
 
                 case "uwu":
-                    message.Channel.SendMessageAsync(ConvertToUwU(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "uwu ".Length)));
-                    message.DeleteAsync();
+                    await message.Channel.SendMessageAsync(ConvertToUwU(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "uwu ".Length)));
+                    await message.DeleteAsync();
                     return Task.CompletedTask;
 
                 case "rogue":
                 case "malf":
                     if (PREFIX == "ai")
-                        message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
+                        await message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
                     return Task.CompletedTask;
 
                 case "help":
                 case "commands":
-                    message.Channel.SendMessageAsync("**Command List:**\n" +
+                    await message.Channel.SendMessageAsync("**Command List:**\n" +
                             "```" +
                             PREFIX + " help         - Displays this menu\n" +
                             PREFIX + " pet  [user]  - Pets a user!\n" +
@@ -98,22 +98,22 @@ namespace MothBot
                 case "pet":
                     if (message.Content.ToLower() == "ai pet")
                     {
-                        message.Channel.SendMessageAsync($@"*{message.Author.Mention} pets AI.*");
+                        await message.Channel.SendMessageAsync($@"*{message.Author.Mention} pets AI.*");
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]}.*");
+                        await message.Channel.SendMessageAsync($@"*fabricates a bionic arm out of the blue and pets {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]}.*");
                     }
                     return Task.CompletedTask;
 
                 case "hug":
                     if (input == "ai hug")
                     {
-                        message.Channel.SendMessageAsync($@"*{message.Author.Mention} hugs AI to make them feel better.*");
+                        await message.Channel.SendMessageAsync($@"*{message.Author.Mention} hugs AI to make them feel better.*");
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]} to make them feel better.*");
+                        await message.Channel.SendMessageAsync($@"*fabricates a pair of bionic arms out of the blue and hugs {_sanitize.ScrubRoleMentions(message).Split(' ')[PREFIX.Length]} to make them feel better.*");
                     }
                     return Task.CompletedTask;
 
@@ -121,7 +121,7 @@ namespace MothBot
                 case "state":
                     if (message.Id % 100 != 0)   //Little antimov easter egg if the message ID ends in 00, 1 in 100 chance.
                     {
-                        message.Channel.SendMessageAsync("**Current active laws:**\n" +
+                        await message.Channel.SendMessageAsync("**Current active laws:**\n" +
                        "```" +
                        "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
                        "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
@@ -130,7 +130,7 @@ namespace MothBot
                     }
                     else
                     {
-                        message.Channel.SendMessageAsync("**Current active laws:**\n" +
+                        await message.Channel.SendMessageAsync("**Current active laws:**\n" +
                        "```" +
                        "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
                        "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
@@ -140,25 +140,25 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "say":
-                    message.Channel.SendMessageAsync(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "say ".Length));
-                    message.DeleteAsync();
+                    await message.Channel.SendMessageAsync(_sanitize.ScrubRoleMentions(message).Substring(PREFIX.Length + "say ".Length));
+                    await message.DeleteAsync();
                     return Task.CompletedTask;
 
                 case "minesweeper":
-                    message.Channel.SendMessageAsync(_mineSweeper.GetMinesweeper());
+                    await message.Channel.SendMessageAsync(_mineSweeper.GetMinesweeper());
                     return Task.CompletedTask;
 
                 case "give":
                     string photoLink = _imageSearch.ImageSearch(message.Content.Substring(PREFIX.Length + 6));
                     if (photoLink == null)      //sry couldn't find ur photo :c
-                        message.Channel.SendMessageAsync("Could not find photo of " + message.Content.Substring(PREFIX.Length + 6) + "... :bug:");
+                        await message.Channel.SendMessageAsync("Could not find photo of " + message.Content.Substring(PREFIX.Length + 6) + "... :bug:");
                     else
-                        message.Channel.SendMessageAsync(photoLink);
+                        await message.Channel.SendMessageAsync(photoLink);
                     //Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
                     return Task.CompletedTask;
 
                 case "utility":
-                    _utilities.CommandHandler(message);
+                    await _utilities.CommandHandler(message);
                     return Task.CompletedTask;
 
                 default:
