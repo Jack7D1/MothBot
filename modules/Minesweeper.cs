@@ -5,7 +5,7 @@ namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        public ushort defaultBombs = 16;
+        private const ushort defaultBombs = 16;
         private const byte defaultGridsize = 8;
         private static readonly Random _rand = new Random();
 
@@ -16,7 +16,6 @@ namespace MothBot.modules
         private static readonly string bombString = ":bomb:";
         private static readonly string[] spoilerTag = { "||", "||" };
         private static long lastMinesweeper = 0;
-        //Tags for spoilers (ie [s]x[/s] should be entered as {"[s]","[/s]"})
 
         //Element space arrays
         private readonly bool[,] bombSpace = new bool[8, 8];

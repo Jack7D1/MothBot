@@ -8,16 +8,12 @@ namespace MothBot.modules
 {
     internal class Logging
     {
-        private readonly StreamWriter _log = new StreamWriter(@"..\..\log.txt", true);
+        private const string LOGPATH = @"..\..\log.txt";
         private readonly string[] recentLogs = new string[256];
         private uint commandIndex = 0;
+        private StreamWriter log = new StreamWriter(LOGPATH, true);
         private byte recentIndex = 0;
         private bool recentIndexRollover = false;
-
-        public void Close()
-        {
-            _log.Close();
-        }
 
         public string[] GetLogs()
         {
@@ -40,16 +36,18 @@ namespace MothBot.modules
 
         public Task Log(SocketMessage src)
         {
-            _log.WriteLineAsync($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
+            log.WriteLineAsync($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
             commandIndex++;
-            ToIndex(src.Content);
+            ToRecentLogs(src.Content);
+            Save();
             return Task.CompletedTask;
         }
 
         public Task Log(string str)
         {
-            _log.WriteLineAsync(str);
-            ToIndex(str);
+            log.WriteLineAsync(str);
+            ToRecentLogs(str);
+            Save();
             return Task.CompletedTask;
         }
 
@@ -62,12 +60,19 @@ namespace MothBot.modules
         public Task LogtoConsoleandFile(string str)
         {
             Console.WriteLine(str);
-            _log.WriteLineAsync(str);
-            ToIndex(str);
+            log.WriteLineAsync(str);
+            ToRecentLogs(str);
+            Save();
             return Task.CompletedTask;
         }
 
-        private Task ToIndex(string str)
+        private void Save() //Why is this necessary
+        {
+            log.Close();
+            log = new StreamWriter(LOGPATH, true);
+        }
+
+        private Task ToRecentLogs(string str)
         {
             if (recentIndex == 255)
                 recentIndexRollover = true;

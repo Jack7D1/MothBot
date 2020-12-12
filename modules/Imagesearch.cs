@@ -4,11 +4,10 @@ namespace MothBot.modules
 {
     internal class Imagesearch
     {
-        public bool firstResultFallback = true;
-        public byte maxRetries = 255;
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";
+        private const byte maxRetries = 255;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
 
         public string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
@@ -41,12 +40,6 @@ namespace MothBot.modules
                 retries--;
                 webData = webData.Substring(linkPtr + 32);
             } while (retries > 0);
-
-            if (!firstResultFallback)
-            {
-                Console.WriteLine("No valid results found, returning null.");
-                return null;
-            }
             //Last ditch effort to find *something*! Shooting for the top result.
             webData = System.Text.Encoding.UTF8.GetString(raw);
             linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
@@ -61,12 +54,6 @@ namespace MothBot.modules
                 Console.WriteLine("No valid results found, returning null.");
                 return null;
             }
-        }
-
-        public void ToggleFallback()
-        {
-            firstResultFallback = !firstResultFallback;
-            return;
         }
 
         private bool CheckValid(string inStr)
