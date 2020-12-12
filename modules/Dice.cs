@@ -22,7 +22,7 @@ namespace MothBot.modules
             }
             if (sides > 128 || quantity > 32)
             {
-                await channel.SendMessageAsync("Max side count is 128, max dice count is 32!");
+                await channel.SendMessageAsync("Max dice count is 32, max side count is 128!");
                 return Task.CompletedTask;
             }
             if (offset > 127 || offset < -128)
@@ -30,22 +30,10 @@ namespace MothBot.modules
                 await channel.SendMessageAsync($"Offset can only range from -128 to 127!");
                 return Task.CompletedTask;
             }
-            byte[] rolls;
-            if (offset == 0)
-            {
-                rolls = DiceMaster((byte)quantity, (byte)sides);
-            }
-            else
-            {
-                rolls = DiceMaster((byte)quantity, (byte)sides, (sbyte)offset);
-            }
-            await channel.SendMessageAsync(StringBuilder(rolls));
-            return Task.CompletedTask;
-        }
 
-        public async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides)
-        {
-            await Roll(channel, quantity, sides, 0);
+            byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
+
+            await channel.SendMessageAsync(StringBuilder(rolls, (sbyte)offset));
             return Task.CompletedTask;
         }
 
@@ -61,7 +49,7 @@ namespace MothBot.modules
                 }
                 else
                 {
-                    await Roll(channel, int.Parse(Quantity_Sides[0]), int.Parse(Quantity_Sides[1]));
+                    await Roll(channel, int.Parse(Quantity_Sides[0]), int.Parse(Quantity_Sides[1]), 0);
                 }
                 return Task.CompletedTask;
             }
@@ -76,39 +64,30 @@ namespace MothBot.modules
         {
             byte[] outresults = new byte[quantity];
             for (byte i = 0; i < quantity; i++)
-            {
                 outresults[i] = (byte)rand.Next(1, sides + 1);
-            }
+
             return outresults;
         }
 
-        private byte[] DiceMaster(byte quantity, byte sides, sbyte offset)
-        {
-            byte[] outresults = DiceMaster(quantity, sides);
-            for (byte i = 0; i < quantity; i++)
-            {
-                short offsetRoll = (short)(outresults[i] + offset);
-                offsetRoll = (short)Math.Max((int)offsetRoll, 0);
-                outresults[i] = (byte)offsetRoll;
-            }
-            return outresults;
-        }
-
-        private string StringBuilder(byte[] results)
+        private string StringBuilder(byte[] results, sbyte offset)
         {
             string outstring = $"{results[0]}";
             byte count = (byte)results.Length;
-            if (count == 1)
-            {
+            if (count == 1 && offset == 0)
                 return outstring;
-            }
+
             ushort sum = results[0];
             for (byte i = 1; i < count; i++)
             {
                 outstring += $" + {results[i]}";
                 sum += results[i];
             }
-            return outstring + " = " + sum;
+            outstring += $" = {sum}";
+            if (offset != 0)
+            {
+                outstring += $"+{offset} = {sum + offset}";
+            }
+            return outstring;
         }
     }
 }

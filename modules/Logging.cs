@@ -36,18 +36,14 @@ namespace MothBot.modules
 
         public Task Log(SocketMessage src)
         {
-            log.WriteLineAsync($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
+            ToLogs($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
             commandIndex++;
-            ToRecentLogs(src.Content);
-            Save();
             return Task.CompletedTask;
         }
 
         public Task Log(string str)
         {
-            log.WriteLineAsync(str);
-            ToRecentLogs(str);
-            Save();
+            ToLogs(str);
             return Task.CompletedTask;
         }
 
@@ -60,16 +56,17 @@ namespace MothBot.modules
         public Task LogtoConsoleandFile(string str)
         {
             Console.WriteLine(str);
-            log.WriteLineAsync(str);
-            ToRecentLogs(str);
-            Save();
+            Log(str);
             return Task.CompletedTask;
         }
 
-        private void Save() //Why is this necessary
+        private Task ToLogs(string str)
         {
+            log.WriteLineAsync(str);
+            ToRecentLogs(str);
             log.Close();
             log = new StreamWriter(LOGPATH, true);
+            return Task.CompletedTask;
         }
 
         private Task ToRecentLogs(string str)

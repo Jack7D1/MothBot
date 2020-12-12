@@ -18,7 +18,7 @@ namespace MothBot.modules
 
         public async Task<Task> CommandHandler(SocketMessage src)
         {
-            string command = "", keyword = "", arg = "";
+            string command = "", keyword = "", args = "";
             if (!IsOperator(src))   //You do not have permission
             {
                 await src.Channel.SendMessageAsync("You do not have access to Utilities.");
@@ -35,7 +35,7 @@ namespace MothBot.modules
                 if (command.Contains('(') && command.Contains(')'))
                 {
                     keyword = command.Substring(0, command.IndexOf('('));
-                    arg = command[(command.IndexOf('(') + 1)..command.IndexOf(')')];
+                    args = command[(command.IndexOf('(') + 1)..command.IndexOf(')')];
                 }
                 else
                 {
@@ -52,10 +52,10 @@ namespace MothBot.modules
                     return Task.CompletedTask;
 
                 case "setprefix":
-                    Program._prefix = arg.ToLower();
+                    Program._prefix = args.ToLower();
                     await Program.logging.LogtoConsoleandFile($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
-                    await Program.client.SetGameAsync("Prefix: " + arg + ". Say '" + arg + " help' for commands!", null, ActivityType.Playing);
+                    await Program.client.SetGameAsync("Prefix: " + args + ". Say '" + args + " help' for commands!", null, ActivityType.Playing);
                     return Task.CompletedTask;
 
                 //Debug info
@@ -99,7 +99,7 @@ namespace MothBot.modules
 
                 //dangerous
                 case "shutdown":
-                    if (arg == "confirm")
+                    if (args == "confirm")
                     {
                         if (shutdownEnabled)
                         {
