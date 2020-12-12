@@ -137,12 +137,7 @@ namespace MothBot
                     return Task.CompletedTask;
 
                 case "give":
-                    string photoLink = imageSearch.ImageSearch(args);
-                    if (photoLink == null)      //sry couldn't find ur photo :c
-                        await message.Channel.SendMessageAsync("Could not find photo of " + args + "... :bug:");
-                    else
-                        await message.Channel.SendMessageAsync(photoLink);
-                    //Console.WriteLine(message.Content.Substring(PREFIX.Length + 6));
+                    await imageSearch.ImageSearchHandler(message.Channel, args);
                     return Task.CompletedTask;
 
                 case "roll":

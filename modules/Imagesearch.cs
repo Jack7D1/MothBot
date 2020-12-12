@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Discord.WebSocket;
+using System;
+using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
@@ -54,6 +56,16 @@ namespace MothBot.modules
                 Console.WriteLine("No valid results found, returning null.");
                 return null;
             }
+        }
+
+        public Task ImageSearchHandler(ISocketMessageChannel channel, string searchquery)
+        {
+            string photoLink = ImageSearch(searchquery);
+            if (photoLink == null)      //sry couldn't find ur photo :c
+                channel.SendMessageAsync("Could not find photo of " + searchquery + "... :bug:");
+            else
+                channel.SendMessageAsync(photoLink);
+            return Task.CompletedTask;
         }
 
         private bool CheckValid(string inStr)
