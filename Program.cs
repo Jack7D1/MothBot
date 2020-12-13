@@ -160,7 +160,7 @@ namespace MothBot
             client.Log += logging.Log;
 
             await client.LoginAsync(TokenType.Bot, S());
-            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands!", null, ActivityType.Playing);
+            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens

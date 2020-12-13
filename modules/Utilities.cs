@@ -55,7 +55,7 @@ namespace MothBot.modules
                     Program._prefix = args.ToLower();
                     await Program.logging.LogtoConsoleandFile($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
-                    await Program.client.SetGameAsync("Prefix: " + args + ". Say '" + args + " help' for commands!", null, ActivityType.Playing);
+                    await Program.client.SetGameAsync("Prefix: " + args + ". Say '" + args + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
                     return Task.CompletedTask;
 
                 //Debug info

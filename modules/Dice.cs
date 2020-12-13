@@ -58,6 +58,11 @@ namespace MothBot.modules
                 await channel.SendMessageAsync("Error parsing arguments, proper format for dice rolling is <count>d<sides> (ie 1d20), or append with a +# for an offset.");
                 return Task.CompletedTask;
             }
+            catch (System.OverflowException)
+            {
+                await channel.SendMessageAsync("A number provided was too large!");
+                return Task.CompletedTask;
+            }
         }
 
         private byte[] DiceMaster(byte quantity, byte sides)
