@@ -12,7 +12,7 @@ namespace MothBot.modules
         private const byte maxRetries = 255;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
 
-        public string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
+        public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
             searchTerm = linkSearch + searchTerm;
             searchTerm = searchTerm.Replace(' ', '+');
@@ -58,7 +58,7 @@ namespace MothBot.modules
             }
         }
 
-        public Task ImageSearchHandler(ISocketMessageChannel channel, string searchquery)
+        public static Task ImageSearchHandler(ISocketMessageChannel channel, string searchquery)
         {
             string photoLink = ImageSearch(searchquery);
             if (photoLink == null)      //sry couldn't find ur photo :c
@@ -68,7 +68,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private bool CheckValid(string inStr)
+        private static bool CheckValid(string inStr)
         {
             if (inStr == null || inStr == "8e3iAyI")
                 return false;

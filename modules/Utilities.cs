@@ -19,7 +19,7 @@ namespace MothBot.modules
         public async Task<Task> CommandHandler(SocketMessage src)
         {
             string command = "", keyword = "", args = "";
-            if (!IsOperator(src))   //You do not have permission
+            if (!IsOperator(src.Author))   //You do not have permission
             {
                 await src.Channel.SendMessageAsync("You do not have access to Utilities.");
                 return Task.CompletedTask;
@@ -48,7 +48,7 @@ namespace MothBot.modules
                 //General
                 case "commands":
                 case "help":
-                    PrintCommandList(src.Channel, prefix);
+                    await Lists.Utilities_PrintCommandList(src.Channel, prefix);
                     return Task.CompletedTask;
 
                 case "setprefix":
@@ -60,7 +60,7 @@ namespace MothBot.modules
 
                 //Debug info
                 case "showvars":
-                    PrintVars(src.Channel);
+                    await Lists.PrintVars(src.Channel, shutdownEnabled);
                     return Task.CompletedTask;
 
                 case "showguilds":
@@ -129,45 +129,14 @@ namespace MothBot.modules
             }
         }
 
-        private bool IsOperator(SocketMessage src)
+        private bool IsOperator(SocketUser user)
         {
             for (byte i = 0; i < operatorIDs.Length; i++)
             {
-                if (src.Author.Id == operatorIDs[i])
+                if (user.Id == operatorIDs[i])
                     return true;
             }
             return false;
-        }
-
-        private void PrintCommandList(ISocketMessageChannel ch, string prefix)
-        {
-            ch.SendMessageAsync(
-                "**Utility Command List:**\n" +
-                "```" +
-                "general:\n" +
-                prefix + "commands\n" +
-                prefix + "setprefix(string)\n" +
-                "``````" +
-                "debug info:\n" +
-                prefix + "showvars\n" +
-                prefix + "showguilds\n" +
-                prefix + "ping\n" +
-                prefix + "recentlogs\n" +
-                "``````" +
-                "dangerous:\n" +
-                prefix + "shutdown\n" +
-                "```");
-        }
-
-        private void PrintVars(ISocketMessageChannel ch)
-        {
-            ch.SendMessageAsync(
-                "**Set Vars:**\n" +
-                "```" +
-                "general:\n" +
-                $"Current Prefix: \"{Program._prefix}\"\n" +
-                $"shutdownEnabled: {shutdownEnabled}\n" +
-                "```");
         }
     }
 }

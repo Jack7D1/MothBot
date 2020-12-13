@@ -8,7 +8,7 @@ namespace MothBot.modules
     {
         private static readonly Random rand = new Random();
 
-        public async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
+        public static async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
         {
             if (quantity <= 0)
             {
@@ -37,7 +37,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        public async Task<Task> Roll(ISocketMessageChannel channel, string args)
+        public static async Task<Task> Roll(ISocketMessageChannel channel, string args)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace MothBot.modules
             }
         }
 
-        private byte[] DiceMaster(byte quantity, byte sides)
+        private static byte[] DiceMaster(byte quantity, byte sides)
         {
             byte[] outresults = new byte[quantity];
             for (byte i = 0; i < quantity; i++)
@@ -74,7 +74,7 @@ namespace MothBot.modules
             return outresults;
         }
 
-        private string StringBuilder(byte[] results, sbyte offset)
+        private static string StringBuilder(byte[] results, sbyte offset)
         {
             string outstring = $"{results[0]}";
             byte count = (byte)results.Length;

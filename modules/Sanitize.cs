@@ -4,7 +4,7 @@ namespace MothBot.modules
 {
     internal class Sanitize
     {
-        public string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        public static string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
         {
             //Blacklist for @everyone, @here.
             if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
@@ -15,7 +15,7 @@ namespace MothBot.modules
                 return inStr;
         }
 
-        public string ScrubRoleMentions(SocketMessage src)
+        public static string ScrubRoleMentions(SocketMessage src)
         {   //Removes any mentions for roles.
             if (src.MentionedRoles.Count > 0)
             {
