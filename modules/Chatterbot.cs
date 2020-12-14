@@ -8,7 +8,7 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private const ushort CHANCE_TO_CHAT = 8;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHANCE_TO_CHAT = 16;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 2048;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
         private static readonly List<string> chatters = new List<string>();
