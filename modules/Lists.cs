@@ -33,18 +33,6 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        public static Task PrintVars(ISocketMessageChannel ch, bool shutdownEnabled)
-        {
-            ch.SendMessageAsync(
-                "**Set Vars:**\n" +
-                "```" +
-                "general:\n" +
-                $"Current Prefix: \"{Program._prefix}\"\n" +
-                $"shutdownEnabled: {shutdownEnabled}\n" +
-                "```");
-            return Task.CompletedTask;
-        }
-
         public static Task Program_PrintCommandList(ISocketMessageChannel ch, string prefix)
         {
             ch.SendMessageAsync(
@@ -70,10 +58,9 @@ namespace MothBot.modules
                 "```" +
                 "general:\n" +
                 prefix + "commands\n" +
-                prefix + "setprefix(string)\n" +
+                prefix + "setprefix [string]\n" +
                 "``````" +
                 "debug info:\n" +
-                prefix + "showvars\n" +
                 prefix + "showguilds\n" +
                 prefix + "ping\n" +
                 prefix + "recentlogs\n" +

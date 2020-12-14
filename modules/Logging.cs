@@ -72,7 +72,10 @@ namespace MothBot.modules
         private Task ToRecentLogs(string str)
         {
             if (recentIndex == 255)
+            {
                 recentIndexRollover = true;
+                recentIndex = 0;
+            }
 
             recentLogs[recentIndex] = str;
             recentIndex++;

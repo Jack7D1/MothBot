@@ -10,6 +10,7 @@ namespace MothBot
     {
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
         public static DiscordSocketClient client = new DiscordSocketClient();
+        public static Chatterbot chatter = new Chatterbot();
         public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Utilities utilities = new Utilities();
@@ -38,23 +39,27 @@ namespace MothBot
             return System.Text.Encoding.UTF8.GetString(s);
         }
 
-        private async Task<Task> CommandHandler(SocketMessage message)
+        private async Task MessageHandler(SocketMessage message)
         {
             {
                 string input = message.Content.ToLower();
                 // Filter messages
                 if (message.Author.IsBot)   //If message author is a bot, ignore
-                    return Task.CompletedTask;
-                else if (input == "ye" && message.Id % 10 == 0) //If someone says ye, say ye, but with a 1/10 chance
+                    return;
+                if (input == "ye") //If someone says ye, say ye, but with a 1/10 chance
                 {
+                    if (message.Id % 10 != 0)
+                        return;
                     await message.Channel.SendMessageAsync("Ye");
-                    return Task.CompletedTask;
+                    return;
                 }
+                chatter.AddChatter(message);
+                await chatter.ChatterHandler(message);
                 //All non prefix dependant directives go above
-                else if ((input.Split(' ')[0] != _prefix))
-                    return Task.CompletedTask;
-                else if (input[_prefix.Length] != ' ')    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
-                    return Task.CompletedTask;
+                if ((input.Split(' ')[0] != _prefix))
+                    return;
+                if (input[_prefix.Length] != ' ')    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
+                    return;
             }
             //We are now sure that the message starts with ai and is followed by a command.
             Console.WriteLine($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
@@ -82,64 +87,64 @@ namespace MothBot
                 case "hi":
                 case "hey":
                     await message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
-                    return Task.CompletedTask;
+                    return;
 
                 case "rogue":
                 case "malf":
                     if (_prefix == "ai")
                         await message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
-                    return Task.CompletedTask;
+                    return;
 
                 case "help":
                 case "commands":
                     await Lists.Program_PrintCommandList(message.Channel, _prefix);
-                    return Task.CompletedTask;
+                    return;
 
                 case "pet":
                     if (args != "")
                         await message.Channel.SendMessageAsync($@"*Fabricates a bionic arm out of the blue and pets {Sanitize.ScrubRoleMentions(message).Split(' ')[_prefix.Length]}.*");
-                    return Task.CompletedTask;
+                    return;
 
                 case "hug":
                     if (args != "")
                         await message.Channel.SendMessageAsync($@"*Fabricates a pair of bionic arms out of the blue and hugs {Sanitize.ScrubRoleMentions(message).Split(' ')[_prefix.Length]} to make them feel better.*");
-                    return Task.CompletedTask;
+                    return;
 
                 case "laws":
                 case "state":
                     await Lists.PrintLaws(message.Channel);
-                    return Task.CompletedTask;
+                    return;
 
                 case "say":
                     await message.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(message).Substring(_prefix.Length + "say ".Length));
                     await message.DeleteAsync();
-                    return Task.CompletedTask;
+                    return;
 
                 case "minesweeper":
                     await message.Channel.SendMessageAsync(mineSweeper.GetMinesweeper());
-                    return Task.CompletedTask;
+                    return;
 
                 case "give":
                     await Imagesearch.ImageSearchHandler(message.Channel, args);
-                    return Task.CompletedTask;
+                    return;
 
                 case "roll":
                     await Dice.Roll(message.Channel, args);
-                    return Task.CompletedTask;
+                    return;
 
                 case "utility":
                     await utilities.CommandHandler(message);
-                    return Task.CompletedTask;
+                    return;
 
                 default:
-                    return Task.CompletedTask;
+                    return;
             }
         }
 
         private async Task MainAsync()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            client.MessageReceived += CommandHandler;
+            client.MessageReceived += MessageHandler;
             client.Log += logging.Log;
 
             await client.LoginAsync(TokenType.Bot, S());

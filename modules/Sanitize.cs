@@ -4,15 +4,33 @@ namespace MothBot.modules
 {
     internal class Sanitize
     {
-        public static string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        private const byte ID_LENGTH = 18;
+
+        public static string ReplaceAllMentionsWithID(string inStr, ulong ID)
         {
-            //Blacklist for @everyone, @here.
-            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
+            string outStr;
+            int startIndex = inStr.IndexOf("<@!"), stopIndex = inStr.LastIndexOf("<@!");
+            char[] numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            if (startIndex == -1)
+                return ScrubEveryoneandHereMentions(inStr);
+            if (startIndex == stopIndex)
             {
-                return inStr.Replace("@everyone", "everyone").Replace("@here", "here");
+                if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
+                    return ScrubEveryoneandHereMentions(inStr);
+                outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
+                return ScrubEveryoneandHereMentions(outStr);
             }
             else
-                return inStr;
+            {
+                while (true)
+                {
+                    if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
+                        return ScrubEveryoneandHereMentions(inStr);
+                    outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
+                    if(outStr.IndexOf("<@!") == -1 || outStr[outStr.IndexOf("<@!") + ID_LENGTH + 4] != '>')
+                        return ScrubEveryoneandHereMentions(outStr);
+                }
+            }
         }
 
         public static string ScrubRoleMentions(SocketMessage src)
@@ -21,13 +39,22 @@ namespace MothBot.modules
             {
                 string content = ScrubEveryoneandHereMentions(src.Content);
                 foreach (SocketRole mention in src.MentionedRoles)
-                {
                     content = content.Replace($"<@&{mention.Id}>", mention.Name);
-                }
                 return content;
             }
             else
                 return ScrubEveryoneandHereMentions(src.Content);
+        }
+
+        private static string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        {
+            //Blacklist for @everyone, @here.
+            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
+            {
+                return inStr.Replace("@everyone", "everyone").Replace("@here", "here");
+            }
+            else
+                return inStr;
         }
     }
 }

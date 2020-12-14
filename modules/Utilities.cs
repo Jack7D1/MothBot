@@ -18,29 +18,23 @@ namespace MothBot.modules
 
         public async Task<Task> CommandHandler(SocketMessage src)
         {
-            string command = "", keyword = "", args = "";
             if (!IsOperator(src.Author))   //You do not have permission
             {
                 await src.Channel.SendMessageAsync("You do not have access to Utilities.");
                 return Task.CompletedTask;
             }
 
-            if (src.Content.Length < (Program._prefix + " utility ").Length)
+            string command, keyword, args;
+            command = src.Content.ToLower().Substring(Program._prefix.Length + " utility ".Length); //We now have all text that follows the prefix and the word utility.
+            if (command.Contains(' '))
             {
-                keyword = "commands";
+                keyword = command.Substring(0, command.IndexOf(' '));
+                args = command.Substring(command.IndexOf(' ') + 1);
             }
             else
             {
-                command = src.Content.ToLower().Substring(src.Content.ToLower().IndexOf("utility") + "utility ".Length); //We now have all text that follows the word 'utility'.
-                if (command.Contains('(') && command.Contains(')'))
-                {
-                    keyword = command.Substring(0, command.IndexOf('('));
-                    args = command[(command.IndexOf('(') + 1)..command.IndexOf(')')];
-                }
-                else
-                {
-                    keyword = command;
-                }
+                keyword = command;
+                args = "";
             }
             string prefix = Program._prefix + " utility ";
             switch (keyword)    //Ensure switch is ordered similarly to command list
@@ -59,9 +53,6 @@ namespace MothBot.modules
                     return Task.CompletedTask;
 
                 //Debug info
-                case "showvars":
-                    await Lists.PrintVars(src.Channel, shutdownEnabled);
-                    return Task.CompletedTask;
 
                 case "showguilds":
                     {
@@ -103,7 +94,7 @@ namespace MothBot.modules
                     {
                         if (shutdownEnabled)
                         {
-                            Console.WriteLine($"SHUTTING DOWN: ordered by {src.Author.Username}");
+                            await Program.logging.LogtoConsoleandFile($"SHUTTING DOWN: ordered by {src.Author.Username}");
                             await src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
                             Environment.Exit(13);
                             return Task.CompletedTask;
@@ -112,17 +103,16 @@ namespace MothBot.modules
                         {
                             shutdownEnabled = true;
                             await src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
-                            Console.WriteLine($"{src.Author.Username} disabled shutdown safety.");
+                            await Program.logging.LogtoConsoleandFile($"{src.Author.Username} disabled shutdown safety.");
                             return Task.CompletedTask;
                         }
                     }
                     else
                     {
                         shutdownEnabled = false;
-                        await src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument (confirm) to disable.");
+                        await src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument 'confirm' to disable.");
                         return Task.CompletedTask;
                     }
-
                 default:
                     await src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
                     return Task.CompletedTask;
