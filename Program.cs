@@ -8,16 +8,17 @@ namespace MothBot
 {
     internal class Program
     {
+        public const ulong MY_ID = 765202973495656538;
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
-        public static DiscordSocketClient client = new DiscordSocketClient();
         public static Chatterbot chatter = new Chatterbot();
+        public static DiscordSocketClient client = new DiscordSocketClient();
         public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Utilities utilities = new Utilities();
 
         public static void Main(string[] args)  //Initialization
         {
-            logging.Log($"System rebooted at [{System.DateTime.UtcNow}] {args}");
+            logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
@@ -37,6 +38,19 @@ namespace MothBot
                 s[m] = c;
             }
             return System.Text.Encoding.UTF8.GetString(s);
+        }
+
+        private async Task MainAsync()
+        {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            client.MessageReceived += MessageHandler;
+            client.Log += logging.Log;
+
+            await client.LoginAsync(TokenType.Bot, S());
+            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            await client.StartAsync();
+
+            await Task.Delay(-1);   //Sit here while the async listens
         }
 
         private async Task MessageHandler(SocketMessage message)
@@ -80,7 +94,7 @@ namespace MothBot
 
             //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
-            await logging.Log(message);
+            await logging.LogAsync(message);
             switch (keyword)
             {
                 case "hello":
@@ -141,23 +155,11 @@ namespace MothBot
             }
         }
 
-        private async Task MainAsync()
-        {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            client.MessageReceived += MessageHandler;
-            client.Log += logging.Log;
-
-            await client.LoginAsync(TokenType.Bot, S());
-            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
-            await client.StartAsync();
-
-            await Task.Delay(-1);   //Sit here while the async listens
-        }
-
         private void OnProcessExit(object sender, EventArgs e)
         {
-            client.LogoutAsync();  //So mothbot doesn't hang out as a ghost for a few minutes.
+            chatter.SaveChatters();
             logging.Log($"System shutdown at [{System.DateTime.UtcNow}]");
+            client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
         }
     }
 }

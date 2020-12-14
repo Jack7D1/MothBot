@@ -8,16 +8,14 @@ namespace MothBot.modules
 
         public static string ReplaceAllMentionsWithID(string inStr, ulong ID)
         {
-            string outStr;
             int startIndex = inStr.IndexOf("<@!"), stopIndex = inStr.LastIndexOf("<@!");
-            char[] numbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             if (startIndex == -1)
                 return ScrubEveryoneandHereMentions(inStr);
             if (startIndex == stopIndex)
             {
                 if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
                     return ScrubEveryoneandHereMentions(inStr);
-                outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
+                string outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
                 return ScrubEveryoneandHereMentions(outStr);
             }
             else
@@ -26,8 +24,8 @@ namespace MothBot.modules
                 {
                     if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
                         return ScrubEveryoneandHereMentions(inStr);
-                    outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
-                    if(outStr.IndexOf("<@!") == -1 || outStr[outStr.IndexOf("<@!") + ID_LENGTH + 4] != '>')
+                    string outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
+                    if (outStr.IndexOf("<@!") == -1 || outStr[outStr.IndexOf("<@!") + ID_LENGTH + 4] != '>')
                         return ScrubEveryoneandHereMentions(outStr);
                 }
             }
