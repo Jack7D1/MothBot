@@ -60,11 +60,6 @@ namespace MothBot.modules
                 prefix + "commands\n" +
                 prefix + "setprefix [string]\n" +
                 "``````" +
-                "debug info:\n" +
-                prefix + "showguilds\n" +
-                prefix + "ping\n" +
-                prefix + "recentlogs\n" +
-                "``````" +
                 "dangerous:\n" +
                 prefix + "shutdown\n" +
                 "```");

@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using MothBot.modules;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MothBot
@@ -10,11 +11,13 @@ namespace MothBot
     {
         public const ulong MY_ID = 765202973495656538;
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
+
         public static Chatterbot chatter = new Chatterbot();
         public static DiscordSocketClient client = new DiscordSocketClient();
         public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Utilities utilities = new Utilities();
+        private const string TOKEN_PATH = @"..\..\data\token.txt";
 
         public static void Main(string[] args)  //Initialization
         {
@@ -23,30 +26,13 @@ namespace MothBot
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
 
-        private static string S()
-        {
-            byte[] s = { 0xd4, 0xcd, 0x64, 0x9a, 0x96, 0x6, 0x58, 0x11, 0x1, 0xf2, 0x91, 0x77, 0x3c, 0x9f, 0xfc, 0xf9, 0xa7, 0x5e, 0x58, 0x46, 0x59, 0xc2,
-                0x6e, 0xd3, 0x2d, 0xb4, 0xcb, 0x4b, 0xd7, 0x46, 0x28, 0x3e, 0x92, 0x8b, 0xa6, 0xd3, 0xc4, 0xaf, 0x8d, 0xda, 0xaf, 0x11, 0xde, 0x5, 0xb1,
-                0xc5, 0x8f, 0xe5, 0xc4, 0x98, 0x5b, 0x3a, 0x8f, 0xc9, 0xf8, 0xec, 0x62, 0xcd, 0x44 };
-            for (byte m = 0; m < s.Length; ++m)
-            {
-                byte c = s[m];
-                c += 0x28; c ^= m; c += 0x37; c ^= 0xc3; c += m; c ^= 0x1f; c -= m; c = (byte)((c >> 0x6) | (c << 0x2)); c ^= 0xdc; c = (byte)~c;
-                c += m; c = (byte)((c >> 0x6) | (c << 0x2)); c = (byte)-c; c = (byte)((c >> 0x7) | (c << 0x1)); c -= m; c = (byte)((c >> 0x7) | (c << 0x1));
-                c = (byte)-c; c -= 0x73; c = (byte)-c; c -= m; c = (byte)~c; c = (byte)-c; c ^= 0x7c; c += 0x94; c ^= m; c += 0x88; c ^= m; c += m;
-                c = (byte)-c; c = (byte)((c >> 0x1) | (c << 0x7)); c = (byte)~c; c ^= 0xb8;
-                s[m] = c;
-            }
-            return System.Text.Encoding.UTF8.GetString(s);
-        }
-
         private async Task MainAsync()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             client.MessageReceived += MessageHandler;
             client.Log += logging.Log;
 
-            await client.LoginAsync(TokenType.Bot, S());
+            await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
             await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
             await client.StartAsync();
 
@@ -135,7 +121,7 @@ namespace MothBot
                     return;
 
                 case "minesweeper":
-                    await message.Channel.SendMessageAsync(mineSweeper.GetMinesweeper());
+                    await mineSweeper.MinesweeperHandler(message.Channel);
                     return;
 
                 case "give":
@@ -144,6 +130,10 @@ namespace MothBot
 
                 case "roll":
                     await Dice.Roll(message.Channel, args);
+                    return;
+
+                case "ping":
+                    await message.Channel.SendMessageAsync($"Ping: {client.Latency}ms");
                     return;
 
                 case "utility":

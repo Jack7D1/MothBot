@@ -10,10 +10,15 @@ namespace MothBot.modules
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";
         private const byte maxRetries = 255;
+        private const long MS_PER_IMAGE = 500;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
+        private static long lastImage = 0;
 
         public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
+            if (DateTime.Now.Ticks < lastImage + (MS_PER_IMAGE * 1000)) //1 sec is 10,000,000 ticks
+                return "Minesweepers generated too frequently!";
+            lastImage = DateTime.Now.Ticks;
             searchTerm = linkSearch + searchTerm;
             searchTerm = searchTerm.Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);

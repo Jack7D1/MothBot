@@ -52,42 +52,6 @@ namespace MothBot.modules
                     await Program.client.SetGameAsync("Prefix: " + args + ". Say '" + args + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
                     return Task.CompletedTask;
 
-                //Debug info
-
-                case "showguilds":
-                    {
-                        string guildstring = "";
-
-                        byte i = 0;
-                        foreach (SocketGuild guild in Program.client.Guilds)
-                        {
-                            guildstring += $"GUILD {i + 1}: {guild.Name} [{guild.Id}]. Members: {guild.MemberCount}\n";
-                            i++;
-                        }
-
-                        await src.Channel.SendMessageAsync(guildstring);
-                        return Task.CompletedTask;
-                    }
-
-                case "ping":
-                    await src.Channel.SendMessageAsync($"Ping: {Program.client.Latency}ms");
-                    return Task.CompletedTask;
-
-                case "recentlogs":
-                    {
-                        string[] inlogs = Program.logging.GetLogs();
-                        string outstr = "**Recent Log Entries**```";
-                        for (byte i = 0; i < 255; i++)
-                        {
-                            outstr += $"{i + 1}: \"{inlogs[i]}\"\n";
-                            if (i < 255)
-                                if (inlogs[i + 1] == null)
-                                    break;
-                        }
-                        await src.Channel.SendMessageAsync(outstr + "```");
-                        return Task.CompletedTask;
-                    }
-
                 //dangerous
                 case "shutdown":
                     if (args == "confirm")
