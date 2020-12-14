@@ -8,13 +8,11 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private const ushort CHANCE_TO_CHAT = 5;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHANCE_TO_CHAT = 8;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHATTER_MAX_LENGTH = 2048;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
-        private const ushort CHATTER_MAX_LENGTH = 1024;
-        private static string nextChatter;
-        private static List<string> chatters = new List<string>();
-        private static readonly Random rand = new Random();
-
+        private static readonly List<string> chatters = new List<string>();
+        private static readonly Random rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
         public Chatterbot()
         {
             try
@@ -27,7 +25,6 @@ namespace MothBot.modules
                     i++;
                 }
                 reader.Close();
-                nextChatter = GetChatter();
             }
             catch (FileNotFoundException)
             {
@@ -44,8 +41,6 @@ namespace MothBot.modules
 
         public void AddChatter(SocketMessage src)
         {
-            if (rand.Next(0, CHANCE_TO_CHAT) != 0)
-                return;
             if (ShouldIgnore(src.Content))
                 return;
             if (chatters.Count >= CHATTER_MAX_LENGTH)
@@ -65,9 +60,9 @@ namespace MothBot.modules
 
             if ((rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src.Content)) && !mentionsMothbot)
                 return;
-            if(nextChatter != null)
-                await src.Channel.SendMessageAsync(nextChatter);
-            nextChatter = Sanitize.ReplaceAllMentionsWithID(GetChatter(), src.Author.Id);
+            string outStr = GetChatter();
+            if (outStr != null)
+                await src.Channel.SendMessageAsync(outStr);
         }
 
         public void SaveChatters()

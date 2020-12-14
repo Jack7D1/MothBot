@@ -18,7 +18,7 @@ namespace MothBot.modules
             searchTerm = searchTerm.Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);
             string webData = System.Text.Encoding.UTF8.GetString(raw);
-            Random rng = new Random();
+            Random rng = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
             string link = "";
             int linkPtr = -1;
             byte retries = maxRetries;

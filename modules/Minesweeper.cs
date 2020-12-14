@@ -7,7 +7,7 @@ namespace MothBot.modules
     {
         private const ushort defaultBombs = 16;
         private const byte defaultGridsize = 8;
-        private static readonly Random _rand = new Random();
+        private static readonly Random _rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
 
         //Program creates a minesweeper for discord, given by input parameters.
         //Element defs

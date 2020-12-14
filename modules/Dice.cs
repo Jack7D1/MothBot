@@ -6,7 +6,7 @@ namespace MothBot.modules
 {
     internal class Dice
     {
-        private static readonly Random rand = new Random();
+        private static readonly Random rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
 
         public static async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
         {
