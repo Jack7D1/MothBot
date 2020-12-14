@@ -8,11 +8,12 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private const ushort CHANCE_TO_CHAT = 5;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHANCE_TO_CHAT = 8;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 2048;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
         private static readonly List<string> chatters = new List<string>();
         private static readonly Random rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
+
         public Chatterbot()
         {
             try
@@ -41,7 +42,7 @@ namespace MothBot.modules
 
         public void AddChatter(SocketMessage src)
         {
-            if (ShouldIgnore(src.Content))
+            if (ShouldIgnore(src))
                 return;
             if (chatters.Count >= CHATTER_MAX_LENGTH)
                 chatters.RemoveAt(0);
@@ -58,7 +59,7 @@ namespace MothBot.modules
                     break;
                 }
 
-            if ((rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src.Content)) && !mentionsMothbot)
+            if ((rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src)) && !mentionsMothbot)
                 return;
             string outStr = GetChatter();
             if (outStr != null)
@@ -88,10 +89,10 @@ namespace MothBot.modules
             return outStr;
         }
 
-        private bool ShouldIgnore(string inStr)
+        private bool ShouldIgnore(SocketMessage src)
         {
             char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
-            inStr = inStr.ToLower();
+            string inStr = src.Content.ToLower();
             if (inStr.Contains(Program._prefix))
                 return true;
             if (inStr.IndexOfAny(firstCharBlacklist) == 1)
