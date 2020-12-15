@@ -73,7 +73,7 @@ namespace MothBot.modules
                         else
                         {
                             shutdownEnabled = true;
-                            shutdownTimeout = DateTime.Now.AddSeconds(1).Ticks;
+                            shutdownTimeout = DateTime.Now.AddSeconds(12).Ticks;
                             await src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
                             await Program.logging.LogtoConsoleandFileAsync($"{src.Author.Username} disabled shutdown safety.");
                             return;
