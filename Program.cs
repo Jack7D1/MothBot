@@ -27,13 +27,6 @@ namespace MothBot
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
 
-        private Task Client_ChannelCreated(SocketChannel ch)
-        {
-            if (rand.Next(3) == 0 && ch.Users.Count > 10)
-                ((ISocketMessageChannel)ch).SendMessageAsync("first");
-            return Task.CompletedTask;
-        }
-
         private async Task Client_MessageRecieved(SocketMessage message)
         {
             {
@@ -144,9 +137,8 @@ namespace MothBot
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             client.MessageReceived += Client_MessageRecieved;
             client.Log += logging.Log;
-            client.ChannelCreated += Client_ChannelCreated;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
-            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            await Lists.SetDefaultStatus();
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens

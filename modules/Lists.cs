@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace MothBot.modules
             if (rand.Next() % 100 != 0)
             {
                 ch.SendMessageAsync(
-                    "**Current active laws:**\n" +
+                    "**Current active laws:**" +
                     "```" +
                     "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
                     "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
@@ -23,7 +24,7 @@ namespace MothBot.modules
             else       //Little antimov easter egg if the message ID ends in 00, 1 in 100 chance.
             {
                 ch.SendMessageAsync(
-                    "**Current active laws:**\n" +
+                    "**Current active laws:**" +
                     "```" +
                     "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
                     "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
@@ -36,7 +37,7 @@ namespace MothBot.modules
         public static Task Program_PrintCommandList(ISocketMessageChannel ch, string prefix)
         {
             ch.SendMessageAsync(
-                "**Command List:**\n" +
+                "**Command List:**" +
                 "```" +
                 prefix + " help         - Displays this menu\n" +
                 prefix + " pet  [user]  - Pets a user!\n" +
@@ -51,10 +52,16 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
+        public static Task SetDefaultStatus()
+        {
+            Program.client.SetGameAsync("Prefix: " + Program._prefix + ". Say '" + Program._prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            return Task.CompletedTask;
+        }
+
         public static Task Utilities_PrintCommandList(ISocketMessageChannel ch, string prefix)
         {
             ch.SendMessageAsync(
-                "**Utility Command List:**\n" +
+                "**Utility Command List:**" +
                 "```" +
                 "general:\n" +
                 prefix + "commands\n" +
