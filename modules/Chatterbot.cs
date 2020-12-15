@@ -1,5 +1,4 @@
 ﻿using Discord.WebSocket;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ namespace MothBot.modules
         private const ushort CHATTER_MAX_LENGTH = 2048;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
         private static readonly List<string> chatters = new List<string>();
-        private static readonly Random rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
 
         public Chatterbot()
         {
@@ -59,7 +57,7 @@ namespace MothBot.modules
                     break;
                 }
 
-            if ((rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src)) && !mentionsMothbot)
+            if ((Program.rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src)) && !mentionsMothbot)
                 return;
             string outStr = GetChatter();
             if (outStr != null)
@@ -83,7 +81,7 @@ namespace MothBot.modules
         {
             if (chatters.Count == 0)
                 return null;
-            string outStr = chatters[rand.Next(0, chatters.Count)];
+            string outStr = chatters[Program.rand.Next(0, chatters.Count)];
             if (outStr == null)
                 return null;
             return outStr;
@@ -95,7 +93,7 @@ namespace MothBot.modules
             string inStr = src.Content.ToLower();
             if (inStr.Contains(Program._prefix))
                 return true;
-            if (inStr.IndexOfAny(firstCharBlacklist) == 1)
+            if (inStr.IndexOfAny(firstCharBlacklist) == 0)
                 return true;
             return false;
         }

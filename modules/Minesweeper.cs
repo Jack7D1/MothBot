@@ -6,9 +6,9 @@ namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        private const ushort defaultBombs = 16;
-        private const byte defaultGridsize = 8;
-        private static readonly Random _rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
+        private const ushort COOLDOWN_MS = 500;
+        private const ushort DEFAULT_BOMBS = 16;
+        private const byte DEFAULT_GRIDSIZE = 8;
 
         //Program creates a minesweeper for discord, given by input parameters.
         //Element defs
@@ -16,46 +16,22 @@ namespace MothBot.modules
 
         private static readonly string bombString = ":bomb:";
         private static readonly string[] spoilerTag = { "||", "||" };
-        private static long lastMinesweeper = 0;
+        private static long minesweeperReadyAt = 0;
 
         //Element space arrays
         private readonly bool[,] bombSpace = new bool[8, 8];
 
         private readonly byte[,] numSpace = new byte[8, 8];
 
-        public string GetMinesweeper()
+        public async Task MinesweeperHandlerAsync(ISocketMessageChannel ch, byte gridHeight = DEFAULT_GRIDSIZE, byte gridWidth = DEFAULT_GRIDSIZE, ushort bombs = DEFAULT_BOMBS)
         {
-            return GetMinesweeper(defaultBombs, defaultGridsize);
-        }
-
-        public string GetMinesweeper(ushort bombs, byte gridWidth, byte gridHeight)
-        {
-            if (DateTime.Now.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
-                return "Minesweepers generated too frequently!";
-
-            lastMinesweeper = System.DateTime.Now.Ticks;
-
-            gridHeight = Math.Min(gridHeight, (byte)8);
-            gridWidth = Math.Min(gridWidth, (byte)8);
-            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
-
-            PopulateBombs(bombs, gridWidth, gridHeight);
-            PopulateNums(gridWidth, gridHeight);
-            return $"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
-                GetMineMap(gridWidth, gridHeight);
-        }
-
-        public string GetMinesweeper(ushort bombs, byte size)
-        {
-            return GetMinesweeper(bombs, size, size);
-        }
-
-        public async Task MinesweeperHandler(ISocketMessageChannel ch, byte gridHeight = defaultGridsize, byte gridWidth = defaultGridsize, ushort bombs = defaultBombs)
-        {
-            if (DateTime.Now.Ticks < lastMinesweeper + 10000000) //1 sec is 10,000,000 ticks
+            if (DateTime.Now.Ticks < minesweeperReadyAt)
+            {
                 await ch.SendMessageAsync("Minesweepers generated too frequently!");
+                return;
+            }
 
-            lastMinesweeper = System.DateTime.Now.Ticks;
+            minesweeperReadyAt = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
 
             gridHeight = Math.Min(gridHeight, (byte)8);
             gridWidth = Math.Min(gridWidth, (byte)8);
@@ -153,8 +129,8 @@ namespace MothBot.modules
                 byte xRand, yRand;
                 do
                 { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
-                    xRand = (byte)(_rand.Next(0, gridWidth));
-                    yRand = (byte)(_rand.Next(0, gridHeight));
+                    xRand = (byte)(Program.rand.Next(0, gridWidth));
+                    yRand = (byte)(Program.rand.Next(0, gridHeight));
                 } while (bombSpace[xRand, yRand]);
                 bombSpace[xRand, yRand] = true;
             }

@@ -16,6 +16,7 @@ namespace MothBot
         public static DiscordSocketClient client = new DiscordSocketClient();
         public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
+        public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         public static Utilities utilities = new Utilities();
         private const string TOKEN_PATH = @"..\..\data\token.txt";
 
@@ -26,20 +27,14 @@ namespace MothBot
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
 
-        private async Task MainAsync()
+        private Task Client_ChannelCreated(SocketChannel ch)
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            client.MessageReceived += MessageHandler;
-            client.Log += logging.Log;
-
-            await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
-            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
-            await client.StartAsync();
-
-            await Task.Delay(-1);   //Sit here while the async listens
+            if (rand.Next(3) == 0 && ch.Users.Count > 10)
+                ((ISocketMessageChannel)ch).SendMessageAsync("first");
+            return Task.CompletedTask;
         }
 
-        private async Task MessageHandler(SocketMessage message)
+        private async Task Client_MessageRecieved(SocketMessage message)
         {
             {
                 string input = message.Content.ToLower();
@@ -55,15 +50,19 @@ namespace MothBot
                 }
                 chatter.AddChatter(message);
                 await chatter.ChatterHandler(message);
+
                 //All non prefix dependant directives go above
-                if ((input.Split(' ')[0] != _prefix))
+                if (input.IndexOf($"{_prefix} ") != 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
                     return;
-                if (input[_prefix.Length] != ' ')    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
+                if (input.IndexOf($"{_prefix} utility") == 0)
+                {
+                    await utilities.UtilitiesHandlerAsync(message);
                     return;
+                }
             }
-            //We are now sure that the message starts with ai and is followed by a command.
-            Console.WriteLine($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
-            Console.WriteLine($@"Message size: {message.Content.Length}");
+            //We are now sure that the message starts with the prefix and is followed by a command.
+            await logging.LogtoConsoleandFileAsync($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
+            await logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
 
             string command, keyword, args;
             command = message.Content.ToLower().Substring(_prefix.Length + 1); //We now have all text that follows the prefix.
@@ -80,7 +79,6 @@ namespace MothBot
 
             //Begin comparing command to any known directives. Keep the switch ordered similarly to the commands section!
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
-            await logging.LogAsync(message);
             switch (keyword)
             {
                 case "hello":
@@ -121,11 +119,11 @@ namespace MothBot
                     return;
 
                 case "minesweeper":
-                    await mineSweeper.MinesweeperHandler(message.Channel);
+                    await mineSweeper.MinesweeperHandlerAsync(message.Channel);
                     return;
 
                 case "give":
-                    await Imagesearch.ImageSearchHandler(message.Channel, args);
+                    await Imagesearch.ImageSearchHandlerAsync(message.Channel, args);
                     return;
 
                 case "roll":
@@ -136,13 +134,22 @@ namespace MothBot
                     await message.Channel.SendMessageAsync($"Ping: {client.Latency}ms");
                     return;
 
-                case "utility":
-                    await utilities.CommandHandler(message);
-                    return;
-
                 default:
                     return;
             }
+        }
+
+        private async Task MainAsync()
+        {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            client.MessageReceived += Client_MessageRecieved;
+            client.Log += logging.Log;
+            client.ChannelCreated += Client_ChannelCreated;
+            await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
+            await client.SetGameAsync("Prefix: " + _prefix + ". Say '" + _prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            await client.StartAsync();
+
+            await Task.Delay(-1);   //Sit here while the async listens
         }
 
         private void OnProcessExit(object sender, EventArgs e)

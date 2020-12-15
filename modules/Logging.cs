@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ namespace MothBot.modules
     {
         private const string LOG_PATH = @"..\..\data\log.txt";
         private readonly StreamWriter log;
-        private uint commandIndex = 0;
 
         public Logging()
         {
@@ -18,12 +16,6 @@ namespace MothBot.modules
                 Directory.CreateDirectory(LOG_PATH.Substring(0, LOG_PATH.LastIndexOf('\\')));
 
             log = new StreamWriter(LOG_PATH, true);
-        }
-
-        public void Log(SocketMessage src)
-        {
-            Log($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
-            commandIndex++;
         }
 
         public Task Log(LogMessage msg)
@@ -36,12 +28,6 @@ namespace MothBot.modules
         {
             log.WriteLineAsync(str);
             log.Flush();
-        }
-
-        public async Task LogAsync(SocketMessage src)
-        {
-            await LogAsync($"{commandIndex}: [{src.Timestamp.DateTime}] {src.Author.Username}({src.Author.Id}): \"{src.Content}\"");
-            commandIndex++;
         }
 
         public async Task LogAsync(string str)
@@ -61,6 +47,5 @@ namespace MothBot.modules
             Console.WriteLine(str);
             await LogAsync(str);
         }
-
     }
 }

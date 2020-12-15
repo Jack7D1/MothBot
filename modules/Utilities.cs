@@ -15,17 +15,20 @@ namespace MothBot.modules
         };
 
         private static bool shutdownEnabled = false;
+        private static long shutdownTimeout = 0;
 
-        public async Task<Task> CommandHandler(SocketMessage src)
+        public async Task UtilitiesHandlerAsync(SocketMessage src)
         {
             if (!IsOperator(src.Author))   //You do not have permission
             {
                 await src.Channel.SendMessageAsync("You do not have access to Utilities.");
-                return Task.CompletedTask;
+                return;
             }
 
             string command, keyword, args;
-            command = src.Content.ToLower().Substring(Program._prefix.Length + " utility ".Length); //We now have all text that follows the prefix and the word utility.
+            command = src.Content.ToLower().Substring(Program._prefix.Length + " utility".Length); //We now have all text that follows the prefix and the word utility.
+            if (command.IndexOf(' ') == 0)
+                command = command.Substring(1);
             if (command.Contains(' '))
             {
                 keyword = command.Substring(0, command.IndexOf(' '));
@@ -36,6 +39,8 @@ namespace MothBot.modules
                 keyword = command;
                 args = "";
             }
+            if (keyword == "")
+                keyword = "commands";
             string prefix = Program._prefix + " utility ";
             switch (keyword)    //Ensure switch is ordered similarly to command list
             {
@@ -43,43 +48,47 @@ namespace MothBot.modules
                 case "commands":
                 case "help":
                     await Lists.Utilities_PrintCommandList(src.Channel, prefix);
-                    return Task.CompletedTask;
+                    return;
 
                 case "setprefix":
                     Program._prefix = args.ToLower();
                     await Program.logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
                     await Program.client.SetGameAsync("Prefix: " + args + ". Say '" + args + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
-                    return Task.CompletedTask;
+                    return;
 
                 //dangerous
                 case "shutdown":
                     if (args == "confirm")
                     {
+                        if (DateTime.Now.Ticks > shutdownTimeout)
+                            shutdownEnabled = false;
+
                         if (shutdownEnabled)
                         {
                             await Program.logging.LogtoConsoleandFileAsync($"SHUTTING DOWN: ordered by {src.Author.Username}");
                             await src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
                             Environment.Exit(13);
-                            return Task.CompletedTask;
+                            return;
                         }
                         else
                         {
                             shutdownEnabled = true;
+                            shutdownTimeout = DateTime.Now.AddSeconds(1).Ticks;
                             await src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
                             await Program.logging.LogtoConsoleandFileAsync($"{src.Author.Username} disabled shutdown safety.");
-                            return Task.CompletedTask;
+                            return;
                         }
                     }
                     else
                     {
                         shutdownEnabled = false;
                         await src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument 'confirm' to disable.");
-                        return Task.CompletedTask;
+                        return;
                     }
                 default:
                     await src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
-                    return Task.CompletedTask;
+                    return;
             }
         }
 

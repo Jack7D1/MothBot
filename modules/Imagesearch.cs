@@ -6,30 +6,30 @@ namespace MothBot.modules
 {
     internal class Imagesearch
     {
+        private const long COOLDOWN_MS = 500;
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";
         private const byte maxRetries = 255;
-        private const long MS_PER_IMAGE = 500;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
-        private static long lastImage = 0;
+        private static long timeReady = 0;
 
         public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
-            if (DateTime.Now.Ticks < lastImage + (MS_PER_IMAGE * 1000)) //1 sec is 10,000,000 ticks
+            if (DateTime.Now.Ticks < timeReady)
                 return "Minesweepers generated too frequently!";
-            lastImage = DateTime.Now.Ticks;
+            timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
+
             searchTerm = linkSearch + searchTerm;
             searchTerm = searchTerm.Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);
             string webData = System.Text.Encoding.UTF8.GetString(raw);
-            Random rng = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
             string link = "";
             int linkPtr = -1;
             byte retries = maxRetries;
             do
             {
-                short randNum = (short)rng.Next(1, 64);
+                short randNum = (short)Program.rand.Next(1, 64);
                 for (short i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
@@ -63,14 +63,14 @@ namespace MothBot.modules
             }
         }
 
-        public static Task ImageSearchHandler(ISocketMessageChannel channel, string searchquery)
+        public static async Task ImageSearchHandlerAsync(ISocketMessageChannel channel, string searchquery)
         {
             string photoLink = ImageSearch(searchquery);
             if (photoLink == null)      //sry couldn't find ur photo :c
-                channel.SendMessageAsync("Could not find photo of " + searchquery + "... :bug:");
+                await channel.SendMessageAsync("Could not find photo of " + searchquery + "... :bug:");
             else
-                channel.SendMessageAsync(photoLink);
-            return Task.CompletedTask;
+                await channel.SendMessageAsync(photoLink);
+            return;
         }
 
         private static bool CheckValid(string inStr)

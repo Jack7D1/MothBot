@@ -1,13 +1,10 @@
 ﻿using Discord.WebSocket;
-using System;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
     internal class Dice
     {
-        private static readonly Random rand = new Random(DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond);
-
         public static async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
         {
             if (quantity <= 0)
@@ -69,7 +66,7 @@ namespace MothBot.modules
         {
             byte[] outresults = new byte[quantity];
             for (byte i = 0; i < quantity; i++)
-                outresults[i] = (byte)rand.Next(1, sides + 1);
+                outresults[i] = (byte)Program.rand.Next(1, sides + 1);
 
             return outresults;
         }
