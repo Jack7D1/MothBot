@@ -8,7 +8,7 @@ namespace MothBot.modules
     internal class Chatterbot
     {
         private const ushort CHANCE_TO_CHAT = 16;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
-        private const ushort CHATTER_MAX_LENGTH = 2048;
+        private const ushort CHATTER_MAX_LENGTH = 4096;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
         private static readonly List<string> chatters = new List<string>();
 
@@ -90,6 +90,9 @@ namespace MothBot.modules
         private bool ShouldIgnore(SocketMessage src)
         {
             char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
+            foreach (SocketUser mention in src.MentionedUsers)
+                if (mention.Id == Program.MY_ID)
+                    return true;
             string inStr = src.Content.ToLower();
             if (inStr.Contains(Program._prefix))
                 return true;
