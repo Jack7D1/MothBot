@@ -91,7 +91,7 @@ namespace MothBot.modules
         {
             char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
             foreach (SocketUser mention in src.MentionedUsers)
-                if (mention.Id == Program.MY_ID)
+                if (mention.IsBot)
                     return true;
             string inStr = src.Content.ToLower();
             if (inStr.Contains(Program._prefix))
