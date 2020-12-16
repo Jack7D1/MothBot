@@ -5,30 +5,20 @@ namespace MothBot.modules
     internal class Sanitize
     {
         private const byte ID_LENGTH = 18;
+        private static readonly char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
-        public static string ReplaceAllMentionsWithID(string inStr, ulong ID)
+        public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //holy moly
         {
-            int startIndex = inStr.IndexOf("<@!"), stopIndex = inStr.LastIndexOf("<@!");
-            if (startIndex == -1)
+            if (inStr.Length < ID_LENGTH + "<@>".Length || !inStr.Contains("<@") || !inStr.Substring(inStr.IndexOf("<@")).Contains('>'))
                 return ScrubEveryoneandHereMentions(inStr);
-            if (startIndex == stopIndex)
+            string outStr = inStr, refStr = inStr;
+            while (refStr.Length >= ID_LENGTH + "<@>".Length && refStr.Contains("<@") && refStr.Substring(refStr.IndexOf("<@")).Contains('>'))
             {
-                if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
-                    return ScrubEveryoneandHereMentions(inStr);
-                string outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
-                return ScrubEveryoneandHereMentions(outStr);
+                int IDStartIndex = refStr.IndexOfAny(number, refStr.IndexOf("<@"), ID_LENGTH);
+                outStr = outStr.Replace(refStr.Substring(IDStartIndex, ID_LENGTH), $"{ID}");
+                refStr = refStr.Substring(refStr.IndexOf('>') + 1);
             }
-            else
-            {
-                while (true)
-                {
-                    if (inStr.Substring(startIndex).Length <= ID_LENGTH || !inStr.Substring(startIndex + ID_LENGTH).Contains('>'))
-                        return ScrubEveryoneandHereMentions(inStr);
-                    string outStr = inStr.Replace($"<@!{inStr.Substring(startIndex + 3, ID_LENGTH)}>", $"<@!{ID}>");
-                    if (outStr.IndexOf("<@!") == -1 || outStr[outStr.IndexOf("<@!") + ID_LENGTH + 4] != '>')
-                        return ScrubEveryoneandHereMentions(outStr);
-                }
-            }
+            return ScrubEveryoneandHereMentions(outStr);
         }
 
         public static string ScrubRoleMentions(SocketMessage src)
@@ -44,15 +34,10 @@ namespace MothBot.modules
                 return ScrubEveryoneandHereMentions(src.Content);
         }
 
-        private static string ScrubEveryoneandHereMentions(string inStr = "")  //Outputs a role ping scrubbed string, recieves target string for santization.
+        private static string ScrubEveryoneandHereMentions(string inStr)  //Outputs a role ping scrubbed string, recieves target string for santization.
         {
             //Blacklist for @everyone, @here.
-            if (inStr.ToLower().Contains("@everyone") || inStr.ToLower().Contains("@here"))
-            {
-                return inStr.Replace("@everyone", "everyone").Replace("@here", "here");
-            }
-            else
-                return inStr;
+            return inStr.Replace("@everyone", "everyone").Replace("@here", "here");
         }
     }
 }
