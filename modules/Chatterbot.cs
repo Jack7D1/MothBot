@@ -64,7 +64,7 @@ namespace MothBot.modules
             {
                 string outStr = GetChatter();
                 if (outStr != null)
-                    await src.Channel.SendMessageAsync(outStr);
+                    await src.Channel.SendMessageAsync(Sanitize.ReplaceAllMentionsWithID(outStr, src.Author.Id));
             }
         }
 
@@ -82,7 +82,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private string GetChatter()
+        private string GetChatter() //Requires output sanitization still
         {
             if (chatters.Count == 0)
                 return null;
