@@ -38,13 +38,16 @@ namespace MothBot.modules
             }
         }
 
-        public void AddChatter(SocketMessage src)
+        public async Task AddChatter(SocketMessage src)
         {
-            if (ShouldIgnore(src))
-                return;
-            if (chatters.Count >= CHATTER_MAX_LENGTH)
-                chatters.RemoveAt(0);
-            chatters.Add(Sanitize.ScrubRoleMentions(src));
+            if (!ShouldIgnore(src))
+            {
+                if (chatters.Count >= CHATTER_MAX_LENGTH)
+                    chatters.RemoveAt(0);
+                chatters.Add(Sanitize.ScrubRoleMentions(src));
+                if (Program.rand.Next(5) == 0)
+                    await SaveChatters();
+            }
         }
 
         public async Task ChatterHandler(SocketMessage src)
@@ -57,14 +60,15 @@ namespace MothBot.modules
                     break;
                 }
 
-            if ((Program.rand.Next(0, CHANCE_TO_CHAT) != 0 || ShouldIgnore(src)) && !mentionsMothbot)
-                return;
-            string outStr = GetChatter();
-            if (outStr != null)
-                await src.Channel.SendMessageAsync(outStr);
+            if (Program.rand.Next(0, CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src) || mentionsMothbot)
+            {
+                string outStr = GetChatter();
+                if (outStr != null)
+                    await src.Channel.SendMessageAsync(outStr);
+            }
         }
 
-        public void SaveChatters()
+        public Task SaveChatters()
         {
             StreamWriter writer = new StreamWriter(CHATTER_PATH, false);
             for (ushort i = 0; i < CHATTER_MAX_LENGTH; i++)
@@ -75,6 +79,7 @@ namespace MothBot.modules
             }
             writer.Flush();
             writer.Close();
+            return Task.CompletedTask;
         }
 
         private string GetChatter()
@@ -89,14 +94,12 @@ namespace MothBot.modules
 
         private bool ShouldIgnore(SocketMessage src)
         {
-            char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
             foreach (SocketUser mention in src.MentionedUsers)
                 if (mention.IsBot)
                     return true;
             string inStr = src.Content.ToLower();
-            if (inStr.Contains(Program._prefix))
-                return true;
-            if (inStr.IndexOfAny(firstCharBlacklist) == 0)
+            char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
+            if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) == 0)
                 return true;
             return false;
         }

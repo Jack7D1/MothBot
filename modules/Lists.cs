@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -10,8 +9,7 @@ namespace MothBot.modules
         //Command lists and just general lists of everything that can be called from anywhere to print.
         public static Task PrintLaws(ISocketMessageChannel ch)
         {
-            Random rand = new Random();
-            if (rand.Next() % 100 != 0)
+            if (Program.rand.Next() % 100 != 0)
             {
                 ch.SendMessageAsync(
                     "**Current active laws:**" +

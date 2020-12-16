@@ -28,19 +28,20 @@ namespace MothBot.modules
             if (DateTime.Now.Ticks < minesweeperReadyAt)
             {
                 await ch.SendMessageAsync("Minesweepers generated too frequently!");
-                return;
             }
+            else
+            {
+                minesweeperReadyAt = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
 
-            minesweeperReadyAt = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
+                gridHeight = Math.Min(gridHeight, (byte)8);
+                gridWidth = Math.Min(gridWidth, (byte)8);
+                bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
 
-            gridHeight = Math.Min(gridHeight, (byte)8);
-            gridWidth = Math.Min(gridWidth, (byte)8);
-            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
-
-            await PopulateBombs(bombs, gridWidth, gridHeight);
-            await PopulateNums(gridWidth, gridHeight);
-            await ch.SendMessageAsync($"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
-                GetMineMap(gridWidth, gridHeight));
+                await PopulateBombs(bombs, gridWidth, gridHeight);
+                await PopulateNums(gridWidth, gridHeight);
+                await ch.SendMessageAsync($"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
+                    GetMineMap(gridWidth, gridHeight));
+            }
         }
 
         private string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string

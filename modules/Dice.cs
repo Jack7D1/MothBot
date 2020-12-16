@@ -5,36 +5,37 @@ namespace MothBot.modules
 {
     internal class Dice
     {
-        public static async Task<Task> Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
+        public static async Task Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
         {
             if (quantity <= 0)
             {
                 await channel.SendMessageAsync("I can't roll 0 dice!");
-                return Task.CompletedTask;
+                return;
             }
-            if (sides <= 1)
+            else if (sides <= 1)
             {
                 await channel.SendMessageAsync("I'm not going to roll a die with that few sides.");
-                return Task.CompletedTask;
+                return;
             }
-            if (sides > 128 || quantity > 32)
+            else if (sides > 128 || quantity > 32)
             {
                 await channel.SendMessageAsync("Max dice count is 32, max side count is 128!");
-                return Task.CompletedTask;
+                return;
             }
-            if (offset > 127 || offset < -128)
+            else if (offset > 127 || offset < -128)
             {
                 await channel.SendMessageAsync($"Offset can only range from -128 to 127!");
-                return Task.CompletedTask;
+                return;
             }
+            else
+            {
+                byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
 
-            byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
-
-            await channel.SendMessageAsync(StringBuilder(rolls, (sbyte)offset));
-            return Task.CompletedTask;
+                await channel.SendMessageAsync(StringBuilder(rolls, (sbyte)offset));
+            }
         }
 
-        public static async Task<Task> Roll(ISocketMessageChannel channel, string args)
+        public static async Task Roll(ISocketMessageChannel channel, string args)
         {
             try
             {
@@ -48,17 +49,16 @@ namespace MothBot.modules
                 {
                     await Roll(channel, int.Parse(Quantity_Sides[0]), int.Parse(Quantity_Sides[1]), 0);
                 }
-                return Task.CompletedTask;
             }
             catch (System.FormatException)
             {
                 await channel.SendMessageAsync("Error parsing arguments, proper format for dice rolling is <count>d<sides> (ie 1d20), or append with a +# for an offset.");
-                return Task.CompletedTask;
+                return;
             }
             catch (System.OverflowException)
             {
                 await channel.SendMessageAsync("A number provided was too large!");
-                return Task.CompletedTask;
+                return;
             }
         }
 
@@ -67,7 +67,6 @@ namespace MothBot.modules
             byte[] outresults = new byte[quantity];
             for (byte i = 0; i < quantity; i++)
                 outresults[i] = (byte)Program.rand.Next(1, sides + 1);
-
             return outresults;
         }
 
@@ -86,9 +85,7 @@ namespace MothBot.modules
             }
             outstring += $" = {sum}";
             if (offset != 0)
-            {
                 outstring += $"+{offset} = {sum + offset}";
-            }
             return outstring;
         }
     }

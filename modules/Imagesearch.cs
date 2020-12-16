@@ -70,7 +70,6 @@ namespace MothBot.modules
                 await channel.SendMessageAsync("Could not find photo of " + searchquery + "... :bug:");
             else
                 await channel.SendMessageAsync(photoLink);
-            return;
         }
 
         private static bool CheckValid(string inStr)

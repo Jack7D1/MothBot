@@ -36,12 +36,11 @@ namespace MothBot
                     return;
                 if (input == "ye") //If someone says ye, say ye, but with a 1/10 chance
                 {
-                    if (message.Id % 10 != 0)
-                        return;
-                    await message.Channel.SendMessageAsync("Ye");
+                    if (rand.Next(10) == 0)
+                        await message.Channel.SendMessageAsync("Ye");
                     return;
                 }
-                chatter.AddChatter(message);
+                await chatter.AddChatter(message);
                 await chatter.ChatterHandler(message);
 
                 //All non prefix dependant directives go above
@@ -53,10 +52,10 @@ namespace MothBot
                     return;
                 }
             }
-            //We are now sure that the message starts with the prefix and is followed by a command.
             await logging.LogtoConsoleandFileAsync($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
             await logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
 
+            //Begin Command Parser
             string command, keyword, args;
             command = message.Content.ToLower().Substring(_prefix.Length + 1); //We now have all text that follows the prefix.
             if (command.Contains(' '))
