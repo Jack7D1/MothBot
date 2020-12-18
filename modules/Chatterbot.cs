@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -10,7 +11,7 @@ namespace MothBot.modules
         private const ushort CHANCE_TO_CHAT = 16;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 4096;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
-        private static readonly List<string> chatters = new List<string>();
+        private static List<string> chatters = new List<string>();
 
         public Chatterbot()
         {
@@ -24,6 +25,7 @@ namespace MothBot.modules
                     i++;
                 }
                 reader.Close();
+                CleanupChatters();
             }
             catch (FileNotFoundException)
             {
@@ -40,7 +42,7 @@ namespace MothBot.modules
 
         public async Task AddChatter(SocketMessage src)
         {
-            if (!ShouldIgnore(src))
+            if (Program.rand.Next(2) == 0 && !ShouldIgnore(src) && Sanitize.AcceptableChatter(src.Content))
             {
                 if (chatters.Count >= CHATTER_MAX_LENGTH)
                     chatters.RemoveAt(0);
@@ -60,7 +62,7 @@ namespace MothBot.modules
                     break;
                 }
 
-            if (Program.rand.Next(0, CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src) || mentionsMothbot)
+            if (mentionsMothbot || (Program.rand.Next(0, CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src)))
             {
                 string outStr = GetChatter();
                 if (outStr != null)
@@ -70,6 +72,7 @@ namespace MothBot.modules
 
         public Task SaveChatters()
         {
+            CleanupChatters();
             StreamWriter writer = new StreamWriter(CHATTER_PATH, false);
             for (ushort i = 0; i < CHATTER_MAX_LENGTH; i++)
             {
@@ -79,6 +82,20 @@ namespace MothBot.modules
             }
             writer.Flush();
             writer.Close();
+            return Task.CompletedTask;
+        }
+
+        private Task CleanupChatters()
+        {
+            chatters = new HashSet<string>(chatters).ToList();  //Kill duplicates
+            List<bool> validMap = new List<bool>();
+
+            foreach (string chatter in chatters)                 //Test every entry
+                validMap.Add(Sanitize.AcceptableChatter(chatter));
+
+            for (int i = validMap.Count - 1; i > 0; i--)
+                if (!validMap[i])
+                    chatters.RemoveAt(i);
             return Task.CompletedTask;
         }
 
@@ -94,6 +111,8 @@ namespace MothBot.modules
 
         private bool ShouldIgnore(SocketMessage src)
         {
+            if (src.Channel.Id == 735266952129413211)
+                return true;
             foreach (SocketUser mention in src.MentionedUsers)
                 if (mention.IsBot)
                     return true;
