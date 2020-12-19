@@ -86,6 +86,14 @@ namespace MothBot.modules
             }
         }
 
+        public bool IsPortal(ISocketMessageChannel ch)
+        {
+            foreach (Portal portal in portals)
+                if (portal.id == ch.Id)
+                    return true;
+            return false;
+        }
+
         public async Task PortalHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
         {
             if (IsPortal(msg.Channel))
@@ -162,7 +170,7 @@ namespace MothBot.modules
                 if (portal.visible == true && Program.client.GetChannel(portal.id) is IMessageChannel ch)
                 {
                     if (msg.Channel != ch)
-                        await ch.SendMessageAsync($"*{msg.Author.Username} in [{msg.Channel.Name}] says* \"{Sanitize.ScrubRoleMentions(msg)}\"");
+                        await ch.SendMessageAsync($"*{msg.Author.Username} in [{(msg.Author as IGuildUser).Guild.Name}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
                 }
                 else
                     portals.Remove(portal);
@@ -178,14 +186,6 @@ namespace MothBot.modules
                     break;
                 }
             return Task.CompletedTask;
-        }
-
-        private bool IsPortal(ISocketMessageChannel ch)
-        {
-            foreach (Portal portal in portals)
-                if (portal.id == ch.Id)
-                    return true;
-            return false;
         }
     }
 }

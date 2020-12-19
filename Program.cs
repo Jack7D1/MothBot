@@ -30,21 +30,19 @@ namespace MothBot
         private async Task Client_MessageRecieved(SocketMessage message)
         {
             {
-                string input = message.Content.ToLower();
                 // Filter messages
                 if (message.Author.IsBot)   //If message author is a bot, ignore
                     return;
-                if (input == "ye") //If someone says ye, say ye, but with a 1/10 chance
+                if (portals.IsPortal(message.Channel))
                 {
-                    if (rand.Next(10) == 0)
-                        await message.Channel.SendMessageAsync("Ye");
+                    await portals.PortalHandlerAsync(message);
                     return;
                 }
                 await chatter.AddChatter(message);
                 await chatter.ChatterHandler(message);
-                await portals.PortalHandlerAsync(message);
 
                 //All non prefix dependant directives go above
+                string input = message.Content.ToLower();
                 if (input.IndexOf($"{_prefix} ") != 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
                     return;
                 if (input.IndexOf($"{_prefix} utility") == 0)
@@ -93,12 +91,12 @@ namespace MothBot
 
                 case "pet":
                     if (args != "")
-                        await message.Channel.SendMessageAsync($@"*Fabricates a bionic arm out of the blue and pets {Sanitize.ScrubRoleMentions(message).Split(' ')[_prefix.Length]}.*");
+                        await message.Channel.SendMessageAsync($@"*Fabricates a bionic arm out of the blue and pets {Sanitize.ScrubRoleMentions(message.Content).Split(' ')[_prefix.Length]}.*");
                     return;
 
                 case "hug":
                     if (args != "")
-                        await message.Channel.SendMessageAsync($@"*Fabricates a pair of bionic arms out of the blue and hugs {Sanitize.ScrubRoleMentions(message).Split(' ')[_prefix.Length]} to make them feel better.*");
+                        await message.Channel.SendMessageAsync($@"*Fabricates a pair of bionic arms out of the blue and hugs {Sanitize.ScrubRoleMentions(message.Content).Split(' ')[_prefix.Length]} to make them feel better.*");
                     return;
 
                 case "laws":
@@ -107,7 +105,7 @@ namespace MothBot
                     return;
 
                 case "say":
-                    await message.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(message).Substring(_prefix.Length + "say ".Length));
+                    await message.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(message.Content).Substring(_prefix.Length + "say ".Length));
                     await message.DeleteAsync();
                     return;
 

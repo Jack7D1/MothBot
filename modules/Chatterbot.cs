@@ -24,7 +24,7 @@ namespace MothBot.modules
             {
                 if (chatters.Count >= CHATTER_MAX_LENGTH)
                     chatters.RemoveAt(0);
-                chatters.Add(Sanitize.ScrubRoleMentions(src));
+                chatters.Add(Sanitize.ScrubRoleMentions(src.Content));
                 if (Program.rand.Next(5) == 0)
                     await SaveChatters();
             }
