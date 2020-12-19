@@ -77,26 +77,6 @@ namespace MothBot.modules
             }
         }
 
-        public static Task WriteFile(string path, List<string> data, bool append = false)
-        {
-            try
-            {
-                StreamWriter writer = new StreamWriter(path, append);
-                if (data.Count > 0 && path != "")
-                {
-                    foreach (string line in data)
-                        writer.WriteLine(line);
-                }
-                writer.Close();
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
-                WriteFile(path, data, append);
-            }
-            return Task.CompletedTask;
-        }
-
         public static Task SetDefaultStatus()
         {
             Program.client.SetGameAsync("Prefix: " + Program._prefix + ". Say '" + Program._prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
@@ -115,6 +95,26 @@ namespace MothBot.modules
                 "dangerous:\n" +
                 prefix + "shutdown\n" +
                 "```");
+            return Task.CompletedTask;
+        }
+
+        public static Task WriteFile(string path, List<string> data, bool append = false)
+        {
+            try
+            {
+                StreamWriter writer = new StreamWriter(path, append);
+                if (data.Count > 0 && path != "")
+                {
+                    foreach (string line in data)
+                        writer.WriteLine(line);
+                }
+                writer.Close();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                WriteFile(path, data, append);
+            }
             return Task.CompletedTask;
         }
     }
