@@ -1,5 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -45,8 +47,53 @@ namespace MothBot.modules
                 prefix + " minesweeper  - Play a game of minesweeper!\n" +
                 prefix + " give [text]  - Searches the input on imgur and posts the image!\n" +
                 prefix + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
+                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator." +
                 prefix + " utility      - Utility functions, bot only responds to operators\n" +
                 "```");
+            return Task.CompletedTask;
+        }
+
+        public static List<string> ReadFile(string path)    //Returns null if file not found
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(path);
+                List<string> outList = new List<string>();
+                while (!reader.EndOfStream)
+                    outList.Add(reader.ReadLine());
+                reader.Close();
+                return outList;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                _ = new StreamWriter(path, false);
+                return null;
+            }
+            catch (FileNotFoundException)
+            {
+                _ = new StreamWriter(path, false);
+                return null;
+            }
+        }
+
+        public static Task WriteFile(string path, List<string> data, bool append = false)
+        {
+            try
+            {
+                StreamWriter writer = new StreamWriter(path, append);
+                if (data.Count > 0 && path != "")
+                {
+                    foreach (string line in data)
+                        writer.WriteLine(line);
+                }
+                writer.Close();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                WriteFile(path, data, append);
+            }
             return Task.CompletedTask;
         }
 

@@ -11,15 +11,13 @@ namespace MothBot
     {
         public const ulong MY_ID = 765202973495656538;
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
-
-        public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
-        public static DiscordSocketClient client = new DiscordSocketClient();
-        public static Logging logging = new Logging();  //Sequence sensitive inits here
-
         public static Chatterbot chatter = new Chatterbot();
+        public static DiscordSocketClient client = new DiscordSocketClient();
+        public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
+        public static Portals portals; //Requires the client to be logged in before init
+        public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         public static Utilities utilities = new Utilities();
-        public static Portals portal = new Portals();
         private const string TOKEN_PATH = @"..\..\data\token.txt";
 
         public static void Main(string[] args)  //Initialization
@@ -44,6 +42,7 @@ namespace MothBot
                 }
                 await chatter.AddChatter(message);
                 await chatter.ChatterHandler(message);
+                await portals.PortalHandlerAsync(message);
 
                 //All non prefix dependant directives go above
                 if (input.IndexOf($"{_prefix} ") != 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
@@ -128,6 +127,10 @@ namespace MothBot
                     await message.Channel.SendMessageAsync($"Ping: {client.Latency}ms");
                     return;
 
+                case "portal":
+                    await portals.PortalManagement(message, args);
+                    return;
+
                 default:
                     return;
             }
@@ -138,6 +141,7 @@ namespace MothBot
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             client.MessageReceived += Client_MessageRecieved;
             client.Log += logging.Log;
+            client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
             await Lists.SetDefaultStatus();
             await client.StartAsync();
@@ -147,7 +151,15 @@ namespace MothBot
 
         private void ProcessExit(object sender, EventArgs e)
         {
+            portals.SavePortals();
+            chatter.SaveChatters();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
+        }
+
+        private Task Ready()  //Init any objects here that are dependant on the client having logged in.
+        {
+            portals = new Portals();
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Discord.WebSocket;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,30 +14,8 @@ namespace MothBot.modules
 
         public Chatterbot()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
-            try
-            {
-                StreamReader reader = new StreamReader(CHATTER_PATH);
-                ushort i = 0;
-                while (!reader.EndOfStream && i < CHATTER_MAX_LENGTH)
-                {
-                    chatters.Add(reader.ReadLine());
-                    i++;
-                }
-                reader.Close();
-                CleanupChatters();
-            }
-            catch (FileNotFoundException)
-            {
-                _ = new StreamWriter(CHATTER_PATH, false);
-                return;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(CHATTER_PATH.Substring(0, CHATTER_PATH.LastIndexOf('\\')));
-                _ = new StreamWriter(CHATTER_PATH, false);
-                return;
-            }
+            chatters = Lists.ReadFile(CHATTER_PATH);
+            CleanupChatters();
         }
 
         public async Task AddChatter(SocketMessage src)
@@ -75,15 +51,7 @@ namespace MothBot.modules
         public Task SaveChatters()
         {
             CleanupChatters();
-            StreamWriter writer = new StreamWriter(CHATTER_PATH, false);
-            for (ushort i = 0; i < CHATTER_MAX_LENGTH; i++)
-            {
-                if (i == chatters.Count)
-                    break;
-                writer.WriteLine(chatters[i]);
-            }
-            writer.Flush();
-            writer.Close();
+            Lists.WriteFile(CHATTER_PATH, chatters);
             return Task.CompletedTask;
         }
 
@@ -123,10 +91,6 @@ namespace MothBot.modules
             if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) == 0)
                 return true;
             return false;
-        }
-        private void ProcessExit(object sender, EventArgs e)
-        {
-            SaveChatters();
         }
     }
 }

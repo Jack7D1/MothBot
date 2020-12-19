@@ -17,6 +17,7 @@ namespace MothBot.modules
 
         public static bool AcceptableChatter(string inStr)
         {
+            inStr = inStr.ToLower();
             if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0) // Catch empty strings
                 return false;
 
