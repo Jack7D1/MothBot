@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace MothBot.modules
 
         public Chatterbot()
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             try
             {
                 StreamReader reader = new StreamReader(CHATTER_PATH);
@@ -29,13 +31,13 @@ namespace MothBot.modules
             }
             catch (FileNotFoundException)
             {
-                _ = new StreamWriter(CHATTER_PATH, true);
+                _ = new StreamWriter(CHATTER_PATH, false);
                 return;
             }
             catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(CHATTER_PATH.Substring(0, CHATTER_PATH.LastIndexOf('\\')));
-                _ = new StreamWriter(CHATTER_PATH, true);
+                _ = new StreamWriter(CHATTER_PATH, false);
                 return;
             }
         }
@@ -121,6 +123,10 @@ namespace MothBot.modules
             if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) == 0)
                 return true;
             return false;
+        }
+        private void ProcessExit(object sender, EventArgs e)
+        {
+            SaveChatters();
         }
     }
 }

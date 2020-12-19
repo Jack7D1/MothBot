@@ -1,5 +1,7 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -16,6 +18,12 @@ namespace MothBot.modules
                 Directory.CreateDirectory(LOG_PATH.Substring(0, LOG_PATH.LastIndexOf('\\')));
 
             log = new StreamWriter(LOG_PATH, true);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
+        }
+
+        private void ProcessExit(object sender, EventArgs e)
+        {
+            Log($"System shutdown at [{System.DateTime.UtcNow}]");
         }
 
         public Task Log(LogMessage msg)

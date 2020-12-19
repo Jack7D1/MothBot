@@ -12,12 +12,14 @@ namespace MothBot
         public const ulong MY_ID = 765202973495656538;
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
 
-        public static Chatterbot chatter = new Chatterbot();
-        public static DiscordSocketClient client = new DiscordSocketClient();
-        public static Logging logging = new Logging();
-        public static Minesweeper mineSweeper = new Minesweeper();
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
+        public static DiscordSocketClient client = new DiscordSocketClient();
+        public static Logging logging = new Logging();  //Sequence sensitive inits here
+
+        public static Chatterbot chatter = new Chatterbot();
+        public static Minesweeper mineSweeper = new Minesweeper();
         public static Utilities utilities = new Utilities();
+        public static Portals portal = new Portals();
         private const string TOKEN_PATH = @"..\..\data\token.txt";
 
         public static void Main(string[] args)  //Initialization
@@ -133,7 +135,7 @@ namespace MothBot
 
         private async Task MainAsync()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             client.MessageReceived += Client_MessageRecieved;
             client.Log += logging.Log;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
@@ -143,10 +145,8 @@ namespace MothBot
             await Task.Delay(-1);   //Sit here while the async listens
         }
 
-        private void OnProcessExit(object sender, EventArgs e)
+        private void ProcessExit(object sender, EventArgs e)
         {
-            chatter.SaveChatters();
-            logging.Log($"System shutdown at [{System.DateTime.UtcNow}]");
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
         }
     }
