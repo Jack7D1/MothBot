@@ -162,7 +162,7 @@ namespace MothBot.modules
                 if (portal.visible == true && Program.client.GetChannel(portal.id) is IMessageChannel ch)
                 {
                     if (msg.Channel != ch)
-                        await ch.SendMessageAsync($"*{msg.Author.Username} in [{msg.Channel.Name}] says* \"{msg.Content}\"");
+                        await ch.SendMessageAsync($"*{msg.Author.Username} in [{msg.Channel.Name}] says* \"{Sanitize.ScrubRoleMentions(msg)}\"");
                 }
                 else
                     portals.Remove(portal);
