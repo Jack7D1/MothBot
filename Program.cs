@@ -33,13 +33,12 @@ namespace MothBot
                 // Filter messages
                 if (message.Author.IsBot)   //If message author is a bot, ignore
                     return;
-                if (portals.IsPortal(message.Channel))
+                if (!(portals.GetPortal(message.Channel) is Portal))
                 {
-                    await portals.PortalHandlerAsync(message);
-                    return;
+                    await chatter.AddChatter(message);
+                    await chatter.ChatterHandler(message);
                 }
-                await chatter.AddChatter(message);
-                await chatter.ChatterHandler(message);
+                await portals.BroadcastHandlerAsync(message);
 
                 //All non prefix dependant directives go above
                 string input = message.Content.ToLower();

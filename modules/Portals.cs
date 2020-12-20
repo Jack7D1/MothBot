@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,24 @@ namespace MothBot.modules
 {
     internal class Portal
     {
-        public readonly ulong id;
-        public readonly string portalName;
-        public readonly bool visible = false;
+        public readonly ulong channelId;
+        public readonly ulong guildId;
 
-        public Portal(ulong inId, string str)
+        public Portal(ulong serverId, ulong chId)
         {
-            portalName = str;
-            id = inId;
-            if (Program.client.GetChannel(id) is IMessageChannel messageChannel)
-            {
-                visible = true;
-                if (messageChannel.Name != portalName)
-                    portalName = messageChannel.Name;
-            }
+            guildId = serverId;
+            channelId = chId;
+        }
+
+        public IMessageChannel GetChannel() //returns null if not found
+        {
+            return Program.client.GetChannel(channelId) as IMessageChannel;
         }
     }
 
     internal class Portals
     {
-        private const long COOLDOWN_MS = 1000;  //1 second cooldown, to avoid inevitable super spam.
+        private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
         private const string PORTALS_PATH = @"..\..\data\portals.txt";
         private static long timeReady = 0;
         private readonly List<Portal> portals = new List<Portal>();
@@ -36,8 +35,8 @@ namespace MothBot.modules
          * The string "BEGIN PORTALS"
          *
          * Each portal channel entry contains 2 lines:
-         * The ulong 'channelID'
-         * The string 'portalName;
+         * The ulong 'guildID' which represents the ID of the guild the portal belongs to
+         * The ulong 'channelID' which represents the ID of the channel the portal targets
          *
          * If there are no portal entries the string "NO PORTALS" is saved instead
          *
@@ -46,7 +45,8 @@ namespace MothBot.modules
 
         public Portals()
         {
-            Program.client.ChannelDestroyed += CheckPortals;
+            Program.client.ChannelDestroyed += ChannelDestroyed;
+            Program.client.LeftGuild += LeftGuild;
             try
             {
                 List<string> fileData = Lists.ReadFile(PORTALS_PATH);
@@ -57,20 +57,10 @@ namespace MothBot.modules
                 if (fileData.Count == 0 || fileData[0] != "BEGIN PORTALS" || endIndex == -1)
                     throw new Exception("ERROR PARSING PORTALS");
 
-                string portalIds = "";
                 //Main data parsing
                 if (fileData[1] != "NO PORTALS")
-                {
                     for (int i = 1; i < endIndex; i += 2)
-                        portals.Add(new Portal(ulong.Parse(fileData[i]), fileData[i + 1]));
-                    foreach (Portal portal in portals)
-                        portalIds += portal.id;
-                }
-                else
-                {
-                    portals.Clear();
-                    return;
-                }
+                        portals.Add(new Portal(ulong.Parse(fileData[i]), ulong.Parse(fileData[i + 1])));
             }
             catch (Exception e) when (e.Message == "ERROR PARSING PORTALS")
             {
@@ -86,26 +76,31 @@ namespace MothBot.modules
             }
         }
 
-        public bool IsPortal(ISocketMessageChannel ch)
+        public async Task BroadcastHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
         {
-            foreach (Portal portal in portals)
-                if (portal.id == ch.Id)
-                    return true;
-            return false;
-        }
-
-        public async Task PortalHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
-        {
-            if (IsPortal(msg.Channel))
+            if (GetPortal(msg.Channel) is Portal)
             {
                 if (DateTime.Now.Ticks < timeReady)
-                    await msg.Channel.SendMessageAsync("The portal is cooling down!");
+                {
+                    RestMessage sentmsg = msg.Channel.SendMessageAsync("The portal is cooling down!").Result;
+                    await Task.Delay(500);
+                    await msg.DeleteAsync();
+                    await sentmsg.DeleteAsync();
+                }
                 else
                 {
                     timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
                     await BroadcastAsync(msg);
                 }
             }
+        }
+
+        public Portal GetPortal(IMessageChannel ch) //If not a portal returns null
+        {
+            foreach (Portal portal in portals)
+                if (portal.channelId == ch.Id)
+                    return portal;
+            return null;
         }
 
         public Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal"
@@ -115,51 +110,50 @@ namespace MothBot.modules
                 switch (args)
                 {
                     case "create":
-                        if (!IsPortal(msg.Channel))
+                        if (!GuildHasPortal(user.Guild))
                         {
-                            Portal portal = new Portal(msg.Channel.Id, msg.Channel.Name);
+                            Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
                             msg.Channel.SendMessageAsync($"This channel successfully added as a portal! To remove as a portal say \"{Program._prefix} portal delete\" or delete this channel!");
+                            Program.logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                         }
                         else
-                            msg.Channel.SendMessageAsync("This channel is already a portal!");
+                            msg.Channel.SendMessageAsync("This server already has a portal!");
                         return Task.CompletedTask;
 
                     case "delete":
-                        foreach (Portal portal in portals)
-                            if (portal.id == msg.Channel.Id)
+                        {
+                            if (GetPortal(msg.Channel) is Portal portal)
                             {
                                 portals.Remove(portal);
                                 msg.Channel.SendMessageAsync("Portal successfully deleted");
-                                return Task.CompletedTask;
+                                Program.logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                             }
-                        msg.Channel.SendMessageAsync("This channel is not a portal!");
-                        return Task.CompletedTask;
-
+                            else
+                                msg.Channel.SendMessageAsync("This channel is not a portal!");
+                            return Task.CompletedTask;
+                        }
                     default:
                         msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal create\" or \"{Program._prefix} portal delete\" to manage portals!");
                         return Task.CompletedTask;
                 }
             else
-                msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server!");
+                msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [Administrator]");
             return Task.CompletedTask;
         }
 
         public void SavePortals()
         {
             List<string> outList = new List<string> { "BEGIN PORTALS" };  //header
-            string portalIds = "";
             if (portals.Count != 0)
                 foreach (Portal portal in portals)
                 {
-                    portalIds += portal.id;
-                    outList.Add($"{portal.id}");
-                    outList.Add(portal.portalName);
+                    outList.Add($"{portal.guildId}");
+                    outList.Add($"{portal.channelId}");
                 }
             else
                 outList.Add("NO PORTALS");
             outList.Add("END PORTALS");
-            Task.Delay(500);
             Lists.WriteFile(PORTALS_PATH, outList);
         }
 
@@ -167,7 +161,7 @@ namespace MothBot.modules
         {
             List<Portal> portaldupe = portals;
             foreach (Portal portal in portaldupe)
-                if (portal.visible == true && Program.client.GetChannel(portal.id) is IMessageChannel ch)
+                if (portal.GetChannel() is IMessageChannel ch)
                 {
                     if (msg.Channel != ch)
                         await ch.SendMessageAsync($"*{msg.Author.Username} in [{(msg.Author as IGuildUser).Guild.Name}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
@@ -176,15 +170,32 @@ namespace MothBot.modules
                     portals.Remove(portal);
         }
 
-        private Task CheckPortals(SocketChannel ch)
+        private Task ChannelDestroyed(SocketChannel arg)
+        {
+            CheckPortals();
+            return Task.CompletedTask;
+        }
+
+        private Task CheckPortals()
         {
             List<Portal> portaldupe = portals;
             foreach (Portal portal in portaldupe)
-                if (ch.Id == portal.id)
-                {
+                if (!(portal.GetChannel() is IMessageChannel))
                     portals.Remove(portal);
-                    break;
-                }
+            return Task.CompletedTask;
+        }
+
+        private bool GuildHasPortal(SocketGuild guild)   //Returns true if the input guild has a portal already
+        {
+            foreach (Portal portal in portals)
+                if (guild.Id == portal.guildId)
+                    return true;
+            return false;
+        }
+
+        private Task LeftGuild(SocketGuild arg)
+        {
+            CheckPortals();
             return Task.CompletedTask;
         }
     }

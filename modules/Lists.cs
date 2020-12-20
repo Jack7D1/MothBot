@@ -62,6 +62,7 @@ namespace MothBot.modules
                 while (!reader.EndOfStream)
                     outList.Add(reader.ReadLine());
                 reader.Close();
+                reader.Dispose();
                 return outList;
             }
             catch (DirectoryNotFoundException)
@@ -109,6 +110,7 @@ namespace MothBot.modules
                         writer.WriteLine(line);
                 }
                 writer.Close();
+                writer.Dispose();
             }
             catch (DirectoryNotFoundException)
             {
