@@ -14,7 +14,7 @@ namespace MothBot.modules
 
         public Chatterbot()
         {
-            chatters = Lists.ReadFile(CHATTER_PATH);
+            chatters = Data.ReadFileString(CHATTER_PATH);
             CleanupChatters();
         }
 
@@ -51,7 +51,7 @@ namespace MothBot.modules
         public Task SaveChatters()
         {
             CleanupChatters();
-            Lists.WriteFile(CHATTER_PATH, chatters);
+            Data.WriteFileString(CHATTER_PATH, chatters);
             return Task.CompletedTask;
         }
 

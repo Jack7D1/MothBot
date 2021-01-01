@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -23,7 +24,7 @@ namespace MothBot.modules
             searchTerm = linkSearch + searchTerm;
             searchTerm = searchTerm.Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);
-            string webData = System.Text.Encoding.UTF8.GetString(raw);
+            string webData = Encoding.UTF8.GetString(raw);
             string link = "";
             int linkPtr = -1;
             byte retries = maxRetries;
@@ -48,7 +49,7 @@ namespace MothBot.modules
                 webData = webData.Substring(linkPtr + 32);
             } while (retries > 0);
             //Last ditch effort to find *something*! Shooting for the top result.
-            webData = System.Text.Encoding.UTF8.GetString(raw);
+            webData = Encoding.UTF8.GetString(raw);
             linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;
             link = webData.Substring(linkPtr, 7);
             if (CheckValid(link))

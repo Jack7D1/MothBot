@@ -22,14 +22,19 @@ namespace MothBot.modules
         {
             return Program.client.GetChannel(channelId) as IMessageChannel;
         }
+
+        public IGuild GetGuild()    //returns null if not found
+        {
+            return Program.client.GetGuild(guildId);
+        }
     }
 
     internal class Portals
     {
         private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
         private const string PORTALS_PATH = @"..\..\data\portals.txt";
+        private static readonly List<Portal> portals = new List<Portal>();
         private static long timeReady = 0;
-        private readonly List<Portal> portals = new List<Portal>();
         /*Savedata structure:
          * File header contains 1 line:
          * The string "BEGIN PORTALS"
@@ -49,7 +54,7 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                List<string> fileData = Lists.ReadFile(PORTALS_PATH);
+                List<string> fileData = Data.ReadFileString(PORTALS_PATH);
                 if (fileData == null)
                     throw new Exception("NO FILEDATA");
                 int endIndex = fileData.IndexOf("END PORTALS");
@@ -76,14 +81,14 @@ namespace MothBot.modules
             }
         }
 
-        public async Task BroadcastHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
+        public static async Task BroadcastHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
         {
             if (GetPortal(msg.Channel) is Portal)
             {
                 if (DateTime.Now.Ticks < timeReady)
                 {
                     RestMessage sentmsg = msg.Channel.SendMessageAsync("The portal is cooling down!").Result;
-                    await Task.Delay(500);
+                    await Task.Delay(2000);
                     await msg.DeleteAsync();
                     await sentmsg.DeleteAsync();
                 }
@@ -95,7 +100,7 @@ namespace MothBot.modules
             }
         }
 
-        public Portal GetPortal(IMessageChannel ch) //If not a portal returns null
+        public static Portal GetPortal(IMessageChannel ch) //If not a portal returns null
         {
             foreach (Portal portal in portals)
                 if (portal.channelId == ch.Id)
@@ -103,10 +108,14 @@ namespace MothBot.modules
             return null;
         }
 
-        public Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal"
+        public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal"
         {
             SocketGuildUser user = msg.Author as SocketGuildUser;
-            if (user.GuildPermissions.Administrator)    //Only guild admins can designate a portal channel.
+            if (args == "list")
+            {
+                await ListPortals(msg.Channel);
+            }
+            else if (user is SocketGuildUser && user.GuildPermissions.Administrator)    //Only guild admins can designate a portal channel.
                 switch (args)
                 {
                     case "create":
@@ -114,35 +123,34 @@ namespace MothBot.modules
                         {
                             Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
-                            msg.Channel.SendMessageAsync($"This channel successfully added as a portal! To remove as a portal say \"{Program._prefix} portal delete\" or delete this channel!");
+                            await msg.Channel.SendMessageAsync($"This channel successfully added as a portal! To remove as a portal say \"{Program._prefix} portal delete\" or delete this channel!");
                             Program.logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                         }
                         else
-                            msg.Channel.SendMessageAsync("This server already has a portal!");
-                        return Task.CompletedTask;
+                            await msg.Channel.SendMessageAsync("This server already has a portal!");
+                        break;
 
                     case "delete":
                         {
                             if (GetPortal(msg.Channel) is Portal portal)
                             {
                                 portals.Remove(portal);
-                                msg.Channel.SendMessageAsync("Portal successfully deleted");
+                                await msg.Channel.SendMessageAsync("Portal successfully deleted");
                                 Program.logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                             }
                             else
-                                msg.Channel.SendMessageAsync("This channel is not a portal!");
-                            return Task.CompletedTask;
+                                await msg.Channel.SendMessageAsync("This channel is not a portal!");
+                            break;
                         }
                     default:
-                        msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal create\" or \"{Program._prefix} portal delete\" to manage portals!");
-                        return Task.CompletedTask;
+                        await msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal create\" or \"{Program._prefix} portal delete\" to manage portals!");
+                        break;
                 }
             else
-                msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [Administrator]");
-            return Task.CompletedTask;
+                await msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [Administrator]");
         }
 
-        public void SavePortals()
+        public static void SavePortals()
         {
             List<string> outList = new List<string> { "BEGIN PORTALS" };  //header
             if (portals.Count != 0)
@@ -154,10 +162,10 @@ namespace MothBot.modules
             else
                 outList.Add("NO PORTALS");
             outList.Add("END PORTALS");
-            Lists.WriteFile(PORTALS_PATH, outList);
+            Data.WriteFileString(PORTALS_PATH, outList);
         }
 
-        private async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
+        private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
         {
             List<Portal> portaldupe = portals;
             foreach (Portal portal in portaldupe)
@@ -170,13 +178,13 @@ namespace MothBot.modules
                     portals.Remove(portal);
         }
 
-        private Task ChannelDestroyed(SocketChannel arg)
+        private static Task ChannelDestroyed(SocketChannel arg)
         {
             CheckPortals();
             return Task.CompletedTask;
         }
 
-        private Task CheckPortals()
+        private static Task CheckPortals()
         {
             List<Portal> portaldupe = portals;
             foreach (Portal portal in portaldupe)
@@ -185,7 +193,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private bool GuildHasPortal(SocketGuild guild)   //Returns true if the input guild has a portal already
+        private static bool GuildHasPortal(SocketGuild guild)   //Returns true if the input guild has a portal already
         {
             foreach (Portal portal in portals)
                 if (guild.Id == portal.guildId)
@@ -193,9 +201,27 @@ namespace MothBot.modules
             return false;
         }
 
-        private Task LeftGuild(SocketGuild arg)
+        private static Task LeftGuild(SocketGuild arg)
         {
             CheckPortals();
+            return Task.CompletedTask;
+        }
+
+        private static Task ListPortals(ISocketMessageChannel ch)
+        {
+            if (portals.Count > 0)
+            {
+                string outStr = "**OPEN PORTALS:** ```";
+                for (int i = 0; i < portals.Count; i++)
+                {
+                    IMessageChannel portalCh = portals[i].GetChannel();
+                    IGuild portalGuild = portals[i].GetGuild();
+                    outStr += $"{i + 1}: \"{portalCh.Name}\" in {portalGuild.Name}.\n";
+                }
+                ch.SendMessageAsync(outStr + "```");
+            }
+            else
+                ch.SendMessageAsync("No portals found!");
             return Task.CompletedTask;
         }
     }

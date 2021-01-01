@@ -15,7 +15,6 @@ namespace MothBot
         public static DiscordSocketClient client = new DiscordSocketClient();
         public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
-        public static Portals portals; //Requires the client to be logged in before init
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         public static Utilities utilities = new Utilities();
         private const string TOKEN_PATH = @"..\..\data\token.txt";
@@ -33,12 +32,12 @@ namespace MothBot
                 // Filter messages
                 if (message.Author.IsBot)   //If message author is a bot, ignore
                     return;
-                if (!(portals.GetPortal(message.Channel) is Portal))
+                if (!(Portals.GetPortal(message.Channel) is Portal))
                 {
                     await chatter.AddChatter(message);
                     await chatter.ChatterHandler(message);
                 }
-                await portals.BroadcastHandlerAsync(message);
+                await Portals.BroadcastHandlerAsync(message);
 
                 //All non prefix dependant directives go above
                 string input = message.Content.ToLower();
@@ -125,7 +124,7 @@ namespace MothBot
                     return;
 
                 case "portal":
-                    await portals.PortalManagement(message, args);
+                    await Portals.PortalManagement(message, args);
                     return;
 
                 default:
@@ -148,14 +147,14 @@ namespace MothBot
 
         private void ProcessExit(object sender, EventArgs e)
         {
-            portals.SavePortals();
+            Portals.SavePortals();
             chatter.SaveChatters();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
         }
 
         private Task Ready()  //Init any objects here that are dependant on the client having logged in.
         {
-            portals = new Portals();
+            _ = new Portals();
             return Task.CompletedTask;
         }
     }
