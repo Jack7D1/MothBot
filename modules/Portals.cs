@@ -28,11 +28,6 @@ namespace MothBot.modules
         {
             return Program.client.GetGuild(guildId);
         }
-
-        public string GetJson()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
     internal class Portals
@@ -49,7 +44,7 @@ namespace MothBot.modules
             try
             {
                 string fileData = Lists.ReadFile(PORTALS_PATH)[0];
-                portals = JsonConvert.DeserializeObject<List<Portal>>(fileData);   
+                portals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
@@ -63,17 +58,20 @@ namespace MothBot.modules
         {
             if (GetPortal(msg.Channel) is Portal)
             {
-                if (DateTime.Now.Ticks < timeReady)
+                if (!msg.Content.StartsWith(Program._prefix))
                 {
-                    RestMessage sentmsg = msg.Channel.SendMessageAsync("The portal is cooling down!").Result;
-                    await Task.Delay(2000);
-                    await msg.DeleteAsync();
-                    await sentmsg.DeleteAsync();
-                }
-                else
-                {
-                    timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
-                    await BroadcastAsync(msg);
+                    if (DateTime.Now.Ticks < timeReady)
+                    {
+                        RestMessage sentmsg = msg.Channel.SendMessageAsync("The portal is cooling down!").Result;
+                        await Task.Delay(2000);
+                        await msg.DeleteAsync();
+                        await sentmsg.DeleteAsync();
+                    }
+                    else
+                    {
+                        timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
+                        await BroadcastAsync(msg);
+                    }
                 }
             }
         }
@@ -156,9 +154,12 @@ namespace MothBot.modules
         private static Task CheckPortals()
         {
             List<Portal> portaldupe = portals;
+            List<Portal> toRemove = new List<Portal>();
             foreach (Portal portal in portaldupe)
                 if (!(portal.GetChannel() is IMessageChannel))
-                    portals.Remove(portal);
+                    toRemove.Add(portal);
+            foreach (Portal portal in toRemove)
+                portals.Remove(portal);
             return Task.CompletedTask;
         }
 
@@ -180,6 +181,7 @@ namespace MothBot.modules
         {
             if (portals.Count > 0)
             {
+                CheckPortals();
                 string outStr = "**OPEN PORTALS:** ```";
                 for (int i = 0; i < portals.Count; i++)
                 {
