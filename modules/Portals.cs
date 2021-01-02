@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,26 +28,19 @@ namespace MothBot.modules
         {
             return Program.client.GetGuild(guildId);
         }
+
+        public string GetJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
     }
 
     internal class Portals
     {
         private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
-        private const string PORTALS_PATH = @"..\..\data\portals.txt";
-        private static readonly List<Portal> portals = new List<Portal>();
+        private const string PORTALS_PATH = @"..\..\data\portals.json";
+        private static List<Portal> portals = new List<Portal>();
         private static long timeReady = 0;
-        /*Savedata structure:
-         * File header contains 1 line:
-         * The string "BEGIN PORTALS"
-         *
-         * Each portal channel entry contains 2 lines:
-         * The ulong 'guildID' which represents the ID of the guild the portal belongs to
-         * The ulong 'channelID' which represents the ID of the channel the portal targets
-         *
-         * If there are no portal entries the string "NO PORTALS" is saved instead
-         *
-         * Footer is the string "END PORTALS"
-         */
 
         public Portals()
         {
@@ -54,24 +48,8 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                List<string> fileData = Data.ReadFileString(PORTALS_PATH);
-                if (fileData == null)
-                    throw new Exception("NO FILEDATA");
-                int endIndex = fileData.IndexOf("END PORTALS");
-                //Check Header
-                if (fileData.Count == 0 || fileData[0] != "BEGIN PORTALS" || endIndex == -1)
-                    throw new Exception("ERROR PARSING PORTALS");
-
-                //Main data parsing
-                if (fileData[1] != "NO PORTALS")
-                    for (int i = 1; i < endIndex; i += 2)
-                        portals.Add(new Portal(ulong.Parse(fileData[i]), ulong.Parse(fileData[i + 1])));
-            }
-            catch (Exception e) when (e.Message == "ERROR PARSING PORTALS")
-            {
-                Program.logging.LogtoConsoleandFile($"FATAL IN {this}: Error parsing \"{PORTALS_PATH}\", data is either corrupted or missing, file will be overwritten on application close.");
-                portals.Clear();
-                return;
+                string fileData = Lists.ReadFile(PORTALS_PATH)[0];
+                portals = JsonConvert.DeserializeObject<List<Portal>>(fileData);   
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
@@ -118,24 +96,24 @@ namespace MothBot.modules
             else if (user is SocketGuildUser && user.GuildPermissions.Administrator)    //Only guild admins can designate a portal channel.
                 switch (args)
                 {
-                    case "create":
+                    case "open":
                         if (!GuildHasPortal(user.Guild))
                         {
                             Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
-                            await msg.Channel.SendMessageAsync($"This channel successfully added as a portal! To remove as a portal say \"{Program._prefix} portal delete\" or delete this channel!");
+                            await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
                             Program.logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                         }
                         else
                             await msg.Channel.SendMessageAsync("This server already has a portal!");
                         break;
 
-                    case "delete":
+                    case "close":
                         {
                             if (GetPortal(msg.Channel) is Portal portal)
                             {
                                 portals.Remove(portal);
-                                await msg.Channel.SendMessageAsync("Portal successfully deleted");
+                                await msg.Channel.SendMessageAsync("Portal successfully closed");
                                 Program.logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                             }
                             else
@@ -143,7 +121,7 @@ namespace MothBot.modules
                             break;
                         }
                     default:
-                        await msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal create\" or \"{Program._prefix} portal delete\" to manage portals!");
+                        await msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal open\" or \"{Program._prefix} portal close\" to manage portals!");
                         break;
                 }
             else
@@ -152,17 +130,8 @@ namespace MothBot.modules
 
         public static void SavePortals()
         {
-            List<string> outList = new List<string> { "BEGIN PORTALS" };  //header
-            if (portals.Count != 0)
-                foreach (Portal portal in portals)
-                {
-                    outList.Add($"{portal.guildId}");
-                    outList.Add($"{portal.channelId}");
-                }
-            else
-                outList.Add("NO PORTALS");
-            outList.Add("END PORTALS");
-            Data.WriteFileString(PORTALS_PATH, outList);
+            string outStr = JsonConvert.SerializeObject(portals);
+            Lists.WriteFile(PORTALS_PATH, outStr.ToCharArray());
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.

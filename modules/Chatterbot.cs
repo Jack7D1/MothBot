@@ -7,20 +7,20 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private const ushort CHANCE_TO_CHAT = 16;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHANCE_TO_CHAT = 20;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 4096;
         private const string CHATTER_PATH = @"..\..\data\chatters.txt";
         private static List<string> chatters = new List<string>();
 
         public Chatterbot()
         {
-            chatters = Data.ReadFileString(CHATTER_PATH);
+            chatters = Lists.ReadFile(CHATTER_PATH);
             CleanupChatters();
         }
 
         public async Task AddChatter(SocketMessage src)
         {
-            if (Program.rand.Next(2) == 0 && !ShouldIgnore(src) && Sanitize.AcceptableChatter(src.Content))
+            if (Program.rand.Next(3) == 0 && !ShouldIgnore(src) && Sanitize.AcceptableChatter(src.Content))
             {
                 if (chatters.Count >= CHATTER_MAX_LENGTH)
                     chatters.RemoveAt(0);
@@ -51,7 +51,7 @@ namespace MothBot.modules
         public Task SaveChatters()
         {
             CleanupChatters();
-            Data.WriteFileString(CHATTER_PATH, chatters);
+            Lists.WriteFile(CHATTER_PATH, chatters);
             return Task.CompletedTask;
         }
 
@@ -88,7 +88,7 @@ namespace MothBot.modules
                     return true;
             string inStr = src.Content.ToLower();
             char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
-            if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) == 0)
+            if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) < 2)
                 return true;
             return false;
         }
