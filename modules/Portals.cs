@@ -8,33 +8,11 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Portal
-    {
-        public readonly ulong channelId;
-        public readonly ulong guildId;
-
-        public Portal(ulong serverId, ulong chId)
-        {
-            guildId = serverId;
-            channelId = chId;
-        }
-
-        public IMessageChannel GetChannel() //returns null if not found
-        {
-            return Program.client.GetChannel(channelId) as IMessageChannel;
-        }
-
-        public IGuild GetGuild()    //returns null if not found
-        {
-            return Program.client.GetGuild(guildId);
-        }
-    }
-
     internal class Portals
     {
         private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
         private const string PORTALS_PATH = @"..\..\data\portals.json";
-        private static List<Portal> portals = new List<Portal>();
+        private static readonly List<Portal> portals = new List<Portal>();
         private static long timeReady = 0;
 
         public Portals()
@@ -43,12 +21,23 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                string fileData = Lists.ReadFile(PORTALS_PATH)[0];
-                portals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
+                string fileData = Lists.ReadFileString(PORTALS_PATH);
+                if (fileData.Length == 0 || fileData == null || fileData == "[]")
+                    throw new Exception("NO FILEDATA");
+                List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
+                foreach (Portal portal in filePortals)
+                    portals.Add(portal);
+                CheckPortals();
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
-                Program.logging.LogtoConsoleandFile($"{this} reports: No file data found, running with empty list of portals.");
+                Logging.LogtoConsoleandFile($"No portal data found at {PORTALS_PATH}, running with empty list of portals.");
+                portals.Clear();
+                return;
+            }
+            catch (JsonException)
+            {
+                Logging.LogtoConsoleandFile($"{PORTALS_PATH} data corrupt, clearing filedata...");
                 portals.Clear();
                 return;
             }
@@ -76,12 +65,12 @@ namespace MothBot.modules
             }
         }
 
-        public static Portal GetPortal(IMessageChannel ch) //If not a portal returns null
+        public static bool IsPortal(IMessageChannel ch)
         {
-            foreach (Portal portal in portals)
-                if (portal.channelId == ch.Id)
-                    return portal;
-            return null;
+            if (GetPortal(ch) is Portal)
+                return true;
+            else
+                return false;
         }
 
         public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal"
@@ -100,7 +89,7 @@ namespace MothBot.modules
                             Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
                             await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
-                            Program.logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
+                            Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                         }
                         else
                             await msg.Channel.SendMessageAsync("This server already has a portal!");
@@ -112,7 +101,7 @@ namespace MothBot.modules
                             {
                                 portals.Remove(portal);
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
-                                Program.logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
+                                Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                             }
                             else
                                 await msg.Channel.SendMessageAsync("This channel is not a portal!");
@@ -128,8 +117,8 @@ namespace MothBot.modules
 
         public static void SavePortals()
         {
-            string outStr = JsonConvert.SerializeObject(portals);
-            Lists.WriteFile(PORTALS_PATH, outStr.ToCharArray());
+            string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
+            Lists.WriteFile(PORTALS_PATH, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
@@ -153,14 +142,21 @@ namespace MothBot.modules
 
         private static Task CheckPortals()
         {
-            List<Portal> portaldupe = portals;
             List<Portal> toRemove = new List<Portal>();
-            foreach (Portal portal in portaldupe)
+            foreach (Portal portal in portals)
                 if (!(portal.GetChannel() is IMessageChannel))
                     toRemove.Add(portal);
             foreach (Portal portal in toRemove)
                 portals.Remove(portal);
             return Task.CompletedTask;
+        }
+
+        private static Portal GetPortal(IMessageChannel ch) //If not a portal returns null
+        {
+            foreach (Portal portal in portals)
+                if (portal.channelId == ch.Id)
+                    return portal;
+            return null;
         }
 
         private static bool GuildHasPortal(SocketGuild guild)   //Returns true if the input guild has a portal already
@@ -179,9 +175,9 @@ namespace MothBot.modules
 
         private static Task ListPortals(ISocketMessageChannel ch)
         {
+            CheckPortals();
             if (portals.Count > 0)
             {
-                CheckPortals();
                 string outStr = "**OPEN PORTALS:** ```";
                 for (int i = 0; i < portals.Count; i++)
                 {
@@ -194,6 +190,30 @@ namespace MothBot.modules
             else
                 ch.SendMessageAsync("No portals found!");
             return Task.CompletedTask;
+        }
+
+        private class Portal
+        {
+            public ulong channelId;
+
+            public ulong guildId;
+
+            [JsonConstructor]
+            public Portal(ulong serverId, ulong chId)
+            {
+                guildId = serverId;
+                channelId = chId;
+            }
+
+            public IMessageChannel GetChannel() //returns null if not found
+            {
+                return Program.client.GetChannel(channelId) as IMessageChannel;
+            }
+
+            public IGuild GetGuild()    //returns null if not found
+            {
+                return Program.client.GetGuild(guildId);
+            }
         }
     }
 }

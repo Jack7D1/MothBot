@@ -13,7 +13,6 @@ namespace MothBot
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
         public static Chatterbot chatter = new Chatterbot();
         public static DiscordSocketClient client = new DiscordSocketClient();
-        public static Logging logging = new Logging();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         public static Utilities utilities = new Utilities();
@@ -21,7 +20,8 @@ namespace MothBot
 
         public static void Main(string[] args)  //Initialization
         {
-            logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
+            _ = new Logging();
+            Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
@@ -32,7 +32,7 @@ namespace MothBot
                 // Filter messages
                 if (message.Author.IsBot)   //If message author is a bot, ignore
                     return;
-                if (!(Portals.GetPortal(message.Channel) is Portal))
+                if (!Portals.IsPortal(message.Channel))
                 {
                     await chatter.AddChatter(message);
                     await chatter.ChatterHandler(message);
@@ -49,8 +49,8 @@ namespace MothBot
                     return;
                 }
             }
-            await logging.LogtoConsoleandFileAsync($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
-            await logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
+            await Logging.LogtoConsoleandFileAsync($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
+            await Logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
 
             //Begin Command Parser
             string command, keyword, args;
@@ -136,7 +136,7 @@ namespace MothBot
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             client.MessageReceived += Client_MessageRecieved;
-            client.Log += logging.Log;
+            client.Log += Logging.Log;
             client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
             await Lists.SetDefaultStatus();

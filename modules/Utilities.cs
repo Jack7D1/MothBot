@@ -52,7 +52,7 @@ namespace MothBot.modules
 
                 case "setprefix":
                     Program._prefix = args.ToLower();
-                    await Program.logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
+                    await Logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
                     await Lists.SetDefaultStatus();
                     return;
@@ -66,7 +66,7 @@ namespace MothBot.modules
 
                         if (shutdownEnabled)
                         {
-                            await Program.logging.LogtoConsoleandFileAsync($"SHUTTING DOWN: ordered by {src.Author.Username}");
+                            await Logging.LogtoConsoleandFileAsync($"SHUTTING DOWN: ordered by {src.Author.Username}");
                             await src.Channel.SendMessageAsync($"{src.Author.Mention} Shutdown confirmed, terminating bot.");
                             Environment.Exit(0);
                         }
@@ -75,7 +75,7 @@ namespace MothBot.modules
                             shutdownEnabled = true;
                             shutdownTimeout = DateTime.Now.AddSeconds(12).Ticks;
                             await src.Channel.SendMessageAsync($"Shutdown safety disabled, {src.Author.Mention} confirm shutdown again to shut down bot, or argument anything else to re-enable safety.");
-                            await Program.logging.LogtoConsoleandFileAsync($"{src.Author.Username} disabled shutdown safety.");
+                            await Logging.LogtoConsoleandFileAsync($"{src.Author.Username} disabled shutdown safety.");
                         }
                     }
                     else

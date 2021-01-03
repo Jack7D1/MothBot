@@ -2,6 +2,7 @@
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -78,6 +79,31 @@ namespace MothBot.modules
             }
         }
 
+        public static string ReadFileString(string path)    //Returns null if file not found
+        {
+            try
+            {
+                StreamReader reader = new StreamReader(path);
+                List<byte> inChars = new List<byte>();
+                while (!reader.EndOfStream)
+                    inChars.Add((byte)reader.Read());
+                reader.Close();
+                reader.Dispose();
+                return Encoding.UTF8.GetString(inChars.ToArray());
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                _ = new StreamWriter(path, false);
+                return null;
+            }
+            catch (FileNotFoundException)
+            {
+                _ = new StreamWriter(path, false);
+                return null;
+            }
+        }
+
         public static Task SetDefaultStatus()
         {
             Program.client.SetGameAsync("Prefix: " + Program._prefix + ". Say '" + Program._prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
@@ -121,7 +147,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        public static Task WriteFile(string path, char[] data, bool append = false)
+        public static Task WriteFile(string path, string data, bool append = false)
         {
             try
             {
