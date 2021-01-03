@@ -90,6 +90,7 @@ namespace MothBot.modules
                             portals.Add(portal);
                             await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
                             Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
+                            await CheckPortals();
                         }
                         else
                             await msg.Channel.SendMessageAsync("This server already has a portal!");
@@ -102,6 +103,7 @@ namespace MothBot.modules
                                 portals.Remove(portal);
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
                                 Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
+                                await CheckPortals();
                             }
                             else
                                 await msg.Channel.SendMessageAsync("This channel is not a portal!");
@@ -143,9 +145,14 @@ namespace MothBot.modules
         private static Task CheckPortals()
         {
             List<Portal> toRemove = new List<Portal>();
+            List<ulong> seenGuildIDs = new List<ulong>();   //Enforce one portal per guild
             foreach (Portal portal in portals)
-                if (!(portal.GetChannel() is IMessageChannel))
+            {
+                if (!(portal.GetChannel() is IMessageChannel) || seenGuildIDs.Contains(portal.guildId))
                     toRemove.Add(portal);
+                else
+                    seenGuildIDs.Add(portal.guildId);
+            }
             foreach (Portal portal in toRemove)
                 portals.Remove(portal);
             return Task.CompletedTask;
