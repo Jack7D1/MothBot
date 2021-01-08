@@ -73,7 +73,7 @@ namespace MothBot.modules
                 return false;
         }
 
-        public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal"
+        public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal", 'args' is expected to be everything following keyword, minus space.
         {
             SocketGuildUser user = msg.Author as SocketGuildUser;
             if (args == "list")

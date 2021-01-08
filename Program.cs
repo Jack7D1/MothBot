@@ -23,7 +23,19 @@ namespace MothBot
             _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
-            new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
+            try
+            {
+                new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
+            }
+            catch (Exception ex)   //Catch unhandled exceptions and safely shutdown the program.
+            {
+                client.StopAsync();   //Prevent further inputs immediately.
+                Logging.LogtoConsoleandFile("\n\n******[UNHANDLED EXCEPTION]******\n" +
+                    $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
+                    $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
+                    "Crash logging finished, saving data and shutting down safely...");
+                Environment.Exit(ex.HResult);
+            }
         }
 
         private async Task Client_MessageRecieved(SocketMessage message)
@@ -49,7 +61,7 @@ namespace MothBot
                     return;
                 }
             }
-            await Logging.LogtoConsoleandFileAsync($@"[{message.Timestamp}][{message.Author}] said ({message.Content}) in #{message.Channel}");
+            await Logging.LogtoConsoleandFileAsync($@"[{message.Timestamp.UtcDateTime}][{message.Author}] said ({message.Content}) in #{message.Channel}");
             await Logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
 
             //Begin Command Parser
