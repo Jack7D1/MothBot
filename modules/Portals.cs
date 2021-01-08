@@ -91,6 +91,7 @@ namespace MothBot.modules
                             await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
                             Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                             await CheckPortals();
+                            SavePortals();
                         }
                         else
                             await msg.Channel.SendMessageAsync("This server already has a portal!");
@@ -104,6 +105,7 @@ namespace MothBot.modules
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
                                 Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                                 await CheckPortals();
+                                SavePortals();
                             }
                             else
                                 await msg.Channel.SendMessageAsync("This channel is not a portal!");
