@@ -15,7 +15,6 @@ namespace MothBot
         public static DiscordSocketClient client = new DiscordSocketClient();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
-        public static Utilities utilities = new Utilities();
         private const string TOKEN_PATH = @"..\..\data\token.txt";
 
         public static void Main(string[] args)  //Initialization
@@ -57,7 +56,7 @@ namespace MothBot
                     return;
                 if (input.IndexOf($"{_prefix} utility") == 0)
                 {
-                    await utilities.UtilitiesHandlerAsync(message);
+                    await Utilities.UtilitiesHandlerAsync(message);
                     return;
                 }
             }

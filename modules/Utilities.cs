@@ -17,7 +17,7 @@ namespace MothBot.modules
         private static bool shutdownEnabled = false;
         private static long shutdownTimeout = 0;
 
-        public async Task UtilitiesHandlerAsync(SocketMessage src)
+        public static async Task UtilitiesHandlerAsync(SocketMessage src)
         {
             if (!IsOperator(src.Author))   //You do not have permission
             {
@@ -91,7 +91,7 @@ namespace MothBot.modules
             }
         }
 
-        private bool IsOperator(SocketUser user)
+        public static bool IsOperator(SocketUser user)
         {
             foreach (ulong op in operatorIDs)
                 if (user.Id == op)
