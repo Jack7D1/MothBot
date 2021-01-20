@@ -29,7 +29,7 @@ namespace MothBot
             catch (Exception ex)   //Catch unhandled exceptions and safely shutdown the program.
             {
                 client.StopAsync();   //Prevent further inputs immediately.
-                Logging.LogtoConsoleandFile("\n\n******[UNHANDLED EXCEPTION]******\n" +
+                Logging.Log("\n\n******[UNHANDLED EXCEPTION]******\n" +
                     $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
                     $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
                     "Crash logging finished, saving data and shutting down safely...");
@@ -60,8 +60,8 @@ namespace MothBot
                     return;
                 }
             }
-            await Logging.LogtoConsoleandFileAsync($@"[{message.Timestamp.UtcDateTime}][{message.Author}] said ({message.Content}) in #{message.Channel}");
-            await Logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
+            await Logging.LogAsync($@"[{message.Timestamp.UtcDateTime}][{message.Author}] said ({message.Content}) in #{message.Channel}");
+            await Logging.LogAsync($@"Message size: {message.Content.Length}");
 
             //Begin Command Parser
             string command, keyword, args;

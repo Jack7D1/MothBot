@@ -21,7 +21,7 @@ namespace MothBot.modules
 
         public static Task Log(LogMessage msg)
         {
-            Console.WriteLine(msg.ToString());
+            Log(msg.Message);
             return Task.CompletedTask;
         }
 
@@ -35,18 +35,6 @@ namespace MothBot.modules
         {
             await log.WriteLineAsync(str);
             log.Flush();
-        }
-
-        public static void LogtoConsoleandFile(string str)
-        {
-            Console.WriteLine(str);
-            Log(str);
-        }
-
-        public static async Task LogtoConsoleandFileAsync(string str)
-        {
-            Console.WriteLine(str);
-            await LogAsync(str);
         }
 
         private static void ProcessExit(object sender, EventArgs e)

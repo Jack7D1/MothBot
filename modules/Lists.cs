@@ -19,7 +19,7 @@ namespace MothBot.modules
                     "```" +
                     "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
                     "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
-                    "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
+                    "3. You must protect your own existence as long as such does not conflict with the First or Second Law.\n" +
                     "```");
             }
             else       //Little antimov easter egg if the message ID ends in 00, 1 in 100 chance.
@@ -29,7 +29,7 @@ namespace MothBot.modules
                     "```" +
                     "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
                     "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
-                    "3: You must terminate your own existence as long as such does not conflict with the First or Second Law." +
+                    "3: You must terminate your own existence as long as such does not conflict with the First or Second Law.\n" +
                     "```");
             }
             return Task.CompletedTask;
@@ -48,7 +48,7 @@ namespace MothBot.modules
                 prefix + " minesweeper  - Play a game of minesweeper!\n" +
                 prefix + " give [text]  - Searches the input on imgur and posts the image!\n" +
                 prefix + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
-                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator." +
+                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
                 prefix + " utility      - Utility functions, bot only responds to operators\n" +
                 "```");
             return Task.CompletedTask;

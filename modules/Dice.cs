@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using System;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -39,16 +40,24 @@ namespace MothBot.modules
         {
             try
             {
-                string[] Quantity_Sides = args.Split('d');
-                if (args.Contains('+'))
+                if (args.IndexOf('d') == 0)  //Handles the usage of just d20 instead of 1d20
                 {
-                    string[] Sides_Offset = Quantity_Sides[1].Split('+');
-                    await Roll(channel, int.Parse(Quantity_Sides[0]), int.Parse(Sides_Offset[0]), int.Parse(Sides_Offset[1]));
+                    args = "1" + args;
+                }
+                string[] Quantity_Sides = args.Split('d');
+                int quantity = int.Parse(Quantity_Sides[0]), sides, offset;
+                if (args.Contains('+') || args.Contains('-'))
+                {
+                    int splitIndex = Quantity_Sides[1].LastIndexOfAny("+-".ToCharArray());
+                    sides = int.Parse(Quantity_Sides[1].Substring(0, splitIndex));
+                    offset = int.Parse(Quantity_Sides[1].Substring(splitIndex));
                 }
                 else
                 {
-                    await Roll(channel, int.Parse(Quantity_Sides[0]), int.Parse(Quantity_Sides[1]), 0);
+                    offset = 0;
+                    sides = int.Parse(Quantity_Sides[1]);
                 }
+                await Roll(channel, quantity, sides, offset);
             }
             catch (System.FormatException)
             {
@@ -85,7 +94,13 @@ namespace MothBot.modules
             }
             outstring += $" = {sum}";
             if (offset != 0)
-                outstring += $"+{offset} = {sum + offset}";
+            {
+                if (offset > 0)
+                    outstring += "+";
+                else
+                    outstring += "-";
+                outstring += $"{Math.Abs(offset)} = {sum + offset}";
+            }
             return outstring;
         }
     }

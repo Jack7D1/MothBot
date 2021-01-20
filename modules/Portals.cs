@@ -31,13 +31,13 @@ namespace MothBot.modules
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
-                Logging.LogtoConsoleandFile($"No portal data found at {PORTALS_PATH}, running with empty list of portals.");
+                Logging.Log($"No portal data found at {PORTALS_PATH}, running with empty list of portals.");
                 portals.Clear();
                 return;
             }
             catch (JsonException)
             {
-                Logging.LogtoConsoleandFile($"{PORTALS_PATH} data corrupt, clearing filedata...");
+                Logging.Log($"{PORTALS_PATH} data corrupt, clearing filedata...");
                 portals.Clear();
                 return;
             }
@@ -89,7 +89,7 @@ namespace MothBot.modules
                             Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
                             await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
-                            Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
+                            Logging.Log($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                             await CheckPortals();
                             SavePortals();
                         }
@@ -103,7 +103,7 @@ namespace MothBot.modules
                             {
                                 portals.Remove(portal);
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
-                                Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
+                                Logging.Log($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                                 await CheckPortals();
                                 SavePortals();
                             }
