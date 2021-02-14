@@ -48,7 +48,7 @@ namespace MothBot.modules
                 prefix + " minesweeper  - Play a game of minesweeper!\n" +
                 prefix + " give [text]  - Searches the input on imgur and posts the image!\n" +
                 prefix + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
-                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator." +
+                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
                 prefix + " utility      - Utility functions, bot only responds to operators\n" +
                 "```");
             return Task.CompletedTask;
