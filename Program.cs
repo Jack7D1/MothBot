@@ -15,7 +15,7 @@ namespace MothBot
         public static DiscordSocketClient client = new DiscordSocketClient();
         public static Minesweeper mineSweeper = new Minesweeper();
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
-        private const string TOKEN_PATH = @"..\..\data\token.txt";
+        private const string TOKEN_PATH = @"../../data/token.txt";
 
         public static void Main(string[] args)  //Initialization
         {

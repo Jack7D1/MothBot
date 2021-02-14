@@ -68,7 +68,7 @@ namespace MothBot.modules
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
                 _ = new StreamWriter(path, false);
                 return null;
             }
@@ -93,7 +93,7 @@ namespace MothBot.modules
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
                 _ = new StreamWriter(path, false);
                 return null;
             }
@@ -140,7 +140,7 @@ namespace MothBot.modules
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
                 Task.Delay(500);
                 WriteFile(path, data, append);
             }
@@ -162,7 +162,7 @@ namespace MothBot.modules
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('\\')));
+                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
                 Task.Delay(250);
                 WriteFile(path, data, append);
             }
