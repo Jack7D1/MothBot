@@ -57,7 +57,10 @@ namespace MothBot.modules
 
         private Task CleanupChatters()
         {
-            chatters = new HashSet<string>(chatters).ToList();  //Kill duplicates
+            if (chatters is List<string>)
+            {
+                chatters = new HashSet<string>(chatters).ToList();  //Kill duplicates
+            }
             List<bool> validMap = new List<bool>();
 
             foreach (string chatter in chatters)                 //Test every entry
