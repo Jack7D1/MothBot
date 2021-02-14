@@ -13,7 +13,7 @@ namespace MothBot.modules
         public Logging()
         {
             if (!Directory.Exists(LOG_PATH))
-                Directory.CreateDirectory(LOG_PATH.Substring(0, LOG_PATH.LastIndexOf('\\')));
+                Directory.CreateDirectory(LOG_PATH.Substring(0, LOG_PATH.LastIndexOf('/')));
 
             log = new StreamWriter(LOG_PATH, true);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
