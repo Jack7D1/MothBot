@@ -17,6 +17,14 @@ namespace MothBot.modules
         private static bool shutdownEnabled = false;
         private static long shutdownTimeout = 0;
 
+        public static bool IsOperator(SocketUser user)
+        {
+            foreach (ulong op in operatorIDs)
+                if (user.Id == op)
+                    return true;
+            return false;
+        }
+
         public static async Task UtilitiesHandlerAsync(SocketMessage src)
         {
             if (!IsOperator(src.Author))   //You do not have permission
@@ -57,6 +65,10 @@ namespace MothBot.modules
                     await Lists.SetDefaultStatus();
                     return;
 
+                case "blacklist":
+                    await Program.chatter.BlacklistHandler(src, args);
+                    return;
+
                 //dangerous
                 case "shutdown":
                     if (args == "confirm")
@@ -89,14 +101,6 @@ namespace MothBot.modules
                     await src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
                     return;
             }
-        }
-
-        public static bool IsOperator(SocketUser user)
-        {
-            foreach (ulong op in operatorIDs)
-                if (user.Id == op)
-                    return true;
-            return false;
         }
     }
 }

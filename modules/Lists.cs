@@ -125,6 +125,18 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
+        public static Task Chatterbot_PrintBlacklistCommands(ISocketMessageChannel ch, string prefix)
+        {
+            ch.SendMessageAsync(
+                "**Blacklist Management Commands:**" +
+                "```" +
+                prefix + "add\n" +
+                prefix + "remove\n" +
+                prefix + "list\n" +
+                "```");
+            return Task.CompletedTask;
+        }
+
         public static Task WriteFile(string path, List<string> data, bool append = false)
         {
             try
