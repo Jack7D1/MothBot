@@ -7,7 +7,7 @@ namespace MothBot.modules
 {
     internal class Imagesearch
     {
-        private const long COOLDOWN_MS = 500;
+        private const long COOLDOWN_MS = 1;
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";

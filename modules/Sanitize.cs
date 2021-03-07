@@ -11,7 +11,7 @@ namespace MothBot.modules
 
         public static bool IsChannelNsfw(IMessageChannel ch) //PLEASE PLEASE GOD discord.net PLEASE give me a way to check if a channel has nsfw true or not PLEASE
         {
-            List<string> nsfwKeywords = new List<string> { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18" };
+            List<string> nsfwKeywords = new List<string> { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18" };  //I'm not proud of this
             foreach (string keyword in nsfwKeywords)
                 if (ch.Name.Contains(keyword))
                     return true;

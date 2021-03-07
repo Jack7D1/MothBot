@@ -10,8 +10,8 @@ namespace MothBot.modules
 {
     internal class Portals
     {
+        public const string PORTALS_PATH = "../../data/portals.json";
         private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
-        private const string PORTALS_PATH = @"../../data/portals.json";
         private static readonly List<Portal> portals = new List<Portal>();
         private static long timeReady = 0;
 

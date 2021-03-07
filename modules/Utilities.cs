@@ -54,18 +54,23 @@ namespace MothBot.modules
                 case "help":
                     string prefix = Program._prefix + " utility ";
                     await Lists.Utilities_PrintCommandList(src.Channel, prefix);
-                    return;
+                    break;
 
                 case "setprefix":
                     Program._prefix = args.ToLower();
                     await Logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
                     await Lists.SetDefaultStatus();
-                    return;
+                    break;
 
                 case "blacklist":
                     await Chatterbot.BlacklistHandler(src, args);
-                    return;
+                    break;
+
+                case "dumpchatters":
+                    await src.Channel.SendMessageAsync("Dumping chatters file...");
+                    await src.Channel.SendFileAsync(Chatterbot.CHATTER_PATH);
+                    break;
 
                 //dangerous
                 case "shutdown":
@@ -93,11 +98,11 @@ namespace MothBot.modules
                         shutdownEnabled = false;
                         await src.Channel.SendMessageAsync("Shutdown safety (re)enabled, argument 'confirm' to disable.");
                     }
-                    return;
+                    break;
 
                 default:
                     await src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
-                    return;
+                    break;
             }
         }
     }

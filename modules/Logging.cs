@@ -7,7 +7,7 @@ namespace MothBot.modules
 {
     internal class Logging
     {
-        private const string LOG_PATH = @"../../data/log.txt";
+        private const string LOG_PATH = "../../data/log.txt";
         private static StreamWriter log;
 
         public Logging()

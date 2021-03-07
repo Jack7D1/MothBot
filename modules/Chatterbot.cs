@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord.API;
-using Discord.Commands;
-using Discord.Rest;
-using Discord.Net;
 
 namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private const string BLACKLIST_PATH = "../../data/blacklist.txt";
+        public const string BLACKLIST_PATH = "../../data/blacklist.txt";
+        public const string CHATTER_PATH = "../../data/chatters.txt";
         private const ushort CHANCE_TO_CHAT = 24;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 4096;
-        private const string CHATTER_PATH = "../../data/chatters.txt";
         private static List<string> blacklist = new List<string>(Lists.ReadFile(CHATTER_PATH));
         private static List<string> chatters = new List<string>(Lists.ReadFile(CHATTER_PATH));
 
@@ -44,7 +40,7 @@ namespace MothBot.modules
             }
             if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
                 return false;
-            if(blacklist.Count != 0)
+            if (blacklist.Count != 0)
                 foreach (string blacklister in blacklist)
                     if (inStr.Contains(blacklister.ToLower()))
                         return false;

@@ -130,7 +130,8 @@ namespace MothBot.modules
                 "general:\n" +
                 prefix + "commands\n" +
                 prefix + "setprefix [string]\n" +
-                prefix + "blacklist [command]" +
+                prefix + "blacklist [command]\n" +
+                prefix + "dumpchatters\n" +
                 "``````" +
                 "dangerous:\n" +
                 prefix + "shutdown\n" +
