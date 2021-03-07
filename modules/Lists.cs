@@ -9,6 +9,18 @@ namespace MothBot.modules
 {
     internal class Lists
     {
+        public static Task Chatterbot_PrintBlacklistCommands(ISocketMessageChannel ch, string prefix)
+        {
+            ch.SendMessageAsync(
+                "**Chatters Blacklist Management Commands:**" +
+                "```" +
+                prefix + "add       Adds an entry to the blacklist\n" +
+                prefix + "remove    Removes a matching entry from the blacklist\n" +
+                prefix + "list      Lists the current blacklist\n" +
+                "```");
+            return Task.CompletedTask;
+        }
+
         //Command lists and just general lists of everything that can be called from anywhere to print.
         public static Task PrintLaws(ISocketMessageChannel ch)
         {
@@ -118,21 +130,10 @@ namespace MothBot.modules
                 "general:\n" +
                 prefix + "commands\n" +
                 prefix + "setprefix [string]\n" +
+                prefix + "blacklist [command]" +
                 "``````" +
                 "dangerous:\n" +
                 prefix + "shutdown\n" +
-                "```");
-            return Task.CompletedTask;
-        }
-
-        public static Task Chatterbot_PrintBlacklistCommands(ISocketMessageChannel ch, string prefix)
-        {
-            ch.SendMessageAsync(
-                "**Blacklist Management Commands:**" +
-                "```" +
-                prefix + "add\n" +
-                prefix + "remove\n" +
-                prefix + "list\n" +
                 "```");
             return Task.CompletedTask;
         }

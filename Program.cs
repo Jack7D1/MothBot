@@ -11,9 +11,7 @@ namespace MothBot
     {
         public const ulong MY_ID = 765202973495656538;
         public static string _prefix = "ai";         //What should the bots attention prefix be? MUST be lowercase.
-        public static Chatterbot chatter = new Chatterbot();
         public static DiscordSocketClient client = new DiscordSocketClient();
-        public static Minesweeper mineSweeper = new Minesweeper();
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         private const string TOKEN_PATH = @"../../data/token.txt";
 
@@ -45,8 +43,8 @@ namespace MothBot
                     return;
                 if (!Portals.IsPortal(message.Channel))
                 {
-                    await chatter.AddChatter(message);
-                    await chatter.ChatterHandler(message);
+                    await Chatterbot.AddChatter(message);
+                    await Chatterbot.ChatterHandler(message);
                 }
                 await Portals.BroadcastHandlerAsync(message);
 
@@ -119,7 +117,7 @@ namespace MothBot
                     return;
 
                 case "minesweeper":
-                    await mineSweeper.MinesweeperHandlerAsync(message.Channel);
+                    await Minesweeper.MinesweeperHandlerAsync(message.Channel);
                     return;
 
                 case "give":
@@ -159,12 +157,14 @@ namespace MothBot
         private void ProcessExit(object sender, EventArgs e)
         {
             Portals.SavePortals();
-            chatter.SaveChatters();
+            Chatterbot.SaveChatters();
+            Chatterbot.SaveBlacklist();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
         }
 
         private Task Ready()  //Init any objects here that are dependant on the client having logged in.
         {
+            _ = new Chatterbot();
             _ = new Portals();
             return Task.CompletedTask;
         }

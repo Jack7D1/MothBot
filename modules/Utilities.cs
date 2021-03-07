@@ -66,7 +66,7 @@ namespace MothBot.modules
                     return;
 
                 case "blacklist":
-                    await Program.chatter.BlacklistHandler(src, args);
+                    await Chatterbot.BlacklistHandler(src, args);
                     return;
 
                 //dangerous
