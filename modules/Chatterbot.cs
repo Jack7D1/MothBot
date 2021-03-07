@@ -40,9 +40,10 @@ namespace MothBot.modules
             }
             if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
                 return false;
-            foreach (string blacklister in blacklist)
-                if (inStr.Contains(blacklister.ToLower()))
-                    return false;
+            if(blacklist.Count != 0)
+                foreach (string blacklister in blacklist)
+                    if (inStr.Contains(blacklister.ToLower()))
+                        return false;
             return true;
         }
 
