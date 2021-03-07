@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord.API;
+using Discord.Commands;
+using Discord.Rest;
+using Discord.Net;
 
 namespace MothBot.modules
 {
@@ -49,7 +53,7 @@ namespace MothBot.modules
 
         public static async Task AddChatter(SocketMessage src)
         {
-            if (Program.rand.Next(5) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
+            if (Program.rand.Next(5) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content) && !Sanitize.IsChannelNsfw(src.Channel))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
             {
                 if (chatters.Count >= CHATTER_MAX_LENGTH)
                     chatters.RemoveAt(0);

@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using System.Collections.Generic;
 
 namespace MothBot.modules
@@ -7,6 +8,15 @@ namespace MothBot.modules
     {
         private const byte ID_LENGTH = 18;
         private static readonly char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+        public static bool IsChannelNsfw(IMessageChannel ch) //PLEASE PLEASE GOD discord.net PLEASE give me a way to check if a channel has nsfw true or not PLEASE
+        {
+            List<string> nsfwKeywords = new List<string> { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18" };
+            foreach (string keyword in nsfwKeywords)
+                if (ch.Name.Contains(keyword))
+                    return true;
+            return false;
+        }
 
         public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //holy moly
         {
