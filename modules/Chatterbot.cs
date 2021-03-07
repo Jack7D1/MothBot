@@ -40,6 +40,9 @@ namespace MothBot.modules
             }
             if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
                 return false;
+            char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~' };
+            if (inStr.IndexOf(Program._prefix) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)
+                return false;
             if (blacklist.Count != 0)
                 foreach (string blacklister in blacklist)
                     if (inStr.Contains(blacklister.ToLower()))
@@ -182,10 +185,6 @@ namespace MothBot.modules
             foreach (SocketUser mention in src.MentionedUsers)
                 if (mention.IsBot)
                     return true;
-            string inStr = src.Content.ToLower();
-            char[] firstCharBlacklist = { '!', '@', '.', ',', '>', ';', ':', '`', '$', '%', '^', '&', '*', '?', '~' };
-            if (inStr.Contains(Program._prefix) || inStr.IndexOfAny(firstCharBlacklist) < 3)
-                return true;
             return false;
         }
     }
