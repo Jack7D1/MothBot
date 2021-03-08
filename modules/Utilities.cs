@@ -72,7 +72,20 @@ namespace MothBot.modules
                     await src.Channel.SendFileAsync(Chatterbot.CHATTER_PATH);
                     break;
 
+                case "listservers":
+                    {
+                        string outStr = "```CURRENT JOINED SERVERS:\n";
+                        foreach (SocketGuild guild in Program.client.Guilds)
+                            outStr += $"{guild.Name} [{guild.Id}], owned by {guild.OwnerId}\n";
+                        await src.Channel.SendMessageAsync(outStr + "```");
+                    }
+                    break;
                 //dangerous
+                case "leaveserver":
+                    await Program.client.GetGuild(ulong.Parse(args)).LeaveAsync();
+                    await src.Channel.SendMessageAsync($"Left guild {args} successfully");
+                    break;
+
                 case "shutdown":
                     if (args == "confirm")
                     {

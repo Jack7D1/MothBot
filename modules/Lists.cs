@@ -132,8 +132,10 @@ namespace MothBot.modules
                 prefix + "setprefix [string]\n" +
                 prefix + "blacklist [command]\n" +
                 prefix + "dumpchatters\n" +
+                prefix + "listservers" +
                 "``````" +
                 "dangerous:\n" +
+                prefix + "leaveserver [ID]\n" +
                 prefix + "shutdown\n" +
                 "```");
             return Task.CompletedTask;
