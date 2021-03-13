@@ -67,9 +67,24 @@ namespace MothBot.modules
                     await Chatterbot.BlacklistHandler(src, args);
                     break;
 
+                case "prependbackupchatters":
+                    Chatterbot.PrependBackupChatters();
+                    break;
+
+                //Data/debug
                 case "dumpchatters":
                     await src.Channel.SendMessageAsync("Dumping chatters file...");
                     await src.Channel.SendFileAsync(Chatterbot.PATH_CHATTERS);
+                    break;
+
+                case "dumplogs":
+                    await src.Channel.SendMessageAsync("Dumping logs file...");
+                    await src.Channel.SendFileAsync(Logging.PATH_LOGS);
+                    break;
+
+                case "dumpportals":
+                    await src.Channel.SendMessageAsync("Dumping portals file...");
+                    await src.Channel.SendFileAsync(Portals.PATH_PORTALS);
                     break;
 
                 case "listservers":
@@ -79,10 +94,6 @@ namespace MothBot.modules
                             outStr += $"{guild.Name} [{guild.Id}], owned by {guild.OwnerId}\n";
                         await src.Channel.SendMessageAsync(outStr + "```");
                     }
-                    break;
-
-                case "prependbackupchatters":
-                    Chatterbot.PrependBackupChatters();
                     break;
 
                 //dangerous

@@ -129,9 +129,13 @@ namespace MothBot.modules
                 prefix + "commands\n" +
                 prefix + "setprefix [string]\n" +
                 prefix + "blacklist [command]\n" +
-                prefix + "dumpchatters\n" +
-                prefix + "listservers\n" +
                 prefix + "prependbackupchatters\n" +
+                "``````" +
+                "data/debug:\n" +
+                prefix + "dumpchatters\n" +
+                prefix + "dumplogs\n" +
+                prefix + "dumpportals\n" +
+                prefix + "listservers\n" +
                 "``````" +
                 "dangerous:\n" +
                 prefix + "leaveserver [ID]\n" +

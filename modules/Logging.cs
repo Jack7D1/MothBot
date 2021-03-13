@@ -7,15 +7,15 @@ namespace MothBot.modules
 {
     internal class Logging
     {
-        private const string LOG_PATH = "../../data/log.txt";
+        public const string PATH_LOGS = "../../data/log.txt";
         private static StreamWriter log;
 
         public Logging()
         {
-            if (!Directory.Exists(LOG_PATH))
-                Directory.CreateDirectory(LOG_PATH.Substring(0, LOG_PATH.LastIndexOf('/')));
+            if (!Directory.Exists(PATH_LOGS))
+                Directory.CreateDirectory(PATH_LOGS.Substring(0, PATH_LOGS.LastIndexOf('/')));
 
-            log = new StreamWriter(LOG_PATH, true);
+            log = new StreamWriter(PATH_LOGS, true);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
         }
 

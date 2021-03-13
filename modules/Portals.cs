@@ -10,8 +10,8 @@ namespace MothBot.modules
 {
     internal class Portals
     {
-        public const string PORTALS_PATH = "../../data/portals.json";
-        private const long COOLDOWN_MS = 1000;  //Cooldown to try and avoid the inevitable super spam.
+        public const string PATH_PORTALS = "../../data/portals.json";
+        private const long COOLDOWN_MS = 100;  //Cooldown to try and avoid the inevitable super spam.
         private static readonly List<Portal> portals = new List<Portal>();
         private static long timeReady = 0;
 
@@ -21,7 +21,7 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                string fileData = Lists.ReadFileString(PORTALS_PATH);
+                string fileData = Lists.ReadFileString(PATH_PORTALS);
                 if (fileData.Length == 0 || fileData == null || fileData == "[]")
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -31,13 +31,13 @@ namespace MothBot.modules
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
-                Logging.LogtoConsoleandFile($"No portal data found at {PORTALS_PATH}, running with empty list of portals.");
+                Logging.LogtoConsoleandFile($"No portal data found at {PATH_PORTALS}, running with empty list of portals.");
                 portals.Clear();
                 return;
             }
             catch (JsonException)
             {
-                Logging.LogtoConsoleandFile($"{PORTALS_PATH} data corrupt, clearing filedata...");
+                Logging.LogtoConsoleandFile($"{PATH_PORTALS} data corrupt, clearing filedata...");
                 portals.Clear();
                 return;
             }
@@ -122,7 +122,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            Lists.WriteFile(PORTALS_PATH, outStr);
+            Lists.WriteFile(PATH_PORTALS, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
