@@ -149,13 +149,19 @@ namespace MothBot.modules
             }
         }
 
-        public static void PrependBackupChatters()    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+        public static async Task PrependBackupChatters(ISocketMessageChannel ch)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<string> backupchatters = Lists.ReadFile(PATH_CHATTERS_BACKUP);
             if (chatters.Count + backupchatters.Count > CHATTER_MAX_LENGTH)
-                backupchatters.RemoveRange(0, chatters.Count + backupchatters.Count - CHATTER_MAX_LENGTH);
+            {
+                int overshoot = chatters.Count + backupchatters.Count - CHATTER_MAX_LENGTH;
+                await ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{CHATTER_MAX_LENGTH}] by {overshoot} lines. Deleting excess from prepend before saving.");
+                backupchatters.RemoveRange(0, overshoot);
+            }
             foreach (string chatter in backupchatters)
-                chatters.Prepend(chatter);
+                chatters = chatters.Prepend(chatter).ToList();
+            await ch.SendMessageAsync("Prepend successful");
+            await SaveChatters();
         }
 
         public static Task SaveBlacklist()
@@ -176,7 +182,7 @@ namespace MothBot.modules
             chatters = new HashSet<string>(chatters).ToList();  //Kill duplicates
             List<string> chattersout = new List<string>();
 
-            foreach (string chatter in chatters)                 //Test every entry
+            foreach (string chatter in chatters)                //Test every entry
                 if (AcceptableChatter(chatter))
                     chattersout.Add(chatter);
             chatters = chattersout;

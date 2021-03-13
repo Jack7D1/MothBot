@@ -80,7 +80,7 @@ namespace MothBot.modules
             {
                 await ListPortals(msg.Channel);
             }
-            else if (user is SocketGuildUser && user.GuildPermissions.Administrator)    //Only guild admins can designate a portal channel.
+            else if (user is SocketGuildUser && user.GuildPermissions.ManageChannels)    //Only guild admins can designate a portal channel.
                 switch (args)
                 {
                     case "open":
@@ -116,7 +116,7 @@ namespace MothBot.modules
                         break;
                 }
             else
-                await msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [Administrator]");
+                await msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [ManageChannels]");
         }
 
         public static void SavePortals()
