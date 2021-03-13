@@ -69,7 +69,7 @@ namespace MothBot.modules
 
                 case "dumpchatters":
                     await src.Channel.SendMessageAsync("Dumping chatters file...");
-                    await src.Channel.SendFileAsync(Chatterbot.CHATTER_PATH);
+                    await src.Channel.SendFileAsync(Chatterbot.PATH_CHATTERS);
                     break;
 
                 case "listservers":
@@ -80,6 +80,11 @@ namespace MothBot.modules
                         await src.Channel.SendMessageAsync(outStr + "```");
                     }
                     break;
+
+                case "prependbackupchatters":
+                    Chatterbot.PrependBackupChatters();
+                    break;
+
                 //dangerous
                 case "leaveserver":
                     await Program.client.GetGuild(ulong.Parse(args)).LeaveAsync();

@@ -1,5 +1,4 @@
-﻿using Discord;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using System.Collections.Generic;
 
 namespace MothBot.modules
@@ -7,11 +6,14 @@ namespace MothBot.modules
     internal class Sanitize
     {
         private const byte ID_LENGTH = 18;
+
+        private static readonly List<string> nsfwKeywords = new List<string>
+        { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18", "mothing", "pussy", "cock", "gore", "rape", "gay", "dick", "orgasm" };         //I'm not proud of this, i'm sorry
+
         private static readonly char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
-        public static bool IsChannelNsfw(IMessageChannel ch) //PLEASE PLEASE GOD discord.net PLEASE give me a way to check if a channel has nsfw true or not PLEASE
+        public static bool IsChannelNsfw(ISocketMessageChannel ch) //PLEASE PLEASE GOD discord.net PLEASE give me a way to read the nsfw boolean PLEASE. Discord.REST Has ChannelInfo but you need to make audit log entries every time you check! Perhaps make it so ChannelInfo is a member of every Rest Channel Type?
         {
-            List<string> nsfwKeywords = new List<string> { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18" };  //I'm not proud of this
             foreach (string keyword in nsfwKeywords)
                 if (ch.Name.Contains(keyword))
                     return true;

@@ -30,8 +30,8 @@ namespace MothBot.modules
             byte retries = maxRetries;
             do
             {
-                short randNum = (short)Program.rand.Next(1, 64);
-                for (short i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
+                byte randNum = (byte)Program.rand.Next(1, 64);
+                for (byte i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
                     link = webData.Substring(linkPtr + 31, 7);

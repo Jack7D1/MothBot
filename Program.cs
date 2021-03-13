@@ -43,7 +43,7 @@ namespace MothBot
                     return;
                 if (!Portals.IsPortal(message.Channel))
                 {
-                    await Chatterbot.AddChatter(message);
+                    await Chatterbot.AddChatterHandler(message);
                     await Chatterbot.ChatterHandler(message);
                 }
                 await Portals.BroadcastHandlerAsync(message);
@@ -94,16 +94,6 @@ namespace MothBot
                 case "help":
                 case "commands":
                     await Lists.Program_PrintCommandList(message.Channel, _prefix);
-                    return;
-
-                case "pet":
-                    if (args != "")
-                        await message.Channel.SendMessageAsync($@"*Fabricates a bionic arm out of the blue and pets {Sanitize.ScrubRoleMentions(message.Content).Split(' ')[_prefix.Length]}.*");
-                    return;
-
-                case "hug":
-                    if (args != "")
-                        await message.Channel.SendMessageAsync($@"*Fabricates a pair of bionic arms out of the blue and hugs {Sanitize.ScrubRoleMentions(message.Content).Split(' ')[_prefix.Length]} to make them feel better.*");
                     return;
 
                 case "laws":

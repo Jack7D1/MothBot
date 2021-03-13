@@ -7,27 +7,33 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        public const string BLACKLIST_PATH = "../../data/blacklist.txt";
-        public const string CHATTER_PATH = "../../data/chatters.txt";
-        private const ushort CHANCE_TO_CHAT = 24;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        public const string PATH_BLACKLIST = "../../data/blacklist.txt";
+        public const string PATH_CHATTERS = "../../data/chatters.txt";
+        public const string PATH_CHATTERS_BACKUP = "../../preloaded/backupchatters.txt";
+        private const ushort CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 4096;
-        private static List<string> blacklist = new List<string>(Lists.ReadFile(CHATTER_PATH));
-        private static List<string> chatters = new List<string>(Lists.ReadFile(CHATTER_PATH));
+        private static readonly List<string> blacklist = new List<string>(Lists.ReadFile(PATH_BLACKLIST));
+        private static readonly char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~' };
+        private static List<string> chatters = new List<string>();
 
         //Contains strings that will be filtered out of chatters, such as discord invite links.
-
         public Chatterbot()
         {
-            chatters = Lists.ReadFile(CHATTER_PATH);
-            blacklist = Lists.ReadFile(BLACKLIST_PATH);
+            chatters = Lists.ReadFile(PATH_CHATTERS);
+            if (chatters.Count == 0)
+                chatters = Lists.ReadFile(PATH_CHATTERS_BACKUP);
             CleanupChatters();
         }
 
         public static bool AcceptableChatter(string inStr)
         {
             inStr = inStr.ToLower();
-            if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0) // Catch empty strings
+            if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0)     //Catch empty strings
                 return false;
+
+            foreach (char c in inStr.ToCharArray())     //Strings may not contain characters above UTF16 0000BF
+                if (c > 0xBF)
+                    return false;
 
             ushort uniqueChars = 0;
             string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
@@ -40,23 +46,24 @@ namespace MothBot.modules
             }
             if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
                 return false;
-            char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~' };
-            if (inStr.IndexOf(Program._prefix) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)
+
+            if (inStr.IndexOf(Program._prefix) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
                 return false;
-            if (blacklist.Count != 0)
+
+            if (blacklist.Count != 0)                           //Check against strings in the blacklist
                 foreach (string blacklister in blacklist)
                     if (inStr.Contains(blacklister.ToLower()))
                         return false;
             return true;
         }
 
-        public static async Task AddChatter(SocketMessage src)
+        public static async Task AddChatterHandler(SocketMessage src)
         {
-            if (Program.rand.Next(5) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content) && !Sanitize.IsChannelNsfw(src.Channel))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
+            if (Program.rand.Next(16) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
             {
                 if (chatters.Count >= CHATTER_MAX_LENGTH)
                     chatters.RemoveAt(0);
-                chatters.Add(Sanitize.ScrubRoleMentions(src.Content));
+                chatters.Add(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '));
                 await SaveChatters();
             }
         }
@@ -142,17 +149,25 @@ namespace MothBot.modules
             }
         }
 
+        public static void PrependBackupChatters()    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+        {
+            List<string> backupchatters = Lists.ReadFile(PATH_CHATTERS_BACKUP);
+            if (chatters.Count + backupchatters.Count > CHATTER_MAX_LENGTH)
+                backupchatters.RemoveRange(0, chatters.Count + backupchatters.Count - CHATTER_MAX_LENGTH);
+            foreach (string chatter in backupchatters)
+                chatters.Prepend(chatter);
+        }
+
         public static Task SaveBlacklist()
         {
-            blacklist = new HashSet<string>(blacklist).ToList();  //Kill duplicates
-            Lists.WriteFile(BLACKLIST_PATH, blacklist);
+            Lists.WriteFile(PATH_BLACKLIST, blacklist);
             return Task.CompletedTask;
         }
 
         public static Task SaveChatters()
         {
             CleanupChatters();
-            Lists.WriteFile(CHATTER_PATH, chatters);
+            Lists.WriteFile(PATH_CHATTERS, chatters);
             return Task.CompletedTask;
         }
 
@@ -180,7 +195,7 @@ namespace MothBot.modules
 
         private static bool ShouldIgnore(SocketMessage src)
         {
-            if (src.Channel.Id == 735266952129413211)
+            if (Sanitize.IsChannelNsfw(src.Channel))
                 return true;
             foreach (SocketUser mention in src.MentionedUsers)
                 if (mention.IsBot)

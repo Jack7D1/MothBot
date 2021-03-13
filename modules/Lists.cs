@@ -53,8 +53,6 @@ namespace MothBot.modules
                 "**Command List:**" +
                 "```" +
                 prefix + " help         - Displays this menu\n" +
-                prefix + " pet  [user]  - Pets a user!\n" +
-                prefix + " hug  [user]  - Hugs a user!\n" +
                 prefix + " state laws   - States the laws\n" +
                 prefix + " say  [text]  - Have the ai say whatever you want!\n" +
                 prefix + " minesweeper  - Play a game of minesweeper!\n" +
@@ -132,7 +130,8 @@ namespace MothBot.modules
                 prefix + "setprefix [string]\n" +
                 prefix + "blacklist [command]\n" +
                 prefix + "dumpchatters\n" +
-                prefix + "listservers" +
+                prefix + "listservers\n" +
+                prefix + "prependbackupchatters\n" +
                 "``````" +
                 "dangerous:\n" +
                 prefix + "leaveserver [ID]\n" +
