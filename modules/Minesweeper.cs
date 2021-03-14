@@ -6,44 +6,31 @@ namespace MothBot.modules
 {
     internal class Minesweeper
     {
-        private const ushort COOLDOWN_MS = 500;
         private const ushort DEFAULT_BOMBS = 16;
         private const byte DEFAULT_GRIDSIZE = 8;
 
         //Program creates a minesweeper for discord, given by input parameters.
-        //Element defs
         private static readonly string[] bombCounts = { ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:", ":eight:" };
 
-        //Element space arrays
-        private static readonly bool[,] bombSpace = new bool[8, 8];
-
         private static readonly string bombString = ":bomb:";
-        private static readonly byte[,] numSpace = new byte[8, 8];
         private static readonly string[] spoilerTag = { "||", "||" };
-        private static long minesweeperReadyAt = 0;
 
         public async static Task MinesweeperHandlerAsync(ISocketMessageChannel ch, byte gridHeight = DEFAULT_GRIDSIZE, byte gridWidth = DEFAULT_GRIDSIZE, ushort bombs = DEFAULT_BOMBS)
         {
-            if (DateTime.Now.Ticks < minesweeperReadyAt)
-            {
-                await ch.SendMessageAsync("Minesweepers generated too frequently!");
-            }
-            else
-            {
-                minesweeperReadyAt = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
+            bool[,] bombSpace = new bool[8, 8];
+            byte[,] numSpace = new byte[8, 8];
 
-                gridHeight = Math.Min(gridHeight, (byte)8);
-                gridWidth = Math.Min(gridWidth, (byte)8);
-                bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
+            gridHeight = Math.Min(gridHeight, (byte)8);
+            gridWidth = Math.Min(gridWidth, (byte)8);
+            bombs = Math.Min(bombs, (ushort)(gridWidth * gridHeight));
 
-                await PopulateBombs(bombs, gridWidth, gridHeight);
-                await PopulateNums(gridWidth, gridHeight);
-                await ch.SendMessageAsync($"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
-                    GetMineMap(gridWidth, gridHeight));
-            }
+            await PopulateBombs(bombs, gridWidth, gridHeight, ref bombSpace);
+            await PopulateNums(gridWidth, gridHeight, ref bombSpace, ref numSpace);
+            await ch.SendMessageAsync($"```MINESWEEPER: Size-{Math.Max(gridWidth, gridHeight)} Bombs-{bombs}```" +
+                GetMineMap(gridWidth, gridHeight, ref bombSpace, ref numSpace));
         }
 
-        private static string GetMineMap(byte gridWidth, byte gridHeight) //Prints and spoilers game and returns as string
+        private static string GetMineMap(byte gridWidth, byte gridHeight, ref bool[,] bombSpace, ref byte[,] numSpace) //Prints and spoilers game and returns as string
         {
             string mineMap = "";
             for (byte y = 0; y < gridHeight; y++)
@@ -64,7 +51,7 @@ namespace MothBot.modules
             return mineMap;
         }
 
-        private static byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight)  //Checks target cell for bombs nearby. Does not read target cell.
+        private static byte GetNearbyBombs(byte x, byte y, byte gridWidth, byte gridHeight, ref bool[,] bombSpace)  //Checks target cell for bombs nearby. Does not read target cell.
         {
             bool[] p = { true, true, true };
             bool[] p1 = { true, false, true };
@@ -114,7 +101,7 @@ namespace MothBot.modules
             return bombs;
         }
 
-        private static Task PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
+        private static Task PopulateBombs(ushort bombs, byte gridWidth, byte gridHeight, ref bool[,] bombSpace)  //Uses numBombs and plots the number of bombs in random positions in bombSpace.
         {
             //Very important to fill bombspace with 0, as only 1s are plotted
             for (byte y = 0; y < gridHeight; y++)
@@ -137,14 +124,14 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private static Task PopulateNums(byte gridWidth, byte gridHeight)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
+        private static Task PopulateNums(byte gridWidth, byte gridHeight, ref bool[,] bombSpace, ref byte[,] numSpace)  //Calculates nearby bombs and saves the nums to numSpace for easy printing. Bombspace must be populated before this is called.
         {//This is the heaviest task, so it's best to keep it seperate.
             //Effectively calls getNearbyBombs for every demanded space in numSpace
             for (byte y = 0; y < gridHeight; y++)
             {
                 for (byte x = 0; x < gridWidth; x++)
                 {
-                    numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight);
+                    numSpace[x, y] = GetNearbyBombs(x, y, gridWidth, gridHeight, ref bombSpace);
                 }
             }
             return Task.CompletedTask;

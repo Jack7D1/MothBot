@@ -53,14 +53,14 @@ namespace MothBot.modules
                 case "commands":
                 case "help":
                     string prefix = Program._prefix + " utility ";
-                    await Lists.Utilities_PrintCommandList(src.Channel, prefix);
+                    await src.Channel.SendMessageAsync(Data.Utilities_GetCommandList(prefix));
                     break;
 
                 case "setprefix":
                     Program._prefix = args.ToLower();
                     await Logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
                     await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
-                    await Lists.SetDefaultStatus();
+                    await Data.Program_SetStatus();
                     break;
 
                 case "blacklist":

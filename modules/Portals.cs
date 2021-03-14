@@ -21,7 +21,7 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                string fileData = Lists.ReadFileString(PATH_PORTALS);
+                string fileData = Data.Files_Read_String(PATH_PORTALS);
                 if (fileData.Length == 0 || fileData == null || fileData == "[]")
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -122,7 +122,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            Lists.WriteFile(PATH_PORTALS, outStr);
+            Data.Files_Write(PATH_PORTALS, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.

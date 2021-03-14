@@ -12,16 +12,16 @@ namespace MothBot.modules
         public const string PATH_CHATTERS_BACKUP = "../../preloaded/backupchatters.txt";
         private const ushort CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         private const ushort CHATTER_MAX_LENGTH = 4096;
-        private static readonly List<string> blacklist = new List<string>(Lists.ReadFile(PATH_BLACKLIST));
+        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(PATH_BLACKLIST));
         private static readonly char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~' };
         private static List<string> chatters = new List<string>();
 
         //Contains strings that will be filtered out of chatters, such as discord invite links.
         public Chatterbot()
         {
-            chatters = Lists.ReadFile(PATH_CHATTERS);
+            chatters = Data.Files_Read(PATH_CHATTERS);
             if (chatters.Count == 0)
-                chatters = Lists.ReadFile(PATH_CHATTERS_BACKUP);
+                chatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
             CleanupChatters();
         }
 
@@ -126,7 +126,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await Lists.Chatterbot_PrintBlacklistCommands(msg.Channel, $"{Program._prefix} utility blacklist ");
+                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands($"{Program._prefix} utility blacklist "));
                     break;
             }
         }
@@ -151,7 +151,7 @@ namespace MothBot.modules
 
         public static async Task PrependBackupChatters(ISocketMessageChannel ch)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
-            List<string> backupchatters = Lists.ReadFile(PATH_CHATTERS_BACKUP);
+            List<string> backupchatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
             if (chatters.Count + backupchatters.Count > CHATTER_MAX_LENGTH)
             {
                 int overshoot = chatters.Count + backupchatters.Count - CHATTER_MAX_LENGTH;
@@ -166,14 +166,14 @@ namespace MothBot.modules
 
         public static Task SaveBlacklist()
         {
-            Lists.WriteFile(PATH_BLACKLIST, blacklist);
+            Data.Files_Write(PATH_BLACKLIST, blacklist);
             return Task.CompletedTask;
         }
 
         public static Task SaveChatters()
         {
             CleanupChatters();
-            Lists.WriteFile(PATH_CHATTERS, chatters);
+            Data.Files_Write(PATH_CHATTERS, chatters);
             return Task.CompletedTask;
         }
 

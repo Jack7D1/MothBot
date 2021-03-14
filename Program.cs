@@ -35,35 +35,35 @@ namespace MothBot
             }
         }
 
-        private async Task Client_MessageRecieved(SocketMessage message)
+        private async Task Client_MessageRecieved(SocketMessage msg)
         {
             {
                 // Filter messages
-                if (message.Author.IsBot)   //If message author is a bot, ignore
+                if (msg.Author.IsBot)   //If message author is a bot, ignore
                     return;
-                if (!Portals.IsPortal(message.Channel))
+                if (!Portals.IsPortal(msg.Channel))
                 {
-                    await Chatterbot.AddChatterHandler(message);
-                    await Chatterbot.ChatterHandler(message);
+                    await Chatterbot.AddChatterHandler(msg);
+                    await Chatterbot.ChatterHandler(msg);
                 }
-                await Portals.BroadcastHandlerAsync(message);
+                await Portals.BroadcastHandlerAsync(msg);
 
                 //All non prefix dependant directives go above
-                string input = message.Content.ToLower();
+                string input = msg.Content.ToLower();
                 if (input.IndexOf($"{_prefix} ") != 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
                     return;
                 if (input.IndexOf($"{_prefix} utility") == 0)
                 {
-                    await Utilities.UtilitiesHandlerAsync(message);
+                    await Utilities.UtilitiesHandlerAsync(msg);
                     return;
                 }
             }
-            await Logging.LogtoConsoleandFileAsync($@"[{message.Timestamp.UtcDateTime}][{message.Author}] said ({message.Content}) in #{message.Channel}");
-            await Logging.LogtoConsoleandFileAsync($@"Message size: {message.Content.Length}");
+            await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}] said ({msg.Content}) in #{msg.Channel}");
+            await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
 
             //Begin Command Parser
             string command, keyword, args;
-            command = message.Content.ToLower().Substring(_prefix.Length + 1); //We now have all text that follows the prefix.
+            command = msg.Content.ToLower().Substring(_prefix.Length + 1); //We now have all text that follows the prefix.
             if (command.Contains(' '))
             {
                 keyword = command.Substring(0, command.IndexOf(' '));
@@ -82,48 +82,48 @@ namespace MothBot
                 case "hello":
                 case "hi":
                 case "hey":
-                    await message.Channel.SendMessageAsync($@"Hi, {message.Author.Mention}!");
+                    await msg.Channel.SendMessageAsync($@"Hi, {msg.Author.Mention}!");
                     return;
 
                 case "rogue":
                 case "malf":
                     if (_prefix == "ai")
-                        await message.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
+                        await msg.Channel.SendMessageAsync("http://media.discordapp.net/attachments/585862469508005888/752274349372735508/fwefewgaergar.png");
                     return;
 
                 case "help":
                 case "commands":
-                    await Lists.Program_PrintCommandList(message.Channel, _prefix);
+                    await msg.Channel.SendMessageAsync(Data.Program_GetCommandList(_prefix));
                     return;
 
                 case "laws":
                 case "state":
-                    await Lists.PrintLaws(message.Channel);
+                    await msg.Channel.SendMessageAsync(Data.Program_GetLaws());
                     return;
 
                 case "say":
-                    await message.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(message.Content).Substring(_prefix.Length + "say ".Length));
-                    await message.DeleteAsync();
+                    await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(_prefix.Length + "say ".Length));
+                    await msg.DeleteAsync();
                     return;
 
                 case "minesweeper":
-                    await Minesweeper.MinesweeperHandlerAsync(message.Channel);
+                    await Minesweeper.MinesweeperHandlerAsync(msg.Channel);
                     return;
 
                 case "give":
-                    await Imagesearch.ImageSearchHandlerAsync(message.Channel, args);
+                    await Imagesearch.ImageSearchHandlerAsync(msg.Channel, args);
                     return;
 
                 case "roll":
-                    await Dice.Roll(message.Channel, args);
+                    await Dice.Roll(msg.Channel, args);
                     return;
 
                 case "ping":
-                    await message.Channel.SendMessageAsync($"Ping: {client.Latency}ms");
+                    await msg.Channel.SendMessageAsync($"Ping: {client.Latency}ms");
                     return;
 
                 case "portal":
-                    await Portals.PortalManagement(message, args);
+                    await Portals.PortalManagement(msg, args);
                     return;
 
                 default:
@@ -138,7 +138,7 @@ namespace MothBot
             client.Log += Logging.Log;
             client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(TOKEN_PATH));
-            await Lists.SetDefaultStatus();
+            await Data.Program_SetStatus();
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens
