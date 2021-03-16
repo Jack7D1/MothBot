@@ -131,7 +131,6 @@ namespace MothBot.modules
                 "```";
         }
 
-        
         public static string Program_GetLaws()
         {
             if (Program.rand.Next() % 100 != 0)
