@@ -9,7 +9,6 @@ namespace MothBot.modules
     {
         private static readonly List<ulong> operatorIDs = new List<ulong>{   //Discord user IDs of allowed operators, in ulong format.
             206920373952970753, //Jack
-            238735900597682177, //Dex
         };
 
         private static bool shutdownEnabled = false;
