@@ -5,10 +5,8 @@ namespace MothBot.modules
 {
     internal class Sanitize
     {
-        private const byte ID_LENGTH = 18;
-
         private static readonly List<string> nsfwKeywords = new List<string>
-        { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18", "mothing", "pussy", "cock", "gore", "rape", "gay", "dick", "orgasm" };         //I'm not proud of this, i'm sorry
+        { "nsfw", "erp", "cum", "horny", "porn", "18+", "thunderdome", "lewd", "anarchy", "sex", "hentai", "fetish", "+18", "mothing", "pussy", "cock", "gore", "rape", "gay", "dick", "orgasm" };//I'm not proud of this, i'm sorry
 
         private static readonly char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
@@ -22,6 +20,7 @@ namespace MothBot.modules
 
         public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //holy moly
         {
+            const byte ID_LENGTH = 18;
             if (inStr.Length < ID_LENGTH + "<@>".Length || !inStr.Contains("<@") || !inStr.Substring(inStr.IndexOf("<@")).Contains('>'))
                 return ScrubEveryoneandHereMentions(inStr);
             string outStr = inStr, refStr = inStr;

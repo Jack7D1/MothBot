@@ -8,6 +8,7 @@ namespace MothBot.modules
     internal class Utilities
     {
         private static readonly List<ulong> operatorIDs = new List<ulong>{   //Discord user IDs of allowed operators, in ulong format.
+            238735900597682177, //Dex
             206920373952970753, //Jack
         };
 
@@ -31,7 +32,7 @@ namespace MothBot.modules
             }
 
             string command, keyword, args;
-            command = src.Content.ToLower().Substring(Program._prefix.Length + " utility".Length); //We now have all text that follows the prefix and the word utility.
+            command = src.Content.ToLower().Substring(Data.PREFIX.Length + " utility".Length); //We now have all text that follows the prefix and the word utility.
             if (command.IndexOf(' ') == 0)
                 command = command.Substring(1);
             if (command.Contains(' '))
@@ -51,15 +52,8 @@ namespace MothBot.modules
                 //General
                 case "commands":
                 case "help":
-                    string prefix = Program._prefix + " utility ";
+                    string prefix = Data.PREFIX + " utility ";
                     await src.Channel.SendMessageAsync(Data.Utilities_GetCommandList(prefix));
-                    break;
-
-                case "setprefix":
-                    Program._prefix = args.ToLower();
-                    await Logging.LogtoConsoleandFileAsync($"PREFIX CHANGED TO \"{Program._prefix}\"");
-                    await src.Channel.SendMessageAsync($"Prefix changed to {Program._prefix}!");
-                    await Data.Program_SetStatus();
                     break;
 
                 case "blacklist":
@@ -74,17 +68,17 @@ namespace MothBot.modules
                 //Data/debug
                 case "dumpchatters":
                     await src.Channel.SendMessageAsync("Dumping chatters file...");
-                    await src.Channel.SendFileAsync(Chatterbot.PATH_CHATTERS);
+                    await src.Channel.SendFileAsync(Data.PATH_CHATTERS);
                     break;
 
                 case "dumplogs":
                     await src.Channel.SendMessageAsync("Dumping logs file...");
-                    await src.Channel.SendFileAsync(Logging.PATH_LOGS);
+                    await src.Channel.SendFileAsync(Data.PATH_LOGS);
                     break;
 
                 case "dumpportals":
                     await src.Channel.SendMessageAsync("Dumping portals file...");
-                    await src.Channel.SendFileAsync(Portals.PATH_PORTALS);
+                    await src.Channel.SendFileAsync(Data.PATH_PORTALS);
                     break;
 
                 case "listservers":

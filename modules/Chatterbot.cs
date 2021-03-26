@@ -7,21 +7,16 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        public const string PATH_BLACKLIST = "../../data/blacklist.txt";
-        public const string PATH_CHATTERS = "../../data/chatters.txt";
-        public const string PATH_CHATTERS_BACKUP = "../../preloaded/backupchatters.txt";
-        private const ushort CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
-        private const ushort CHATTER_MAX_LENGTH = 4096;
-        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(PATH_BLACKLIST));
-        private static readonly char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~' };
+        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));
+        private static readonly char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~', '\'' };
         private static List<string> chatters = new List<string>();
 
         //Contains strings that will be filtered out of chatters, such as discord invite links.
         public Chatterbot()
         {
-            chatters = Data.Files_Read(PATH_CHATTERS);
+            chatters = Data.Files_Read(Data.PATH_CHATTERS);
             if (chatters.Count == 0)
-                chatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
+                chatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
             CleanupChatters();
         }
 
@@ -47,7 +42,7 @@ namespace MothBot.modules
             if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
                 return false;
 
-            if (inStr.IndexOf(Program._prefix) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
+            if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
                 return false;
 
             if (blacklist.Count != 0)                           //Check against strings in the blacklist
@@ -59,9 +54,9 @@ namespace MothBot.modules
 
         public static async Task AddChatterHandler(SocketMessage src)
         {
-            if (Program.rand.Next(16) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
+            if (Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
             {
-                if (chatters.Count >= CHATTER_MAX_LENGTH)
+                if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
                     chatters.RemoveAt(0);
                 chatters.Add(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '));
                 await SaveChatters();
@@ -126,7 +121,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands($"{Program._prefix} utility blacklist "));
+                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands($"{Data.PREFIX} utility blacklist "));
                     break;
             }
         }
@@ -135,13 +130,13 @@ namespace MothBot.modules
         {
             bool mentionsMothbot = false;
             foreach (SocketUser user in src.MentionedUsers)
-                if (user.Id == Program.MY_ID)
+                if (user.Id == Data.MY_ID)
                 {
                     mentionsMothbot = true;
                     break;
                 }
 
-            if (mentionsMothbot || (Program.rand.Next(0, CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src)))
+            if (mentionsMothbot || (Program.rand.Next(0, Data.CHATTERS_CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src)))
             {
                 string outStr = GetChatter();
                 if (outStr != null)
@@ -151,11 +146,11 @@ namespace MothBot.modules
 
         public static async Task PrependBackupChatters(ISocketMessageChannel ch)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
-            List<string> backupchatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
-            if (chatters.Count + backupchatters.Count > CHATTER_MAX_LENGTH)
+            List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
+            if (chatters.Count + backupchatters.Count > Data.CHATTERS_MAX_COUNT)
             {
-                int overshoot = chatters.Count + backupchatters.Count - CHATTER_MAX_LENGTH;
-                await ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{CHATTER_MAX_LENGTH}] by {overshoot} lines. Deleting excess from prepend before saving.");
+                int overshoot = chatters.Count + backupchatters.Count - Data.CHATTERS_MAX_COUNT;
+                await ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{Data.CHATTERS_MAX_COUNT}] by {overshoot} lines. Deleting excess from prepend before saving.");
                 backupchatters.RemoveRange(0, overshoot);
             }
             foreach (string chatter in backupchatters)
@@ -166,14 +161,14 @@ namespace MothBot.modules
 
         public static Task SaveBlacklist()
         {
-            Data.Files_Write(PATH_BLACKLIST, blacklist);
+            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, blacklist);
             return Task.CompletedTask;
         }
 
         public static Task SaveChatters()
         {
             CleanupChatters();
-            Data.Files_Write(PATH_CHATTERS, chatters);
+            Data.Files_Write(Data.PATH_CHATTERS, chatters);
             return Task.CompletedTask;
         }
 

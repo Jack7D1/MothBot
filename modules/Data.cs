@@ -10,6 +10,27 @@ namespace MothBot.modules
     //Class comprises of static command lists and just general lists of everything that can be called from anywhere to print.
     //This also contains subroutines used for reading and writing to save files in a standardized manner.
     {
+        //PARAMS
+        public const ulong MY_ID = 765202973495656538;
+        public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
+        //PARAMS_Chatterbot
+        public const ushort CHATTERS_CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        public const ushort CHATTERS_CHANCE_TO_SAVE = 16;
+        public const ushort CHATTERS_MAX_COUNT = 4096;
+        //END PARAMS
+
+        //PATHS
+        // /data/
+        public const string PATH_LOGS = "../../data/log.txt";
+        public const string PATH_PORTALS = "../../data/portals.json";
+        public const string PATH_TOKEN = "../../data/token.txt";
+        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
+        public const string PATH_CHATTERS = "../../data/chatters.txt";
+        // /resources/
+        public const string PATH_CHATTERS_BACKUP = "../../resources/preloaded/backupchatters.txt";
+        public const string PATH_GAYBEE = "../../resources/yougaybee.png";
+        //END PATHS
+
         public static string Chatterbot_GetBlacklistCommands(string prefix)
         {
             return
@@ -127,6 +148,7 @@ namespace MothBot.modules
                 prefix + " give [text]  - Searches the input on imgur and posts the image!\n" +
                 prefix + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
                 prefix + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
+                prefix + " ping         - You know what this does.\n" +
                 prefix + " utility      - Utility functions, bot only responds to operators\n" +
                 "```";
         }
@@ -143,7 +165,7 @@ namespace MothBot.modules
                     "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
                     "```";
             }
-            else       //Little antimov easter egg if the message ID ends in 00, 1 in 100 chance.
+            else       //Little antimov easter egg, 1 in 100 chance.
             {
                 return
                     "**Current active laws:**" +
@@ -157,7 +179,7 @@ namespace MothBot.modules
 
         public static Task Program_SetStatus()
         {
-            Program.client.SetGameAsync("Prefix: " + Program._prefix + ". Say '" + Program._prefix + " help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            Program.client.SetGameAsync($"Prefix: {PREFIX}. Say '{PREFIX} help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
             return Task.CompletedTask;
         }
 
@@ -168,7 +190,6 @@ namespace MothBot.modules
                 "```" +
                 "general:\n" +
                 prefix + "commands\n" +
-                prefix + "setprefix [string]\n" +
                 prefix + "blacklist [command]\n" +
                 prefix + "prependbackupchatters\n" +
                 "``````" +

@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Rest;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
@@ -10,10 +9,7 @@ namespace MothBot.modules
 {
     internal class Portals
     {
-        public const string PATH_PORTALS = "../../data/portals.json";
-        private const long COOLDOWN_MS = 100;  //Cooldown to try and avoid the inevitable super spam.
         private static readonly List<Portal> portals = new List<Portal>();
-        private static long timeReady = 0;
 
         public Portals()
         {
@@ -21,7 +17,7 @@ namespace MothBot.modules
             Program.client.LeftGuild += LeftGuild;
             try
             {
-                string fileData = Data.Files_Read_String(PATH_PORTALS);
+                string fileData = Data.Files_Read_String(Data.PATH_PORTALS);
                 if (fileData.Length == 0 || fileData == null || fileData == "[]")
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -31,13 +27,13 @@ namespace MothBot.modules
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
-                Logging.LogtoConsoleandFile($"No portal data found at {PATH_PORTALS}, running with empty list of portals.");
+                Logging.LogtoConsoleandFile($"No portal data found at {Data.PATH_PORTALS}, running with empty list of portals.");
                 portals.Clear();
                 return;
             }
             catch (JsonException)
             {
-                Logging.LogtoConsoleandFile($"{PATH_PORTALS} data corrupt, clearing filedata...");
+                Logging.LogtoConsoleandFile($"{Data.PATH_PORTALS} data corrupt, clearing filedata...");
                 portals.Clear();
                 return;
             }
@@ -47,21 +43,8 @@ namespace MothBot.modules
         {
             if (GetPortal(msg.Channel) is Portal)
             {
-                if (!msg.Content.StartsWith(Program._prefix))
-                {
-                    if (DateTime.Now.Ticks < timeReady)
-                    {
-                        RestMessage sentmsg = msg.Channel.SendMessageAsync("The portal is cooling down!").Result;
-                        await Task.Delay(2000);
-                        await msg.DeleteAsync();
-                        await sentmsg.DeleteAsync();
-                    }
-                    else
-                    {
-                        timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
-                        await BroadcastAsync(msg);
-                    }
-                }
+                if (!msg.Content.StartsWith(Data.PREFIX))
+                    await BroadcastAsync(msg);
             }
         }
 
@@ -88,7 +71,7 @@ namespace MothBot.modules
                         {
                             Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                             portals.Add(portal);
-                            await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Program._prefix} portal close\" or delete this channel!");
+                            await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Data.PREFIX} portal close\" or delete this channel!");
                             Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                             await CheckPortals();
                             SavePortals();
@@ -112,7 +95,7 @@ namespace MothBot.modules
                             break;
                         }
                     default:
-                        await msg.Channel.SendMessageAsync($"Unknown command, say \"{Program._prefix} portal open\" or \"{Program._prefix} portal close\" to manage portals!");
+                        await msg.Channel.SendMessageAsync($"Unknown command, say \"{Data.PREFIX} portal open\" or \"{Data.PREFIX} portal close\" to manage portals!");
                         break;
                 }
             else
@@ -122,7 +105,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            Data.Files_Write(PATH_PORTALS, outStr);
+            Data.Files_Write(Data.PATH_PORTALS, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.

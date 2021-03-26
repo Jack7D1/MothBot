@@ -7,20 +7,14 @@ namespace MothBot.modules
 {
     internal class Imagesearch
     {
-        private const long COOLDOWN_MS = 1;
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";
-        private const byte maxRetries = 255;
+        private const byte maxRetries = 128;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
-        private static long timeReady = 0;
 
         public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
-            if (DateTime.Now.Ticks < timeReady)
-                return "Minesweepers generated too frequently!";
-            timeReady = DateTime.Now.AddMilliseconds(COOLDOWN_MS).Ticks;
-
             searchTerm = linkSearch + searchTerm;
             searchTerm = searchTerm.Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);

@@ -7,15 +7,12 @@ namespace MothBot.modules
 {
     internal class Logging
     {
-        public const string PATH_LOGS = "../../data/log.txt";
         private static StreamWriter log;
 
         public Logging()
         {
-            if (!Directory.Exists(PATH_LOGS))
-                Directory.CreateDirectory(PATH_LOGS.Substring(0, PATH_LOGS.LastIndexOf('/')));
-
-            log = new StreamWriter(PATH_LOGS, true);
+            if (!Directory.Exists(Data.PATH_LOGS))
+                Directory.CreateDirectory(Data.PATH_LOGS.Substring(0, Data.PATH_LOGS.LastIndexOf('/')));
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
         }
 
@@ -27,14 +24,16 @@ namespace MothBot.modules
 
         public static void Log(string str)
         {
+            OpenLogs();
             log.WriteLineAsync(str);
-            log.Flush();
+            log.Close();
         }
 
         public static async Task LogAsync(string str)
         {
+            OpenLogs();
             await log.WriteLineAsync(str);
-            log.Flush();
+            log.Close();
         }
 
         public static void LogtoConsoleandFile(string str)
@@ -47,6 +46,11 @@ namespace MothBot.modules
         {
             Console.WriteLine(str);
             await LogAsync(str);
+        }
+
+        private static void OpenLogs()
+        {
+            log = new StreamWriter(Data.PATH_LOGS, true);
         }
 
         private static void ProcessExit(object sender, EventArgs e)
