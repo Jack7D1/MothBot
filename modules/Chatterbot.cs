@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -8,16 +9,27 @@ namespace MothBot.modules
     internal class Chatterbot
     {
         private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));
-        private static readonly char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~', '\'' };
-        private static List<string> chatters = new List<string>();
+        private static readonly List<Chatter> chatters = new List<Chatter>();
 
         //Contains strings that will be filtered out of chatters, such as discord invite links.
         public Chatterbot()
         {
-            chatters = Data.Files_Read(Data.PATH_CHATTERS);
-            if (chatters.Count == 0)
-                chatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
-            CleanupChatters();
+            try
+            {
+                string fileData = Data.Files_Read_String(Data.PATH_CHATTERS);
+                if (fileData == null || fileData.Length == 0 || fileData == "[]")
+                    throw new Exception("NO FILEDATA");
+                List<Chatter> fileChatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
+                foreach (Chatter chatter in fileChatters)
+                    chatters.Add(chatter);
+                CleanupChatters();
+            }
+            catch (Exception ex) when (ex.Message == "NO FILEDATA")
+            {
+                Logging.LogtoConsoleandFile($"No chatters found at {Data.PATH_CHATTERS}, loading prepend.");
+                PrependBackupChatters();
+                return;
+            }
         }
 
         public static bool AcceptableChatter(string inStr)
@@ -29,21 +41,24 @@ namespace MothBot.modules
             foreach (char c in inStr.ToCharArray())     //Strings may not contain characters above UTF16 0000BF
                 if (c > 0xBF)
                     return false;
-
-            ushort uniqueChars = 0;
-            string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
-            if (clearChars.Length != 0)
-                uniqueChars++;
-            while (clearChars.Length != 0)
             {
-                clearChars = clearChars.Replace(clearChars[0].ToString(), "");
-                uniqueChars++;
+                ushort uniqueChars = 0;
+                string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
+                if (clearChars.Length != 0)
+                    uniqueChars++;
+                while (clearChars.Length != 0)
+                {
+                    clearChars = clearChars.Replace(clearChars[0].ToString(), "");
+                    uniqueChars++;
+                }
+                if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
+                    return false;
             }
-            if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
-                return false;
-
-            if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
-                return false;
+            {
+                char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~', '\'' };
+                if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
+                    return false;
+            }
 
             if (blacklist.Count != 0)                           //Check against strings in the blacklist
                 foreach (string blacklister in blacklist)
@@ -54,11 +69,11 @@ namespace MothBot.modules
 
         public static async Task AddChatterHandler(SocketMessage src)
         {
-            if (Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //1/5 chance to save a message it sees, however checks to see if it's a valid and acceptable chatter first
+            if (Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
                 if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
                     chatters.RemoveAt(0);
-                chatters.Add(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '));
+                chatters.Add(new Chatter(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '), src.Author.Id, (src.Author as SocketGuildUser).Guild.Id));
                 await SaveChatters();
             }
         }
@@ -143,20 +158,49 @@ namespace MothBot.modules
                     await src.Channel.SendMessageAsync(Sanitize.ReplaceAllMentionsWithID(outStr, src.Author.Id));
             }
         }
+        private static Chatter GetLowestRated()
+        {
+            int worst = GetLowestRating();
+            List<Chatter> candidates = chatters;
 
-        public static async Task PrependBackupChatters(ISocketMessageChannel ch)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+            foreach(Chatter chatter in chatters)
+            {
+                if (chatter.Rating > worst)
+                    candidates.Remove(chatter);//no clue if this actually works
+            }
+            return candidates[Program.rand.Next(0, candidates.Count)];
+        }
+
+        private static int GetLowestRating()
+        {
+            int bottom = 0;
+            foreach (Chatter chatter in chatters)
+                if (chatter.Rating < bottom)
+                    bottom = chatter.Rating;
+            return bottom;
+        }
+
+        public static Task PrependBackupChatters(ISocketMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
             if (chatters.Count + backupchatters.Count > Data.CHATTERS_MAX_COUNT)
             {
                 int overshoot = chatters.Count + backupchatters.Count - Data.CHATTERS_MAX_COUNT;
-                await ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{Data.CHATTERS_MAX_COUNT}] by {overshoot} lines. Deleting excess from prepend before saving.");
+                if(ch != null)
+                    ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{Data.CHATTERS_MAX_COUNT}] by {overshoot} lines. Deleting excess from prepend before saving.");
                 backupchatters.RemoveRange(0, overshoot);
             }
+
             foreach (string chatter in backupchatters)
-                chatters = chatters.Prepend(chatter).ToList();
-            await ch.SendMessageAsync("Prepend successful");
-            await SaveChatters();
+                if (chatters.Count == 0)
+                    chatters.Add(new Chatter(chatter));
+                else
+                    chatters.Insert(0, new Chatter(chatter));
+            if(ch != null)
+                ch.SendMessageAsync("Prepend successful");
+            Logging.LogtoConsoleandFile("CHATTERS: Prepend successful.");
+            SaveChatters();
+            return Task.CompletedTask;
         }
 
         public static Task SaveBlacklist()
@@ -168,19 +212,21 @@ namespace MothBot.modules
         public static Task SaveChatters()
         {
             CleanupChatters();
-            Data.Files_Write(Data.PATH_CHATTERS, chatters);
+            string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
+            Data.Files_Write(Data.PATH_CHATTERS, outStr);
             return Task.CompletedTask;
         }
 
         private static Task CleanupChatters()
         {
-            chatters = new HashSet<string>(chatters).ToList();  //Kill duplicates
-            List<string> chattersout = new List<string>();
-
-            foreach (string chatter in chatters)                //Test every entry
-                if (AcceptableChatter(chatter))
+            List<Chatter> chattersout = new List<Chatter>();
+            foreach (Chatter chatter in chatters)                //Test every entry for acceptableness and kill possible duplicates
+                if (AcceptableChatter(chatter.Content) && !chattersout.Contains(chatter))
                     chattersout.Add(chatter);
-            chatters = chattersout;
+            //Move them over
+            chatters.Clear();
+            foreach (Chatter chatter in chattersout)
+                chatters.Add(chatter);
             return Task.CompletedTask;
         }
 
@@ -188,10 +234,8 @@ namespace MothBot.modules
         {
             if (chatters.Count == 0)
                 return null;
-            string outStr = chatters[Program.rand.Next(0, chatters.Count)];
-            if (outStr == null)
-                return null;
-            return outStr;
+            else
+                return chatters[Program.rand.Next(0, chatters.Count)].Content;
         }
 
         private static bool ShouldIgnore(SocketMessage src)
@@ -202,6 +246,27 @@ namespace MothBot.modules
                 if (mention.IsBot)
                     return true;
             return false;
+        }
+
+        private class Chatter   
+        {
+            public ulong Channel_last_used;
+            public int Rating;  //When implementing rating ensure to create some kind of restriction
+            public ulong Time_last_used;
+            public readonly string Content;
+            public readonly ulong Origin_guild;
+            public readonly ulong Origin_user;
+
+            [JsonConstructor]
+            public Chatter(string content, ulong origin_user = 0, ulong origin_guild = 0, int rating = 0, ulong time_last_used = 0, ulong channel_last_used = 0)
+            {
+                Content = content;
+                Origin_user = origin_user;
+                Origin_guild = origin_guild;
+                Rating = rating;
+                Time_last_used = time_last_used;
+                Channel_last_used = channel_last_used;
+            }
         }
     }
 }

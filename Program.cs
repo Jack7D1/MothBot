@@ -16,25 +16,17 @@ namespace MothBot
 
         public static void Main(string[] args)  //Initialization
         {
-            _ = new Logging();
-            Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
-            //Keep at bottom of init
             try
             {
+                _ = new Logging();
+                Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
+                //Keep at bottom of init
                 new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
             }
-            catch (Exception ex)   //Catch fatal exceptions and safely shutdown the program.
-            {
-                client.StopAsync();   //Prevent further inputs immediately.
-                Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
-                    $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
-                    $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
-                    "Crash logging finished, saving data and shutting down safely...");
-                Environment.Exit(ex.HResult);
-            }
+            catch (Exception ex) { Crash(ex); }
         }
 
-        private async Task Client_MessageRecieved(SocketMessage msg)
+        private static async Task Client_MessageRecieved(SocketMessage msg)
         {
             // Filter messages
             if (msg.Author.IsBot)   //If message author is a bot, ignore
@@ -57,7 +49,7 @@ namespace MothBot
                 }
         }
 
-        private async Task RootCommandHandler(SocketMessage msg)
+        private static async Task RootCommandHandler(SocketMessage msg)
         {
             await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}] said ({msg.Content}) in #{msg.Channel}");
             await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
@@ -150,7 +142,7 @@ namespace MothBot
             await Task.Delay(-1);   //Sit here while the async listens
         }
 
-        private void ProcessExit(object sender, EventArgs e)
+        private static void ProcessExit(object sender, EventArgs e)
         {
             Portals.SavePortals();
             Chatterbot.SaveChatters();
@@ -158,11 +150,25 @@ namespace MothBot
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
         }
 
-        private Task Ready()  //Init any objects here that are dependant on the client having logged in.
+        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
         {
-            _ = new Chatterbot();
-            _ = new Portals();
+            try
+            {
+                _ = new Chatterbot();
+                _ = new Portals();
+            }
+            catch (Exception ex) { Crash(ex); }
             return Task.CompletedTask;
+        }
+
+        private static void Crash(Exception ex)    //Catch fatal exceptions and safely shutdown the program.
+        {
+            client.StopAsync();   //Prevent further inputs immediately.
+            Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
+                $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
+                $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
+                "Crash logging finished, saving data and shutting down safely...\n");
+            Environment.Exit(ex.HResult);
         }
     }
 }

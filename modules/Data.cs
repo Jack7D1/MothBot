@@ -20,14 +20,12 @@ namespace MothBot.modules
         //END PARAMS
 
         //PATHS
-        // /data/
         public const string PATH_LOGS = "../../data/log.txt";
         public const string PATH_PORTALS = "../../data/portals.json";
         public const string PATH_TOKEN = "../../data/token.txt";
         public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
-        public const string PATH_CHATTERS = "../../data/chatters.txt";
-        // /resources/
-        public const string PATH_CHATTERS_BACKUP = "../../resources/preloaded/backupchatters.txt";
+        public const string PATH_CHATTERS = "../../data/chatters.json";
+        public const string PATH_CHATTERS_BACKUP = "../../resources/backupchatters.txt";
         public const string PATH_GAYBEE = "../../resources/yougaybee.png";
         //END PATHS
 

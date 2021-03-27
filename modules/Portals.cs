@@ -18,7 +18,7 @@ namespace MothBot.modules
             try
             {
                 string fileData = Data.Files_Read_String(Data.PATH_PORTALS);
-                if (fileData.Length == 0 || fileData == null || fileData == "[]")
+                if (fileData == null || fileData.Length == 0)
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
                 foreach (Portal portal in filePortals)
@@ -28,12 +28,6 @@ namespace MothBot.modules
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
                 Logging.LogtoConsoleandFile($"No portal data found at {Data.PATH_PORTALS}, running with empty list of portals.");
-                portals.Clear();
-                return;
-            }
-            catch (JsonException)
-            {
-                Logging.LogtoConsoleandFile($"{Data.PATH_PORTALS} data corrupt, clearing filedata...");
                 portals.Clear();
                 return;
             }
