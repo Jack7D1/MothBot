@@ -1,1758 +1,479 @@
-Ask and you shall receive.
-Demoman takes skill.
-Most items have names longer than "soap".
-Did you know that tossing the clown into a singularity will either increase or decrease its size by a large amount?
-There are at least 11 ways to get through plastic flaps. How many can you name?
-As the Lawyer, you are the last bastion of roleplay-focused jobs. Even the curator got a whip to go fight people with, that sellout!
-As the Captain, you can use a whetstone to sharpen your fancy fountain pen for extra robustness.
-Some people are unable to read text on a game where half of it is based on text.
-Just the tip?
-Do not go gentle into that good night.
-This game is older than most of the people playing it.
-DEATH IS IMMINENT!
-Plenty of things that aren't traditionally considered weapons can still be used to slowly brutalize someone to death, get creative!
-The remake will never come out.
-Sometimes admins will just do stuff. Roll with it.
-Your sprite represents your hitbox, so that afro makes you easier to kill. The sacrifices we make for style.
-The bird remembers.
-The quartermaster is not a head of staff and will never be one.
-This is a game that is constantly being developed for. Expect things to be added, removed, fixed, and broken on a daily basis.
-Sometimes a round will just be a bust. C'est la vie.
-The wizard is supposed to be extremely strong in one on one combat, stop getting mad about it.
-Cleanbot.
-Blobs are weak to fire! Use a flame thrower for maximum damage!
-Space is cold and it will quickly freeze you to death if you don't protect yourself. This isn't how thermodynamics really works but just go with it.
-The more obscure and underused a game mechanic is, the less likely your victims are to be able to deal with it.
-Completing your objectives is good practice, but the best antagonists will strive to do more than the bare minimum to really leave an impression.
-Just like real life the entropy of the game can only increase with time. If things aren't on fire yet, just wait.
-You can win a pulse rifle from the arcade machine. Honest.
-Killing the entire station isn't fun except when it is.
-When a round ends nearly everything about it is lost forever, leave your salt behind with it.
-Sometimes you won't be able to avoid dying no matter how good you are at the game. Try not to stress too much about it.
-To defeat the slaughter demon, shoot at it until it dies.
-Occasionally the tip of the round might lie to you. Don't panic, this is normal.
-Your true value depends entirely on what you are compared with.
-Your temporary financial embarrassment will be relieved in a surprising manner.
-Your talents will be recognized and suitably rewarded.
-Your supervisor is thinking about you.
-Your step will soil many countries.
-Your society will be sought by people of taste and refinement.
-Your sister swims out to meet troop ships.
-Your reasoning powers are good, and you are a fairly good planner.
-Your reasoning is excellent -- it's only your basic assumptions that are wrong.
-Your present plans will be successful.
-Your own qualities will help prevent your advancement in the world.
-Your object is to save the world, while still leading a pleasant life.
-Your nature demands love and your happiness depends on it.
-Your motives for doing whatever good deed you may have in mind will be misinterpreted by somebody.
-Your mode of life will be changed for the better because of new developments.
-Your mode of life will be changed for the better because of good news soon.
-Your lucky number is 3552664958674928.  Watch for it everywhere.
-Your lucky number has been disconnected.
-Your lucky color has faded.
-Your lover will never wish to leave you.
-Your love life will be... interesting.
-Your love life will be happy and harmonious.
-Your life would be very empty if you had nothing to regret.
-Your ignorance cramps my conversation.
-Your heart is pure, and your mind clear, and your soul devout.
-(Your current chick is burned up too!)
-Your goose is cooked.
-Your fly might be open (but don't check it just now).
-Your domestic life may be harmonious.
-Your depth of comprehension may tend to make you lax in worldly ways.
-Your business will go through a period of considerable expansion.
-Your business will assume vast proportions.
-Your boyfriend takes chocolate from strangers.
-Your boss is a few sandwiches short of a picnic.
-Your boss climbed the corporate ladder, wrong by wrong.
-Your best consolation is the hope that the things you failed to get weren't really worth having.
-Your analyst has you mixed up with another patient.  Don't believe a thing he tells you.
-Your aims are high, and you are capable of much.
-Your aim is high and to the right.
-You've been leading a dog's life.  Stay off the furniture.
-You're working under a slight handicap.  You happen to be human.
-You're ugly and your mother dresses you funny.
-You're not my type.  For that matter, you're not even my species!!!
-You're growing out of some of your problems, but there are others that you're growing into.
-You're definitely on their list.  The question to ask next is what list it is.
-You're being followed.  Cut out the hanky-panky for a few days.
-You're at the end of the road again.
-You're almost as happy as you think you are.
-You're a card which will have to be dealt with.
-You'll never see all the places, or read all the books, but fortunately,
-You'll never be the man your mother was!
-You'll feel much better once you've given up hope.
-You'll feel devilish tonight.  Toss dynamite caps under a flamenco dancer's heel.
-You'll be sorry...
-You'll be called to a post requiring ability in handling groups of people.
-You'd like to do it instantaneously, but that's too slow.
-You would if you could but you can't so you won't.
-You worry too much about your job.  Stop it.  You are not paid enough to worry.
-You work very hard.  Don't try to think as well.
-You will wish you hadn't.
-You will win success in whatever calling you adopt.
-You will visit the Dung Pits of Glive soon.
-You will triumph over your enemy.
-You will stop at nothing to reach your objective, but only because your brakes are defective.
-You will step on the night soil of many countries.
-You will soon meet a person who will play an important role in your life.
-You will soon forget this.
-You will remember something that you should not have forgotten.
-You will receive a legacy which will place you above want.
-You will reach the highest possible point in your business or profession.
-You will probably marry after a very brief courtship.
-You will pioneer the first Martian colony.
-You will pay for your sins.  If you have already paid, please disregard this message.
-You will pass away very quickly.
-You will overcome the attacks of jealous associates.
-You will outgrow your usefulness.
-You will obey or molten silver will be poured into your ears.
-You will not be elected to public office this year.
-You will never know hunger.
-You will meet an important person who will help you advance professionally.
-You will lose your present job and have to become a door to door mayonnaise salesman.
-You will live to see your grandchildren.
-You will live a long, healthy, happy life and make bags of money.
-You will inherit some money or a small piece of land.
-You will inherit millions of dollars.
-You will hear good news from one you thought unfriendly to you.
-You will have long and healthy life.
-You will have good luck and overcome many hardships.
-You will have domestic happiness and faithful friends.
-You will have a long and unpleasant discussion with your supervisor.
-You will have a long and boring life.
-You will give someone a piece of your mind, which you can ill afford.
-You will get what you deserve.
-You will gain money by an immoral action.
-You will gain money by an illegal action.
-You will gain money by a speculation or lottery.
-You will gain money by a fattening action.
-You will forget that you ever knew me.
-You will feel hungry again in another hour.
-You will experience a strong urge to do good; but it will pass.
-You will engage in a profitable business activity.
-You will contract a rare disease.
-You will become rich and famous unless you don't.
-You will be winged by an anti-aircraft battery.
-You will be traveling and coming into a fortune.
-You will be Told about it Tomorrow.  Go Home and Prepare Thyself.
-You will be the victim of a bizarre joke.
-You will be the last person to buy a Chrysler.
-You will be surrounded by luxury.
-You will be surprised by a loud noise.
-You will be successful in love.
-You will be singled out for promotion in your work.
-You will be run over by a bus.
-You will be run over by a beer truck.
-You will be reincarnated as a toad; and you will be much happier.
-You will be recognized and honored as a community leader.
-You will be misunderstood by everyone.
-You will be married within a year.
-You will be married within a year, and divorced within two.
-You will be imprisoned for contributing your time and skill to a bank robbery.
-You will be honored for contributing your time and skill to a worthy cause.
-You will be held hostage by a radical group.
-You will be given a post of trust and responsibility.
-You will be divorced within a year.
-You will be called upon to help a friend in trouble.
-You will be awarded the Nobel Peace Prize... posthumously.
-You will be awarded some great honor.
-You will be awarded a medal for disregarding safety in saving someone.
-You will be audited by the Internal Revenue Service.
-You will be attacked by a beast who has the body of a wolf, the tail of a lion, and the face of Donald Duck.
-You will be aided greatly by a person whom you thought to be unimportant.
-You will be advanced socially, without any special effort on your part.
-You will be a winner today.  Pick a fight with a four-year-old.
-You will attract cultured and artistic people to your home.
-You will always have good luck in your personal affairs.
-You will always get the greatest recognition for the job you least like.
-You two ought to be more careful--your love could drag on for years and years.
-You too can wear a nose mitten.
-You teach best what you most need to learn.
-You single-handedly fought your way into this hopeless mess.
-You should go home.
-You shall be rewarded for a dastardly deed.
-You seek to shield those you love and you like the role of the provider.
-You recoil from the crude; you tend naturally toward the exquisite.
-You possess a mind not merely twisted, but actually sprained.
-You plan things that you do not even attempt because of your extreme caution.
-You own a dog, but you can only feed a cat.
-You now have Asian Flu.
-You never know how many friends you have until you rent a house on the beach.
-You never hesitate to tackle the most difficult problems.
-You need no longer worry about the future.  This time tomorrow you'll be dead.
-You need more time; and you probably always will.
-You may worry about your hair-do today, but tomorrow much peanut butter will be sold.
-You may get an opportunity for advancement today.  Watch it!
-You may be recognized soon.  Hide.
-You may be infinitely smaller than some things, but you're infinitely larger than others.
-You may be gone tomorrow, but that doesn't mean that you weren't here today.
-You love your home and want it to be beautiful.
-You love peace.
-You look tired.
-You look like a million dollars.  All green and wrinkled.
-You like to form new friendships and make new acquaintances.
-You learn to write as if to someone else because NEXT YEAR YOU WILL BE "SOMEONE ELSE."
-You have the power to influence all with whom you come in contact.
-You have the capacity to learn from mistakes.  You'll learn a lot today.
-You have the body of a 19 year old.  Please return it before it gets wrinkled.
-You have taken yourself too seriously.
-You have no real enemies.
-You have many friends and very few living enemies.
-You have literary talent that you should take pains to develop.
-You have had a long-term stimulation relative to business.
-You have Egyptian flu: you're going to be a mummy.
-You have been selected for a secret mission.
-You have an unusual understanding of the problems of human relationships.
-You have an unusual magnetic personality.  Don't walk too close to metal objects which are not fastened down.
-You have an unusual equipment for success.  Be sure to use it properly.
-You have an ambitious nature and may make a name for yourself.
-You have an ability to sense and know higher truth.
-You have a will that can be influenced by all with whom you come in contact.
-You have a truly strong individuality.
-You have a strong desire for a home and your family interests come first.
-A pity that it's totally undeserved.
-You have a reputation for being thoroughly reliable and trustworthy.
-You have a deep interest in all that is artistic.
-You have a deep appreciation of the arts and music.
-You had some happiness once, but your parents moved away, and you had to leave it behind.
-You get along very well with everyone except animals and people.
-You fill a much-needed gap.
-You feel a whole lot more like you do now than you did when you used to.
-You enjoy the company of other people.
-You don't become a failure until you're satisfied with being one.
-You display the wonderful traits of charm and courtesy.
-You dialed 5483.
-You definitely intend to start living sometime soon.
-You could live a better life, if you had a better mind and a better body.
-You can rent this space for only $5 a week.
-You can do very well in speculation where land or anything to do with dirt is concerned.
-You can create your own opportunities this week.  Blackmail a senior executive.
-You attempt things that you do not even plan because of your extreme stupidity.
-You are wise, witty, and wonderful, but you spend too much time reading this sort of trash.
-You are the only person to ever get this message.
-You are taking yourself far too seriously.
-You are standing on my toes.
-You are so boring that when I see you my feet go to sleep.
-You are sick, twisted and perverted.  I like that in a person.
-You are scrupulously honest, frank, and straightforward.  Therefore you have few friends.
-You are only young once, but you can stay immature indefinitely.
-You are number 6!  Who is number one?
-You are not dead yet.  But watch for further reports.
-You are magnetic in your bearing.
-You are going to have a new love affair.
-You are fighting for survival in your own sweet and gentle way.
-You are farsighted, a good planner, an ardent lover, and a faithful friend.
-You are fairminded, just and loving.
-You are dishonest, but never to the point of hurting a friend.
-You are deeply attached to your friends and acquaintances.
-You are confused; but this is your normal state.
-You are capable of planning your future.
-You are as I am with You.
-You are always busy.
-You are a very redundant person, that's what kind of person you are.
-You are a fluke of the universe; you have no right to be here.
-You are a bundle of energy, always on the go.
-Write yourself a threatening letter and pen a defiant reply.
-What happened last night can happen again.
-Tuesday is the Wednesday of the rest of your life.
-Tuesday After Lunch is the cosmic time of the week.
-Try to value useful qualities in one who loves you.
-Try to relax and enjoy the crisis.
-Try to get all of your posthumous medals in advance.
-Try the Moo Shu Pork.  It is especially good today.
-Truth will out this morning.  (Which may really mess things up.)
-in eucalyptus trees.
-Tonight's the night: Sleep in a eucalyptus tree.
-Tonight you will pay the wages of sin; Don't forget to leave a tip.
-Tomorrow, you can be anywhere.
-Tomorrow, this will be part of the unchangeable past but fortunately, it can still be changed today.
-Tomorrow will be cancelled due to lack of interest.
-Today's weirdness is tomorrow's reason why.
-Today is what happened to yesterday.
-Today is the tomorrow you worried about yesterday.
-Today is the last day of your life so far.
-Today is the first day of the rest of your life.
-Today is the first day of the rest of the mess.
-Today is National Existential Ennui Awareness Day.
-Time to be aggressive.  Go after a tattooed Virgo.
-This will be a memorable month -- no matter how hard you try to forget it.
-This life is yours.  Some of it was given to you; the rest, you made yourself.
-Think twice before speaking, but don't say "think think click click".
-Things will be bright in P.M.  A cop will shine a light in your face.
-There will be big changes for you but you will be happy.
-There was a phone call for you.
-There is a fly on your nose.
-There is a 20 chance of tomorrow.
-The whole world is a tuxedo and you are a pair of brown shoes.
-The time is right to make new friends.
-That secret you've been guarding, isn't.
-Stay the curse.
-Stay away from hurricanes for a while.
-Stay away from flying saucers today.
-Someone whom you reject today, will reject you tomorrow.
-How unusual!
-Someone is speaking well of you.
-So you're back... about time...
-So this is it.  We're going to die.
-Snow Day -- stay home.
-Slow day.  Practice crawling.
-Save energy: be apathetic.
-Reply hazy, ask again later.
-Ask somebody something.
-Questionable day.
-Perfect day for scrubbing the floor and other exciting things.
-People are beginning to notice you.  Try dressing before you leave the house.
-Of course you have a purpose -- to find a purpose.
-have a lucky day this year.
-Next Friday will not be your lucky day.  As a matter of fact, you don't
-Never reveal your best argument.
-Never look up when dragons fly overhead.
-Never give an inch!
-Never commit yourself!  Let someone else commit you.
-Never be led astray onto the path of virtue.
-Many changes of mind and mood; do not hesitate too long.
-Make a wish, it might come true.
-Love is in the offing.  Be affectionate to one who adores you.
-Look afar and see the end from the beginning.
-Long life is in store for you.
-Living your life is a task so difficult, it has never been attempted before.
-Live in a world of your own, but always welcome visitors.
-Life, loathe it or ignore it, you can't like it.
-Life is to you a dashing and bold adventure.
-Let me put it this way: today is going to be a learning experience.
-Learn to pause -- or nothing worthwhile can catch up to you.
-Lady Luck brings added income today.  Lady friend takes it away tonight.
-Keep it short for pithy sake.
-Keep emotionally active.  Cater to your favorite neurosis.
-Just to have it is enough.
-Just because the message may never be received does not mean it is not worth sending.
-It was all so different before everything changed.
-It may or may not be worthwhile, but it still has to be done.
-Is this really happening?
-Is that really YOU that is reading this?
-Increased knowledge will help you now.  Have mate's phone bugged.
-In the stairway of life, you'd best take the elevator.
-If your life was a horse, you'd have to shoot it.
-If you think last Tuesday was a drag, wait till you see what happens tomorrow!
-If you stand on your head, you will get footprints in your hair.
-If you sow your wild oats, hope for a crop failure.
-365 useless things.
-If you learn one useless thing every day, in a single year you'll learn
-If you can read this, you're too close.
-Hope that the day after you die is a nice day.
-Green light in A.M. for new projects.  Red light in P.M. for traffic tickets.
-Good night to spend with family, but avoid arguments with your mate's new lover.
-Good news.  Ten weeks from Friday will be a pretty good day.
-Good news from afar can bring you a welcome visitor.
-Good day to let down old friends who need help.
-Good day to deal with people in high places; particularly lonely stewardesses.
-Good day for overcoming obstacles.  Try a steeplechase.
-Good day for a change of scene.  Repaper the bedroom wall.
-Go to a movie tonight.  Darkness becomes you.
-Give your very best today.  Heaven knows it's little enough.
-Give thought to your reputation.  Consider changing name and moving to a new town.
-Give him an evasive answer.
-Generosity and perfection are your everlasting goals.
-Future looks spotty.  You will spill soup in late evening.
-Fortune: You will be attacked next Wednesday at 3:15 p.m. by six samurai sword wielding purple fish glued to Harley-Davidson motorcycles.
-Fine day to work off excess energy.  Steal something heavy.
-Fine day for friends.
-Expect the worst, it's the least you can do.
-Expect a letter from a friend who will ask a favor of you.
-Exercise caution in your daily affairs.
-Executive ability is prominent in your make-up.
-Excellent time to become a missing person.
-Excellent day to have a rotten day.
-Excellent day for putting Slinkies on an escalator.
-Everything will be just tickety-boo today.
-Everything that you know is wrong, but you can be straightened out.
-Don't you wish you had more energy... or less ambition?
-Don't you feel more like you do now than you did when you came in?
-Don't worry.  Life's too long.
-Don't Worry, Be Happy.
-Don't worry so loud, your roommate can't think.
-Don't tell any big lies today.  Small ones can be just as effective.
-Don't relax!  It's only your tension that's holding you together.
-Don't read everything you believe.
-Don't read any sky-writing for the next two weeks.
-Don't plan any hasty moves.  You'll be evicted soon anyway.
-Don't look now, but there is a multi-legged creature on your shoulder.
-Don't look now, but the man in the moon is laughing at you.
-Don't look back, the lemmings are gaining on you.
-Don't let your mind wander -- it's too little to be let out alone.
-Don't kiss an elephant on the lips today.
-Don't hate yourself in the morning -- sleep till noon.
-Don't go surfing in South Dakota for a while.
-Don't get to bragging.
-Don't get stuck in a closet -- wear yourself out.
-Don't feed the bats tonight.
-Domestic happiness and faithful friends.
-Do what comes naturally.  Seethe and fume and throw a tantrum.
-Do something unusual today.  Pay a bill.
-Do nothing unless you must, and when you must act -- hesitate.
-Do not sleep in a eucalyptus tree tonight.
-Do not overtax your powers.
-Day of inquiry.  You will be subpoenaed.
-Courage is your greatest present need.
-Communicate!  It can't make things any worse.
-Cold hands, no gloves.
-Chicken Little was right.
-Chicken Little only has to be right once.
-Chess tonight.
-Cheer Up!  Things are getting worse at a slower rate.
-Change your thoughts and you change your world.
-Celebrate Hannibal Day this year.  Take an elephant to lunch.
-Caution: Keep out of reach of children.
-Caution: breathing may be hazardous to your health.
-Bridge ahead.  Pay troll.
-Break into jail and claim police brutality.
-Blow it out your ear.
-Beware the one behind you.
-Beware of Bigfoot!
-Beware of a tall blond man with one black shoe.
-Beware of a tall black man with one blond shoe.
-Beware of a dark-haired man with a loud tie.
-Better hope the life-inspector doesn't come around while you have your life in such a mess.
-Best of all is never to have been born.  Second best is to die soon.
-Beauty and harmony are as necessary to you as the very breath of life.
-Be security conscious -- National defense is at stake.
-get used to it.
-Be free and open and breezy!  Enjoy!  Things won't get any better so
-Be different: conform.
-Be cheerful while you are alive.
-Be cautious in your daily affairs.
-Be careful!  UGLY strikes 9 out of 10!
-Be careful!  Is it classified?
-Bank error in your favor.  Collect $200.
-Avoid reality at all costs.
-Avoid gunfire in the bathroom tonight.
-Avert misunderstanding by calm, poise, and balance.
-Artistic ventures highlighted.  Rob a museum.
-Are you sure the back door is locked?
-Are you making all this up as you go along?
-Are you ever going to do the dishes?  Or will you change your major to biology?
-Are you a turtle?
-Another good night not to sleep in a eucalyptus tree.
-An exotic journey in downtown Newark is in your future.
-An avocado-tone refrigerator would look good on your resume.
-Among the lucky, you are the chosen one.
-All the troubles you have will pass away very quickly.
-Alimony and bribes will engage a large share of your wealth.
-Afternoon very favorable for romance.  Try a single person for a change.
-After your lover has gone you will still have PEANUT BUTTER!
-Advancement in position.
-Accent on helpful side of your nature.  Drain the moat.
-Abandon the search for Truth; settle for a good fantasy.
-A vivid and creative mind characterizes you.
-A visit to a strange place will bring fresh work.
-A visit to a fresh place will bring strange work.
-A tall, dark stranger will have more fun than you.
-Buy the negatives at any price.
-A long-forgotten loved one will appear soon.
-A gift of a flower will soon be made to you.
-A few hours grace before the madness begins again.
 A day for firm decisions!!!!!  Or is it?
-https://media.discordapp.net/attachments/763454488777588780/775845069550387220/moth_clean.gif
-https://imgur.com/eA8a8Ol
-https://media.discordapp.net/attachments/749685303928684614/764608792020254730/moff.gif
-https://cdn.discordapp.com/attachments/326822144233439242/726043051004264479/MOFF.gif
-https://media.discordapp.net/attachments/326826573951008769/756244723156385863/bongo_moth.gif
-https://media.discordapp.net/attachments/733421105448222774/754078987776688319/moff_sphere.gif
-https://imgur.com/iI5pgFo
-https://media.discordapp.net/attachments/326826573951008769/727289334377611344/Dancing_Nar_Nar_2fast.gif
-https://media.discordapp.net/attachments/732602245983633468/736210459463647333/ezgif-4-0feded13951c.gif
-https://tenor.com/view/bees-explosion-fly-flying-bees-explode-gif-17427777
-https://cdn.discordapp.com/attachments/326822144233439242/719191877860982824/borg.gif
-basically how it works is whenever it sees a message it has a 50% chance of saving it
-then theres a 1/16 chance of spitting out a random message it saved
-can be funny!
-and official too!
-https://github.com/Jack7D1/MothBot
-https://cdn.discordapp.com/attachments/618527046527614986/785610277214748692/image0.png
-But does it still give moths?
-https://cdn.discordapp.com/attachments/399999787006689280/788441231733817344/unknown.png
-a loud tie?
-maybe just anything?
-Fortnite foot-worship is beneficial to your mental state.
-well yeah it works across servers bc we got the 1/16 message
-ok i'm gonna go sh*wer now
-if it gets my message @ me
-otherwise we'd have seen one by now since it's practically 1/2
-ngl, that is me when System rebooted at [12/14/2020 5:07:51 PM] System.String[]
-yesterday at 16:53
-hey e, ur bot is cool :)
-crazy idea what if we put !p fart with suction and reverb on the bot
-one time, poly, which is a parrot which uses similiar code to the bot, glitched out and started saying 'or riot' over the radio every 10 seconds
-like, 1 in 4000
-buttbots.
-tee hee. in class
-but fortunately, moff noises
-thanks cozi! I worked hard on it!
-hey <@344496372600406026>
-https://cdn.discordapp.com/attachments/618527046527614986/788740200666497054/Screenshot_20201214_035157.jpg
-hey e, nice bot :) 
-woah-
-what are the chances of 2-in-a-row
-there is a 1/10000 chance of instead of pulling from the chatter log it pulls from the actual logs
-https://cdn.discordapp.com/attachments/464188484043800587/603477102398013441/video_2.mov
-Have you got any ciggys mate?
-isn't boris that one fucking from bendy?? xD
-https://www.youtube.com/watch?v=A7icLdQmkvk
-https://youtu.be/on-5YFBuweI
-https://cdn.discordapp.com/attachments/784569552033808424/788685750627598346/D-hMDaRXoAMrMPD_1.jpg
-https://cdn.discordapp.com/attachments/786450104608751616/787467979788648478/Screenshot_467.png
-did you get the *moth milk*
-https://www.youtube.com/watch?v=Idm4ASlBrUU
-https://www.youtube.com/watch?v=LymnoUBHx2s
-https://media.discordapp.net/attachments/758785319268778064/788886217281634324/gBDtYtUJqq0.png
-https://is2.4chan.org/wsg/1606946642910.webm
-where you spawn a gun, shoot it, and dispose of the gun to spawn a new one
-IIRC, the wiz ones deal 20 brute and 80 stamina
-that's not so bad!
-plus that's a two-shot stamcrit
-you dupe it, moth
-https://www.youtube.com/watch?v=AAGIi62-sAU
-https://cdn.discordapp.com/attachments/784569552033808424/786319015352991754/923095_whygena-draws_sleepover.gif
-https://cdn.discordapp.com/attachments/326822144233439242/789147493124145202/roleplay_justification.wav
-You feel a tiny prick!
-https://www.youtube.com/watch?v=jRB9IU3Vt2g
-oh darn <:breadpensive:629144478241914891>
-https://tenor.com/view/bee-wasp-gif-11094236
-okay, then...
-https://www.youtube.com/watch?v=NRFTsir64Bw
-https://cdn.discordapp.com/attachments/618527046527614986/789239593890349086/image0.jpg
-a proper diagram/blueprint will look nicer but I just have this here for reference
-https://tenor.com/view/well-obviously-sassy-gif-5444908
-https://www.youtube.com/watch?v=OscOGQjvk-Q
-rank!
-https://www.youtube.com/watch?v=lTsIO_bo2P8
-1 quid????
-https://media.discordapp.net/attachments/769731732151861249/787212508070019072/caption.gif
-https://media.discordapp.net/attachments/782655187764248597/787173623156703252/tenor_-_2020-12-07T203038.531.gif
-https://tenor.com/view/flower-bird-hummingbird-gif-5542795
-just got a mic, but I'm still trying to make it sound okay so it might sound too loud
-or too quiet, idfk
-One sec, swallowing eggs
-https://cdn.discordapp.com/attachments/622200209015046220/789544973288472646/Screenshot_20200822-112501_Instagram.jpg
-anashey.aternos.me
-dude gave me full diamonds, god apples and elytras and totems
-we both have troll skins <:trol:703042192498753546>
-Read the sign and please do what I ask <:trol:703042192498753546>
-lol <:trol:703042192498753546>
-but my internet is shit <:trol:703042192498753546>
-won't even connect to my computer <:trol:703042192498753546>
-https://cdn.discordapp.com/attachments/713288731586592798/789558392796479538/video0.mp4
-what if we take over the gc <:trol:703042192498753546>
-https://www.youtube.com/watch?v=-tmY1psrcCs
-was it test?
-in particular the "new and trending" and "top sellers" section is ***usually*** normal
-https://www.youtube.com/watch?v=jyuH0vR5BvE
-me when the impostor is sus!!
-https://cdn.discordapp.com/attachments/390741591200890900/789676333956857876/131398994_452620979465914_7120205015878383669_n.mp4
-https://media.discordapp.net/attachments/710034839608229888/775837442174746644/unknown.png
-https://media.discordapp.net/attachments/710034839608229888/775837484647055360/unknown.png
-no longer want to sprit....
-https://cdn.discordapp.com/attachments/576151558102974484/788820704904609792/video0.mp4
-https://cdn.discordapp.com/attachments/782655187764248597/789743427909713940/uhhh_n.png
-get on -1b-1t
-Salem had enough!
-with instant noodles and bouillon cubes!
-Might just say "Least you could do is say I'm not getting unbanned rather than ignoring the appeal @mods"
-a boomer, if you will
-most likely gonna get stomped, fights and dies for the cause
-https://media.discordapp.net/attachments/660934905215189052/789237468129525760/mothularity3.gif
-Apply sepia lamp to moth-
-https://cdn.discordapp.com/attachments/484803872762757122/788911674219560960/zombo_one_winged_retard.mp4
-according to the global stat page it's like 10-12 max
-https://media.discordapp.net/attachments/660934924920029194/789969788633481216/unknown.png?width=891&height=500
-when the imposter is sus!
-when the impostor is sus!
-https://youtu.be/DsIWVz-YyGQ
-Did you ever play Partners in Time?
-https://www.youtube.com/watch?v=ABpc_oPToQQ&ab_channel=TipsyDuck
-DId you get stuck at the same part?
-Where bowser has to eat that carrot?
-https://youtu.be/fmHEwxYdwcA when you have to fight!
-https://www.youtube.com/watch?v=N6SmC9fHj8k
-cex sells wii games for £1-£2
-2 quid??
-Bet, I'll check it out
-time to get the rom <:trol:703042192498753546>
-anytime you say something in a portal channel;
-can anyone hear me uot there?
-Hewwo?
-you gotta say Ye. if you want it to send
-https://cdn.discordapp.com/attachments/622200209015046220/789997574123552848/74007a2.png
-also i'm like 70% sure im done
-mof bubl!!
-hello!
-https://media.discordapp.net/attachments/409110435900424196/789987851739594763/100490403-3d32e600-312c-11eb-95c0-38c5c379cd67.gif
-okay, it says the light replacer doesn't have a valid icon state...
-catcloseups.png
-https://youtu.be/NCXQJU0ltgE
-Then just a slightly thicker bottom, I think
-thats like, the equivalent of something being a few states over
-zeta i have reliably produced actual flintlock pistols, sabres forged in the 1810s and original newspapers from the 1900s
-like, antiquities are just unreasonably cheap here
-https://tenor.com/view/clown-mask-gif-14665102
-The only weapon I want is the M1921 with the Type C 100 round .45 drum mag
-Because that's **the** gangland thompson
-but eating bananas almost killed him, same goes for eating boiled eggs
-idk, thats what im thinkign of atm
-Bruh, the next goal on cobby's "make medical worse" list is
-In the future? I think not
-When can fucking Syndies just buy Q-Meds
-Look, I would not put it past Cobby
-https://www.youtube.com/watch?v=zMgxb3Srihg
-Can we bring Yuri back? I wanna play Terraria
-doesn't yuri have new friends or something?
-https://youtu.be/bopGf-gJmi4
-Now what does he do?
-Buy it :(
-unfortunate, i mean cool that he still cares but go off
-I need to get the new achievements :(
-the new one?
-tfw commit dog-sitting for friend 
-just play the game <:trol:703042192498753546>
-bluespace syringes.... are a meme
-Anyone got a link to it?
-https://media.discordapp.net/attachments/774679549324558346/790279101931454514/motthhh.png
-que torneo??
-10 coches y o planos :
-ya lo crearon o no?
-looks poggers, didn't know u were making a build
-lo hacemos mas tarde que esten mas ?
-https://www.youtube.com/watch?v=ogKKbevXoh0
-estar*
-a esa hora*
-scheduled tweets. now i can leave the bird app forever
-thanks, moth bot
-That is my irl dog by the way, just took that pic
-https://media.discordapp.net/attachments/770002645858779166/790348868314988595/tumblr_myczsrcM861qa19lvo1_r1_400.png
-small break for now though! <@!206920373952970753>
-just played this one song, burning sands or something
-https://tenor.com/view/letter-m-dance-happy-gif-9063757 https://tenor.com/view/letter-o-gif-9063759 https://tenor.com/view/letter-f-gif-9063750 https://tenor.com/view/letter-f-gif-9063750
-the fat lady has sung, we are now in the act where the two lads in the funny hats and the guy in the pyjama do synchronized dancing
-also congrats, brug has now been declared horngus
-https://cdn.discordapp.com/attachments/772071386524811275/788095727560949800/IMG_20201214_183013_057.mp4
-https://cdn.discordapp.com/attachments/326843254639165441/790360471207149608/Gooseman.jpg
-https://cdn.discordapp.com/attachments/326826573951008769/790360628363264020/pider.mp4
-incorrect it is 00:45 21/12/2020
-now, time to go and commit a sleep
-yes, for i am in my own time
-https://cdn.discordapp.com/attachments/781083070182719489/789287782949322772/video0_25.mp4
-Y es de 1v1 ?
-Equipo hecho ?
-bueno la vida sigue :v
-https://www.youtube.com/watch?v=2GDQ47TPoqM
-what graphics is that?
-that's staying from. the other stuff tho
-pogers.
-https://www.youtube.com/watch?v=6WQZTNb-nbM
-okay, I have had
-Funny, but terrible
-"hey why is the clown going so fast at the bridge-"
-https://www.youtube.com/watch?v=FZmtmXorzVY
-The skates are not unlimited movement, however, except for the debug ones
-don't know how I'd actually code this though, least not currently
-If *not*
-https://www.youtube.com/watch?v=rcVb6l4TpHw
-ok a*erican
-Is it free?
-£3 or som,ethin
-Which their army *still uses*
-https://www.youtube.com/watch?v=brUqmCdofic****
-https://www.youtube.com/watch?v=Yg2BUCaq46s
-https://www.youtube.com/watch?v=QR3kRigz1bw&list=LL&index=1&t=5s&ab_channel=HYPETV
-https://www.youtube.com/watch?v=FLf4o3LLBZ4
-the best droids are droidekas don't @ me
-Though the IG-100 Magnaguards are also *very* cool
-Question, when we say droids do we mean the man sized ones
-Yes, I mean the mansized ones
-We see that a *lot* with the IG-series Bounty Hunter droids
-https://i.redd.it/kqaqnmrmzhy51.gif
-https://cdn.discordapp.com/attachments/540575949469515789/790688967690813461/a1y7pvxkl7461.png
-Hell, a pet arthropod
-a pet locust?
-moth is always correct it seems...
-cuando es el torneito ese??
-lads, i musk ask thee: how does this pre-historic pizza recipe make you feel
-also what, i have heard peope from ireland also call the actual bellpepper paprica
-Also <@612267216414441472> go the fuck to bed
-https://youtu.be/RqBo7iY5Lis
-Yes or no, use an ENB
-define <@!360866281303441408> :grasp:
-damn moth insulted me....
-then pandemic...
-and tbh as a man of science i dont believe its mystical mumbojumbo, BUT
-it can be backwards?
-meanwhile, on fulp
-Furries.
-https://cdn.discordapp.com/attachments/696079105183055902/750824184749490345/video0.mp4
-what color,,,
-"SHUT THE FUCK UP AND LET ME PASS THE TIME YOU-"
-da futre...
-me @ hon
-what*
-tfw honk is late to manly yoga....
-nope, a few seconds off
-the races the players have seen:
-Lewd, synth time
-https://cdn.discordapp.com/attachments/400853681123360768/790803277330776084/Pearl_and_harbor_Marina_in_splatoon.mp4
-https://cdn.discordapp.com/attachments/495074735353364490/790789261023772712/unknown.png
-https://youtu.be/AGqH7EP807A
-defeating one makes the others grow stronger, which is the fight's gimmick
-Beegineer!!
-and there's a feature where if you've already summoned one of the shadowed chess pieces, you can still summon the others with their corresponding marble pieces, even if it's not a new moon
-https://cdn.discordapp.com/attachments/754507600808378418/777131688354119710/anime.mp4
-https://www.youtube.com/watch?v=luY8yFKnSEo
-https://cdn.discordapp.com/attachments/368872108979257346/790929290090774538/video0-2.mp4
-so most cit forks, also added plasmaman genitals
-have i mentioned that im VERY tired and someoen i don't even like is forcing me to watch an anime that, while not bad, I am above
-like. i have better taste than this
-all of the other anime i watch is higher up than this. the good shit. the classics
-damn...
-but thats 1.fucking weird 2. who would do this 3. what would you have to code that reagent as doing to make this worth it if you arent a Real Lemonhead 4. the bartender does not typically have morgue access 5. uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-omegacraft.cl
-damn.....
-maybe I'm just ss13-addled but if any game besides ss13 had a reagents system similar, I would enjoy it
-which are uh,
-the only closed-form goal of engi is really power gen
-https://youtu.be/kKgU3jyR2sQ
-https://www.youtube.com/watch?v=Lbsf8qj015s
-Coomfy moff!
-There, that's better. Know your place.
-https://cdn.discordapp.com/avatars/525509257102098442/a982cca274214d6888a4eb706235f7af.png
-https://www.youtube.com/watch?v=-Qom9g-ZH4Q
-https://www.youtube.com/watch?v=stlfQNzKdbc
-and i have 13 ingame and probably around 1-2 in menus
-https://www.youtube.com/watch?v=SaluuVmnE40
-https://media.discordapp.net/attachments/694294521319653459/787119648771932210/image0.gif
-mmmm, yeh
-https://youtu.be/yIDqKMcL09E let's play spot the ogan
-https://www.youtube.com/watch?v=k15Mxn4tkKg
-also <@!366354153179447317> help
-https://tenor.com/view/bee-gather-honey-insect-fly-gif-11806346
-https://cdn.discordapp.com/attachments/720957929280241706/758775757035798568/video0-173.mp4
-his name is earl, he eats wallnuts and light beer, please feed him once every 4 hours or he gets sad
-ground-up developing species to adapt to the different types of player
-I awaken, had nightmare
-if only I could sleep more than 4-5 hours
-Yeah!
-well, ROLLMOPS but still idk what it called in
-its litterally tied to AM/PM and military time stuff
-we gave me indians corn and were nice i swear....
-well, woiwoidschaft zu heiligenkreuz i belive
-yes, it means litterally "Woiwod-dom of the holy cross"
-YOU SUCCESSFULLY USED YOUR GERMAN KNOWLEDGE <@!217726273403879424>
-https://www.youtube.com/watch?v=6Xpl3heepds last part of the sword and shield review baby
-Which Erika?
-https://youtu.be/Qs9qxhWlbOs
-Media.
-boomer?
-did moth just....
-trollface...
-"Ok, now it can grow and fester????"
-mald is a good friend to me, honestly, but he's got some strong opinions he clings to
-based.
-"hmmyes new server, what will I do first??"
-gaming....
-but ill 100% support the "delete the pol channel" deal
-but yeah ive been called a commie when ive never talked commie talk....
-and what do we do with those people <@!525509257102098442>
-https://zehirgen.glitch.me/
-i will call someone gay and lease the room...
-and if i join then its 100%
-but can new players?
-yeah, newcomers cant
-what the fuck???
-like sorry to say, what the fuck even are your cities
-I recently learnt about HOAs and why?????
-we really like war and we really dont like taking care of vets......
-It was a toss up between:
-good parts about America: 
-If montana split off onto canada, canada would become the 4th strongest nuclear country
-Fun fact: suburban development is my source of income due to my job
-iirc arkansas does too i think?
-why not block moth from general then?
-dm gel <a:AP_ZERO_YAY:791282791580434442>
-Christmas moth!!
-dm me for free nitro!
-https://youtu.be/HMwpmrbo16g
-https://www.youtube.com/watch?v=nsV-nJIt6ek
-merry Christmas <:trol:703042192498753546>
-do you speak insanca?
-I hope you're all doing well, no sad boy
-nvm, thanks tho c:
-https://cdn.discordapp.com/attachments/649552187579432960/652273710136426517/Murray_christmas.mp4
-forgive me lads, for i have gamed, and just remembered a fucking incredibly dumb childhood story and i now desire to share it for no reason in particular
-when i was 3 i was brought to the swimming pool for the first time and i was told i am not allowed to piss in the water (which to this day i can proudly say i have not actually done excepting this singular story) but the way it was worded 3 year old me apparently took it like a riddle of "you have to piss, but you cant do it inside of the pool" so i thought i had to piss before i was allowed in, so apparently according to legend i went over to the edge of the pool (RIGHT NEXT TO 2 LIFE GUARDS) and pulled down my pants and proceeded to piss into the pool from out the pool, resulting in a somewhat older kid panicing in order to get away from toddler-piss being dispensed into the pool, who then proceeded to thrash around wildly and become unable to stay afloat, resulting in one lifeguard having to jump in RIGHT WHERE I HAD PISSED to get him out while the other lifeguard was having a laughing fit.
-and i am deeply ashamed for this but apparently i caused that pool's house rules to change to define their policy on pool-pissing
-then do a 10 to 6 or something?
-well, that works
-https://tenor.com/view/dancing-dance-funny-lizard-animated-gif-17682589
-sciencemas*
-mistake Island?
-https://cdn.discordapp.com/attachments/530902315083759616/792134970230964246/EqBruS6XMAUECyo.png
-https://www.youtube.com/watch?v=8jmptY4uCkk
-https://www.youtube.com/watch?v=EJ55tlBrf7g
-https://www.youtube.com/watch?v=9uWxR0jV7oY
-https://www.youtube.com/watch?v=qs0hrzzGxg8
-plural!
-https://www.youtube.com/watch?v=v2Hr-H07TvY
-https://www.youtube.com/watch?v=JQ4YGnjzitA&feature=youtu.be
-Hark.
-Whag.
-One day I will have my anthromorphic gfs.
-poor, poor (cute) idiot
-https://cdn.discordapp.com/attachments/791809621140308018/791916168667594772/seTIbAWRA8kYfYpu.mp4
-Bug fables, twilight jerry
-https://cdn.discordapp.com/attachments/782655187764248597/792400422978453534/image0.jpg
-https://youtu.be/1ldTCLB8_BM
-installing wurst for 1.8<:trol:703042192498753546>
-12 hours left<:trol:703042192498753546>
-The **KFC**onsole in**KFC**ludes a **KFC**hamber that when **KFC**hicken of any kind is installed the pro**KFC**essing **KFC**apabilities of the **KFC**onsole in**KFC**rease by over seven hunger per**KFC**ent
-the goal? go super freaking fast and do a flyby of eeloo and leave solar system in under 10 years
-cute space buns :3
-https://cdn.discordapp.com/attachments/742637144807309450/789381685565063198/video0.mp4
-https://media.discordapp.net/attachments/742637144807309450/789864889916588062/20201218_140735.png?width=638&height=473
-https://media.discordapp.net/attachments/742637144807309450/790083880329674762/image0-9-3.gif
-https://cdn.discordapp.com/attachments/742637144807309450/783798600912207913/Screenshot_20201202-155538.png
-https://www.youtube.com/watch?v=KVlVlt-yqyo
-https://www.youtube.com/watch?v=22We2SOLV1E
-https://www.youtube.com/watch?v=KEUncjYoZB8
-Hello!
-Thank you very much for inviting me. It is an honor to finally be part of the moth squad
-So many moth emotes ahhhh <:mothsimov:765381026175909989> <:moth:734580459593400372> <:moff:734580477993680936> <:moff:734580477993680936>
-Social Anxiety is no more.
-https://www.youtube.com/watch?v=jlB2QV5wVxg
-soon:tm:
-im being interrogated by someone from the /tg/ discord server because of my pfp
-Where did this come from?
-o mersinde bne ist.
-https://tenor.com/view/ip-address-i-have-your-gif-19396727
-https://tenor.com/view/hld-gif-19345074
-https://media.discordapp.net/attachments/711080583031160947/790021345886994453/image0.jpg?width=415&height=473
-Event?
-Good times.......
-https://www.youtube.com/watch?v=9bh5QctnNeQ&feature=youtu.be
-https://tenor.com/view/hoi4-gif-19076350
-https://cdn.discordapp.com/attachments/702002142835376188/765970208673235015/video0.mp4
-Event? here
-sj 30 + 1
-https://www.youtube.com/watch?v=Do1fN_isFx8
-https://cdn.discordapp.com/attachments/786977497178832918/791790777046532146/image0.jpg
-I made this horrid thing, you're welcome
-moff artist??
-https://cdn.discordapp.com/attachments/557334676952449045/793284654639742986/yclgMv7mJcgCI4oH.mp4
-https://media.discordapp.net/attachments/765547994623377408/793519849321922560/A_stack_of_bees.png
-multiple arc cannons, shit ton of menders, and most importantly two AA slag cannons
-https://cdn.discordapp.com/attachments/379382069501100032/595126248053669888/8d2db7f043b0aafd5c56587f2ebfe6c4.png
-https://tenor.com/view/wasp-bugs-stinger-tarantula-hawk-wasp-scary-gif-15662322
-https://cdn.discordapp.com/attachments/508646573148995594/793575990147940423/Micheal_Davies.gif
-https://tenor.com/view/jschlatt-keyboard-rage-mad-angry-gif-17142883
-https://cdn.discordapp.com/attachments/720957929280241706/793589030235013141/image0-44.png
-parallax go brr, aa guns go schut
-https://www.youtube.com/watch?v=DhpTkhIpykE
-character making skill: 0
-I did it!!!
-Huh, I thought there's a free version somewhere
-Fuck yeah, good game
-Do you play with the mod?
-Enjoy :)
-1 includes crawling, being low to the ground, and being a plastic golem
-https://cdn.discordapp.com/attachments/247795405121650688/793653890565406730/1fa9faf174f567977608ea896a354627bbb503dd5d57d10d027d5f8d265e4284_1.mp4
-horns: gone
-silicon, lead, copper, glass, titanium, graphite, spicy and explosive bricks
-anan oluom =_=
-yok olmuo =_=
-https://www.youtube.com/watch?v=FKmlXeek_3k
-Olm botlar daha iyi Turkce konusuo :D
-knk bi !help yazsana
-https://github.com/Citadel-Station-13/Citadel-Station-13/pull/13923
-like, im pretty sure u can boob orgasm on citcode
-like what.
-https://media.discordapp.net/attachments/659954234212745238/725576588850364466/wf.gif
-https://cdn.discordapp.com/attachments/692561831268712509/754083398674546708/moff_sphere.gif
-yeah I'm horny and?
-https://media.discordapp.net/attachments/738072868839096421/785718766654586891/image1.gif
-https://tenor.com/view/get-real-get-fake-vibri-vib-ribbon-gif-19024856
-https://tenor.com/view/cat-gif-18393013
-https://media.discordapp.net/attachments/783196050621333565/788933679594078228/image1.gif
-https://media.discordapp.net/attachments/388392906634821632/792012689794138122/4vlk55w551761.gif
-deadass?
-https://cdn.discordapp.com/attachments/326826573951008769/793939792877977620/7zcqp5gclc861.png
-https://cdn.discordapp.com/attachments/326822144233439242/793780697491308544/XoLSaWH.png
-time for attempt #3 on guardian of Nuclear Production Complex
-Yeah, hans was just a gimmick character that I kept and now am m
-https://www.youtube.com/watch?v=RtZBtFJiJ80
-https://youtu.be/X4NpBtAu79g
-this one?
-In the background?
-https://www.youtube.com/watch?v=ASgu6KLAmrE
-I don't see any other mice in <#770002645858779166>
-https://tenor.com/view/padoru-padoru-anime-run-fate-series-saber-nero-gif-15979862
-https://www.youtube.com/watch?v=R384hHjphQI
-https://www.youtube.com/watch?v=z0JUqH8EbLU
-Latex and slime = big ew
-and with that, surge alloy, and with that
-Attempt #3 at Nuclear Production Complex will have
-thanks go out to slag, which can be refined into small amounts of thorium, and to vaults being simple to work with in terms of loading/unloading resources
-https://cdn.discordapp.com/attachments/789973761695809543/794094383586082826/image0.png
-it came from mindustry, mothbot
-https://media.discordapp.net/attachments/794209162732896317/794210851228745738/tenor.gif
-u know /srs i'm assuming
-https://media.discordapp.net/attachments/786603989877522432/794221883833974814/098843a7-3a7a-4a29-aa66-6c07c84b4b8b.gif
-https://media.discordapp.net/attachments/786603989877522432/794226204550365204/8f79ef1c-4ae4-4f68-bc82-d6eba5137304.gif
-https://cdn.discordapp.com/attachments/435820415714197526/794000106567237632/kickfliphoexd_134053392_786930968908185_7888627509490190985_n.mp4
-and the added building speed is *extremely* noticeable
-you mean the flammable pyro shit?
-https://cdn.discordapp.com/attachments/622826703663923215/794267482671546378/unknown.png
-https://www.youtube.com/watch?v=ze9hWZ2KCCg
-https://www.youtube.com/watch?v=b4eBWAcz2Xg
-https://www.youtube.com/watch?v=PPn7MMQpvvA
-https://cdn.discordapp.com/attachments/292022558746738689/794209640480112650/32817abfc8f3cf47d9e0a112de0f6e97.jpg
-then we can start our own faction :D
-Happy New Moff!
-Happy New Year!
-komik :d
-so like 11pm-1am my time??!?!?!
-i was going to go to bed but im sobering up before so im not as fucked in the morning?
-which server?
-https://cdn.discordapp.com/attachments/746392317296115723/794414478917632069/video0_-_2020-12-12T184404.113.mp4
-Kim ?
-https://youtu.be/HasEyYR2A_w
-lchest-redemm
-Sen diyince icn proglanlamadim :d
-so many. snowballs
-lancer!
-https://media.discordapp.net/attachments/268832850139152384/781383480802148382/image0-5.gif
-https://media.discordapp.net/attachments/268832850139152384/781383481275973642/image1.gif
-https://tenor.com/view/puyo-puyo-puyo-oceanprince-violence-kill-gif-19542366
-https://cdn.discordapp.com/attachments/618527046527614986/794709048062771240/image1.jpg
-in the meantime, I got the first chapter of my ffic done, wanna give it a quick......READ?
-is t safe?
-Gonna give it a read!
-Thanks Ely :D
-Don't forget to let me know your thoughts, I wanna IMPROOV
-Oh yeah!
-ascii!
-lets face it people were vikings the original tiders/murderboners??
-are all greyshitters descended from the great Genghis Khan?
-problem?
-just leave sans and troll face<:trol:703042192498753546>
-https://cdn.discordapp.com/attachments/618527046527614986/795192975524757504/image0.png
-https://cdn.discordapp.com/attachments/399999787006689280/795256716744196156/20210103_094631.jpg
-Didn't that kinda already happen anyway with that Dream GPS account?
-everyone was pissing and shitting about it tho <:trol:703042192498753546>
-1 speedrunner vs 15,000,000 hunters
-Can the lawyer start farting?
-https://www.youtube.com/watch?v=DrYRpPxBEaU
-snow!
-https://cdn.discordapp.com/attachments/769306277854576670/795540195675471932/FB_IMG_1602889632811.jpg
-https://cdn.discordapp.com/attachments/660934905215189052/795565541783109672/EqzXTQBXEAASNcf.png
-https://www.youtube.com/watch?v=4EJYwboemes
-https://youtu.be/pELWd_C5-kQ
-https://www.youtube.com/watch?v=tBV3-Y_VHDo
-Depends what download <:trol:703042192498753546>
-google drive*
-https://cdn.discordapp.com/attachments/596785192417492994/793808174779858974/video011.mp4
-anyway now I'm watching a 5000$ CPU from 10 years ago
-https://cdn.discordapp.com/attachments/720957929280241706/795302098601771068/e1f0ab0.jpg
-https://cdn.discordapp.com/attachments/675913930585014282/795728925090119710/FB_IMG_1609787061298.jpg
-if it's usb, it should work
-might need custom binds, but it should work
-just an FYI, there's gonna be a geomagnetic storm soonish
-https://cdn.discordapp.com/attachments/451093541687656458/795867012353359942/a.mp4
-https://www.youtube.com/watch?v=TUwY0jnJ75w
-https://www.youtube.com/watch?v=9ayYeLLT8bs
-https://cdn.discordapp.com/attachments/277899348887470080/795953670289621012/image0-110.jpg
-https://cdn.discordapp.com/attachments/695328204008980612/796043190611476480/video0_2.mp4
-https://media.discordapp.net/attachments/621667203867213824/795998404823875614/8fb22c9.jpg?width=596&height=676
-https://www.youtube.com/watch?v=83486UyyB04&feature=youtu.be
-https://youtu.be/VSPuRXkUWoU
-looks like you literally muted that 'slot' it's marked red :P
-https://youtu.be/ZLeMpbRUMso
-https://www.youtube.com/watch?v=RsAuJ1O5V1I
-Just to make sure, you DO enjoy this, <@!720203082784440341>, right? WOuldn't want to actually hurt you.
-https://cdn.discordapp.com/attachments/348225072256909324/795725969952473138/image0.png
-And when there's alot of people, the likelihood of running into shitty people increases
-ALL OF THE BOTS!
-pls roast <@758834342579142687>
-you mean my rates? i do 10 for sketches, 20 for linework and 30 for colouring and shading
-https://cdn.discordapp.com/attachments/512089614702477332/796566090624925716/unknown.png
-https://www.youtube.com/watch?v=hkeCx7AUH0w
-https://www.youtube.com/watch?v=ApQUzY4hsx0
-https://cdn.discordapp.com/emojis/789531235897966652.gif?v=1
-https://media.discordapp.net/attachments/692110514427396156/795423463904509962/speed-59.gif
-https://media.discordapp.net/attachments/638138480303538186/684893685363638302/53e8cd5e60e39e42e98bec630cd95e49.png?width=422&height=473
-https://www.youtube.com/watch?v=zG2XzTfN5WI
-https://www.youtube.com/watch?v=sa7qoPTYltI
-https://www.youtube.com/watch?v=ptoQ86rO0is
-https://tenor.com/view/zingus-cat-kitty-caption-cat-walk-gif-19570879
-fucking based.
-Gamers, i have a backup, just in case
-Am eating breakfast, will be there soon
-https://cdn.discordapp.com/emojis/793002449283579914.gif?v=1
-https://cdn.discordapp.com/attachments/754607431442628700/796930125659635742/video0.mp4
-SCOTT IN FAMILY GUY!!!
-https://tenor.com/view/cell-seinfeld-the-dealership-loooong-gif-george-gif-18758713
-Gambit x Hoka?!?!?!?!?!?!?!?!?
-https://media.discordapp.net/attachments/782655187764248597/783764545126400010/image0.gif
-FORNITE ! YEAH!!!!
-FORTNITE!!!!!!!!!
-troll!!
-windows + delivery optimisation + turn all the % settings up to 100%
-Christ, hope you'll be okay
-https://www.youtube.com/watch?v=NKCoy6AXV74
-https://www.youtube.com/watch?v=I-2DH_MmtHk
-https://cdn.discordapp.com/attachments/689284559803514996/797103754083434516/video0.mp4
-https://cdn.discordapp.com/attachments/720957929280241706/782026957058605087/Komaeda_Laugh_English.mp4
-https://cdn.discordapp.com/attachments/729147984960421918/795483933307306023/48_1.mp4
-https://cdn.discordapp.com/attachments/729147984960421918/795483884745261077/the.trashweasel_20200902_143735_0.mp4
-https://images-ext-1.discordapp.net/external/aAva35kyOcy-Ufqj3EBbtHCm-bxVMFVl-Zuv1IRqXK0/https/media.discordapp.net/attachments/788994796684574720/794619904681705523/image0.gif
-yo shuichi, is hoka funny
-https://www.youtube.com/watch?v=uNVhXiMPSSM
-Ores you say?
-https://www.youtube.com/watch?v=b7Xky01PRGo
-https://cdn.discordapp.com/attachments/371896306211487754/797498701274021888/video0-12.mp4
-https://www.youtube.com/watch?v=cDfD-aHxvx0
-https://cdn.discordapp.com/attachments/790010917743755294/798057360400187402/video0_7.mp4
-https://www.youtube.com/watch?v=1RQGedrvURw
-sometimes, the circle tool isn't what you want when you want to draw a circle haha
-do you?
-https://cdn.discordapp.com/attachments/498447264986169375/798225329361518631/video0.mp4
-https://www.youtube.com/watch?v=xqJ-ujWvu7s
-https://cdn.discordapp.com/attachments/479672895082201109/798109244649242639/image0.jpg
-Does that mean...
-Why not :)
-there <@377842589082058773>
-my channel?
-yo shuichi, is leaff funny
-I was there guys...
-Although, the way I draw some of my characters has changed quite a bit
-rust.gen3discord.com:28015
-mothfolk v final.pdf - Google Drive
-https://drive.google.com/file/d/1M200-YKAbl-nOLo52W--gkXVO6QpmihE/view
-Or at least I didn't, I had to beat her with urban plague level shit
-I just so happen to hate every part of what you sent <@344496372600406026>
-https://media.discordapp.net/attachments/793802766363394068/795372147597639750/40_time.gif
-https://media.discordapp.net/attachments/720957929280241706/798516151813799986/susss.jpg
-https://media.discordapp.net/attachments/740113394501156899/796408940119195678/image0-4-3.gif
-https://media.discordapp.net/attachments/744568839538475029/798477269609349160/unknown.png
-TROL?!?!??!
-https://cdn.discordapp.com/attachments/740226369597866054/798598587898134608/unknown.png
-https://m.youtube.com/watch?v=wGcyKEZtWuE
-https://tenor.com/view/starfish-baby-cute-gif-10355739
-https://media.discordapp.net/attachments/764447332288561152/785044874008985630/glasses_wont_come_off.gif
-smh, picky with recruits
-hey <@!199526086751682560> can you help?
-It isn't even eevee...
-I just wanted eevee <a:pensiveBlob:771494780815278100>
-But the *concept* is good
-https://tenor.com/view/discord-lacuna-genocide-discord-staff-discord-rules-gif-18885596
-oh also!2!1!1!1!
-last year's military budget was around 750 billion ish?
-also <@!151661421845807104> why does your pfp have a similar energy to mine
-Also <@614834112892633108> no school cuz head hurt
-https://youtu.be/nPawQ1mlc8M
-https://cdn.discordapp.com/attachments/530902315083759616/799193782998270012/20210114_083014.jpg
-https://www.youtube.com/watch?v=UQr3mlrwqUE
-Hoo...ray...
-https://www.youtube.com/watch?v=nMdoQXsPAcQ
-https://cdn.discordapp.com/attachments/740113394501156899/799256705300955166/4c02483.jpg
-https://media.discordapp.net/attachments/604841829195841597/756588061839720589/659fe70400181702d933b845b030de4ee60fde6ee27e8a6716dcbb18deb8c047_1.gif.gif
-https://media.discordapp.net/attachments/703995237202133053/788554547420725278/image0-20.gif
-bwuh...
-You wanna join?
-and i would like to say cobby has a very punchable face*
-hit or miss, i guess you never miss huh ;)
-gotta learn how to write firs,t ely
-maybe paper too?
-it crashed?
-did you remember to delete META-INF?
-Whata ya gonna do about it h u h?! Gonna come to my house and tuck me in?
-Maybe give me a smooch goodnight?!!
-makarov instead of .357
-https://cdn.discordapp.com/attachments/775752263981072414/799354091889229884/video0.mp4
-https://cdn.discordapp.com/attachments/162410624998047744/799468576070303754/IMG_20200525_003428.jpg
-actually spessgame is one of the most developed open source games like, ever B)
-source: dude trust me
-based??
-then, when you need to say one of those things mid-combat
-https://www.youtube.com/watch?v=LRsKRShkC_Q
-https://www.youtube.com/watch?v=vYmSzlOtlSE
-https://www.youtube.com/watch?v=ZnpNxjrxyHQ
-https://media.discordapp.net/attachments/416591312792453122/793249042552717333/caption_1.gif
-meh, its like
-character sheet? more like, character shit
-https://tenor.com/view/how-the-hell-rin-kaenbyou-rin-touhou-dance-gif-18443747
-https://cdn.discordapp.com/attachments/455559755466014723/799685251944808498/video0.mp4
-Serra?
-how hurt am I?
-my week? mixed
-https://tenor.com/view/spider-costume-gif-10194077
-ableism.......
-medical technology in dnd world is just, cleric slaps you with heal stick
-moffs*
-its one of those sorts of spells that force the *target* to make a saving throw
-can you be a moth and cast spells?
-https://cdn.discordapp.com/attachments/519330129646977026/794915293620207666/video0.mp4
-thicc...
-great*
-https://tenor.com/view/rip-juice-cry-cat-kitten-tears-gif-15751834
-https://cdn.discordapp.com/emojis/768907306943250472.png?v=1
-broken knee, asscheek stabbed, stabbed in the kidney
-normal hat?
-"Maybe I should just quit."
-"It really is easier to just live alone in the woods..."
-ENCINO THATS NOT WHAT I DID.
-my tts spelled `tts` out as `titty ass`
-consider it this way: you'll have a real cleric*
-speak. now
-crispy audio...
-i had two azuri, but
-That's where I looked <:Him:652674805597732883>
-White Sands?
-ss13 server!
-Rimworld is great, never got too far tho
-Wasp Denethor.
-probably more like 7% tbh
-https://cdn.discordapp.com/attachments/711102858250027040/799796315030290472/ErzV8THW4AUdE23.png
-PETER GRIFFIN?
-https://www.youtube.com/watch?v=HsasMDBP5_c
-ca va?
-Can't have infections if you don't get hurt <:if_there_is_no:611204816642768941>
-https://cdn.discordapp.com/attachments/647643935212175360/800034689213267998/video0.mp4
-https://cdn.discordapp.com/emojis/688582269471948860.gif?v=1
-https://cdn.discordapp.com/attachments/743174615039475888/770617795893264384/cringe_board.png
-https://www.youtube.com/watch?v=bRjepegGnGw
-https://cdn.discordapp.com/attachments/740113394501156899/798033059953377280/ErYHbEuXEAAlnPx.png
-https://cdn.discordapp.com/attachments/782655187764248597/800294014594449428/ok_what.jpg
-https://cdn.discordapp.com/attachments/782655187764248597/800224651233591316/image0.png
-https://media.discordapp.net/attachments/782655187764248597/800062338501050379/image0-200.gif
-https://media.discordapp.net/attachments/702372924308586556/796646316985155614/B9B339345.gif
-https://media.discordapp.net/attachments/613198535399178254/765596194671689758/image0-39.gif
-awwww, little dude's eyes are so shiny.
-This is real?
-gaming <:trol:703042192498753546>
-based <:trol:703042192498753546>
-so cute I'm dragging <@!246645730280865792> in to look at that shit
-https://youtu.be/2o9KfyPqQzY?t=150
-or if you want a game that me n flowunk are already playing, try Library of Ruina
-and also really, really good worldbuilding/lore
-malt you...
-With one weapon at least <:kek:660995652490362901>
-I like cooking in GT:NH
-Welcome to heaven. Enjoy.
-https://youtu.be/zNTaVTMoNTk
-okay <@!151661421845807104> b real how the fuck do we BOTH have side profile scarf
-those are two qualities I share!
-citystate!
-osu rn <:trol:703042192498753546>
-https://www.youtube.com/watch?v=TAj1cuz7jXs
-https://media.discordapp.net/attachments/793802766363394068/795355870921621574/image0-36.gif
-https://media.discordapp.net/attachments/740121594378059850/781865207030087730/image0.gif
-i made one <:trol:703042192498753546>
-Lol<:trol:703042192498753546>
-10 more mins of this meeting <:trol:703042192498753546>
-https://www.youtube.com/watch?v=7YKBW1y4sCw&t
-PEARS SUS!
-what plant?
-https://tenor.com/73vV.gif
-https://tenor.com/view/aston-martin-vulcan-car-gif-15266499
-https://tenor.com/view/anime-pom-weeb-cheer-gif-14967084
-https://cdn.discordapp.com/attachments/620576156613345310/805200904868855848/video1.mp4
-Remember that ? XD
-https://tenor.com/bnTWv.gif
-https://tenor.com/bdBBW.gif
-https://tenor.com/bpXHH.gif
-https://tenor.com/KuNz.gif
-https://tenor.com/badDo.gif
-https://tenor.com/bpAgQ.gif
-https://tenor.com/bbZ3k.gif
-https://media.discordapp.net/attachments/699118848154271839/731012177670176839/image0.gif
-https://tenor.com/bvfDc.gif
-https://tenor.com/xygz.gif
-https://tenor.com/view/mute-im-back-from-my-mute-broly-movie-dbz-caption-gif-19629430
-https://tenor.com/1fip.gif
-either way, be safe online
-https://tenor.com/view/fat-cunt-fat-cunt-angry-gif-16101369
-https://www.youtube.com/watch?v=XQ3BRBh95M4
-Moths?
-https://media.discordapp.net/attachments/779395318209839124/804737127886749706/image0_3.gif
-Cool, and since it's the server you could wright about you or one of the bots
-Could Pancake work at TAM Inc. also?
-humans are 80% water
-I need to invest hol up, I need to see if I can find this
-https://www.youtube.com/watch?v=3yxH2UmE9iU
-https://www.youtube.com/watch?v=Yg166x1JyHc
-https://www.youtube.com/watch?v=zSPYJ33flRQ
-https://images.app.goo.gl/DA2BjX7j7FVZ43pH9
-https://media.discordapp.net/attachments/497928974832369664/792798450390794260/image0-1-1-1.gif
-https://media.discordapp.net/attachments/740113394501156899/810537481152888852/image0.gif
-https://cdn.discordapp.com/attachments/415764106235215873/810316311065657375/so_sad.mp4
-What is this?
-idk i last read it in like, 2013 but sure if i remember i can share
-He didn't put in mothsweeper <a:pensive:611693805120520192>
-https://cdn.discordapp.com/attachments/573711934872879134/810594021797920798/love.mp4
-yes, almost every sentence is foreshadowing
-SPIRIT MOTH DOESN'T MEAN GHOST MOTH, ELY :((
-states isnt a gamer?
-then you are gamer, gottem
-i have the modpack :grasp:
-https://www.youtube.com/watch?v=49Z53eAQNCo
-too ez...
-https://cdn.discordapp.com/attachments/770017260080857108/810606493425860628/EuHeloPUYAM30i6.png
-are you gaming?
-But what if I'm both <:think:649322086841450555>
-granted what i want is: specific gamer in arms, taking a nap
-like I own a CPU,mothboard, case
-its wacky, right?
-is <@!185457485077807105> doing stuff
-Brb hugging, its valentimesday
-Granny openers, here
-NO ?!??????
-consider: ball grease
-Someone do !sus
-real.....
-What does Alaska have?
-https://cdn.discordapp.com/attachments/333182463885049856/810632226135605338/video01.mp4
-https://media.discordapp.net/attachments/472407264700006420/810673307917352970/reverse.gif
-lugig look!
-https://cdn.discordapp.com/attachments/740113394501156899/810846444973195304/video0.mp4
-Mothfriend :3
-i downloaded a persona 4 save file <:trol:703042192498753546> everyones so op wtf
-https://media.discordapp.net/attachments/528927344690200576/803735533934739547/image0-5-1.gif
-can't <:disappoint:809406707830226954>
-on my computer<:trol:703042192498753546>
-https://media.discordapp.net/attachments/740113394501156899/810823956822360094/image0.jpg?width=481&height=473
-https://jackbox.tv/
-https://www.youtube.com/watch?v=uMJ0osZsfZM
-https://cdn.discordapp.com/attachments/414152339293995010/810978410959863878/20210215_215731.jpg
-_p https://www.youtube.com/watch?v=F5x_IsqT3qQ
-https://media.discordapp.net/attachments/733421105448222774/776974548138459136/moffpat.gif
-https://cdn.discordapp.com/attachments/740113394501156899/811020852148568084/noo_i_dont_want_to_be_women.mp4
-WHAT HAPPENED TO **US**
-I need to be busier :(
-the reason I posted both is that I think that the first one is better than the second, but the second one actually lasts longer than 18 seconds
-https://www.youtube.com/watch?v=lSRnoFocYJ4
-https://www.youtube.com/watch?v=stKYx-QSMps
-https://www.youtube.com/watch?v=wvkHIZg_954
-https://tenor.com/view/you-got-it-snowing-dentist-mexico-minion-gif-19502972
-https://media.discordapp.net/attachments/795737609711255573/809065429041152010/16119250550590.gif
-https://www.youtube.com/watch?v=sh2U1TOOynQ
-https://cdn.discordapp.com/attachments/806315062871720016/811112119990222848/99e5c0aa67894ede2e55025a44544fff.mp4
-https://media.discordapp.net/attachments/789160783409053716/802733760823033876/image0.gif
-https://cdn.discordapp.com/attachments/740113394501156899/811265100346294313/image0-14-1.png
-https://cdn.discordapp.com/attachments/806315062871720016/811112119553884190/d9939ce03651d1d6d171aa7e9f2f6d33.mp4
-https://images-ext-2.discordapp.net/external/ab8FOfAF5g8-NE23Qh_8a3DzCJxLycKVMTIQo0aANsc/https/images-ext-2.discordapp.net/external/JB0o4dXUfAlPT8_7mJBrrozCH2IuKXPoX6ArgDqX6MU/https/media.discordapp.net/attachments/567110887622574090/803053720254414908/image0.gif
-https://tenor.com/view/nikocado-avocado-nikocado-orlin-orlin-home-nyoom-gif-17951405
-https://media.discordapp.net/attachments/740113394501156899/811269829558009918/image0.jpg
-https://media.discordapp.net/attachments/406727877246189569/811236163225387058/hate_crime.gif
-do it.
-https://cdn.discordapp.com/attachments/437863525965365249/809461706136092732/Theres_only_one_reason_to_return.mp4
-Didn't he talk about bullying mech users with grenades that one time?
-Yes! That was funny
-so I just don't say anything about it <:disappoint:809406707830226954>
-lol<:trol:703042192498753546>
-https://www.youtube.com/watch?v=a00KtZ8xnu0&feature=youtu.be
-https://cdn.discordapp.com/attachments/806601692363751505/807344607946997770/video0.mp4
-fren lizar :)
-He probably wants to be a halfling, he plays shmalsey characters
-The holy laser beam <:fuck:771838080318963774>
-just uh. I've terraria'd myself out.
-as sg                                  .hg*
-yea, still seems neat
-Also i installed rogue.dll the other day
-nah, just wanted to look at origins and see their exact features
-glass is a good insulator (hint: fiberglass insulation is a thing for a reason)
-Because, simply put
-https://youtu.be/6A5raLXDsmc
-u go blind from the drops?
-https://github.com/Jack7D1/Rimworld-Apini/issues/69
-Me haces un :)
-moth?
-no quiero fumar ;-;
-On my way to play funny space slavery game <@206920373952970753>
-https://youtu.be/h3z-bm8pEeI
-Here, have a fluff
-What does that mean :tragedy:
-Do you make it null?
-Erudite, Architectural Interest
-https://youtu.be/rVD1v7j0HIQ
-Mar bre :)
-https://media.discordapp.net/attachments/763548695907008554/811753071784099900/ezgif-4-0231c5106467.gif
-it survived the worst of re entry!
-first image from perseverence!
-https://i.imgur.com/Opoob5y.jpg
-Moffs on date :)
-Naevi's from BeeStation, isn't she?
-https://media.discordapp.net/attachments/740113394501156899/812091223317282856/Screenshot_2021-02-18_at_2.40.22_PM.png?width=567&height=473
-https://cdn.discordapp.com/attachments/360103749844336640/811310689409826876/video0-32.mp4
-https://www.youtube.com/watch?v=O3349-GRjhQ
-https://cdn.discordapp.com/attachments/517884207117238282/810966274149580891/bruh_2.mp4
-https://youtu.be/TzShf3Xe2n8
-https://www.youtube.com/watch?v=2kp8B3x28pM&t=22s&ab_channel=ItsYaboii_Zac
-Acknowledge, act and IGNORE
-https://cdn.discordapp.com/attachments/657808646880886785/807681184909492274/image0.gif
-and two, I looked in coding general for ath's posts
-Which absorbed mantis, which also broke off of bee
-The host is currently providing the server for Mothbot!
-But at the same time it was an invasion of privacy because he did it without even askin you guys.
-I think Ely just booted him because he just didn't feel comfortable that ath kept doin stuff without actually respectin his opinion, but it could be sorted out easily if you guys communicate it.
-Creador e el fan art: <@761062485478211605>
-https://media.discordapp.net/attachments/804513875227181118/806109525471526952/802427396962648065.gif
-are we safe?
-You are valid for having feelings that were hurt.
-I mean, there's an unspoken rule between friend groups of what's cool and what isn't right?
-So it'd make sense there are some ground rules vocalised.
-https://tenor.com/view/russian-soldiers-russian-soldiers-soviet-russia-dance-gif-10348779
-Hah, I know that feeling.
-Great!
-Ye :)
-Also, why is the rules channel supposedly hidden from new users
-https://projectlounge.pw/tmp/dtlz5zxo50e.gif
-constructive > destructive criticism
-instead what we *can* do is fix it for the future
-GIRL SKIN IN MINECRAFT!!?!?!?!?
-Cant, drinking with dad <:trol:703042192498753546>
-Ill join l8r if youre still vc'ing <:trol:703042192498753546>
-https://cdn.discordapp.com/attachments/576039640075730984/812340904102068296/ObjectsWeCramUpUrAssFreeman.mp4
-how did you even make the sus command?
-Good? Bad?
-very!!
-Could we take a moment to discuss the philosophical impact of amogus?
-ah good, it doesn't
-OH MY GOD IT @ ME
-Alright Gamers, I finished my homework for the next few days, and I've got everything bababooeyed, I can make it on Sunday.
-https://tenor.com/view/snaushsbahyshsa-amide-akbdn-s-gif-18313933
-https://media.discordapp.net/attachments/779162560599162890/810594861098205204/parkergif1.gif
-https://media.discordapp.net/attachments/807725133305348177/807726863924592661/image0.gif
-Why not? Curvy bee, nice fluffy scarf.
-you brought this uppon us, stats
-https://www.youtube.com/watch?v=nBtSNt7OMug
-https://cdn.discordapp.com/attachments/530902315083759616/812828850236686376/unknown.png
-Minecraft<:trol:703042192498753546>
-https://i.imgur.com/MRBShCX.jpg
-https://tenor.com/view/norman-osborn-oh-you-cant-do-this-to-me-spiderman-no-ways-gif-17373736
-YOU **CANT DO THIS TO ME**
-herobrine.
-https://tenor.com/view/ena-gif-18914835
-or .5 idrk
-vc <:trol:703042192498753546>
-you really *don't* want to know
-im on 2b2t <:trol:703042192498753546>
-See you in 30!
-https://youtu.be/eCO3ujxgVHQ
-https://cdn.discordapp.com/attachments/572395969954578441/813104507437187072/video0.mp4
-Is this real? I mean I know theres parodies of ben but
-https://cdn.discordapp.com/attachments/432178579690881035/813114098891227197/image2.gif
-https://cdn.discordapp.com/attachments/682040935403618438/813107710769233980/Latin.mp4
-https://youtu.be/0_XVUlu3Zwg
-https://cdn.discordapp.com/attachments/740113394501156899/813181908250787930/X2ffWdBHj_gbrJzC.mp4
-mof/lizard body <:mothflushed:745401792065437797>
-Why live?
-You gotta break the lil jar and free em! <@!720203082784440341>
-design ig?
-https://cdn.discordapp.com/attachments/770017260080857108/813367810251948092/1595712685675.png
-https://i.redd.it/4h0i2lwljfi31.jpg
-https://i.imgur.com/KvUF24l.jpg
-https://i.redd.it/aluc511sbc031.jpg
-https://i.redd.it/1vz6hbbzm1631.jpg
-https://i.redd.it/jxj83gk795f31.jpg
-like, fancy leather boots but all fucking scuffed due to being used as work boots
-I only polished my fucking parade boots when I had to, any leather footwear that I own for casual stuff never gets done
-Me siento orgulloso :,)
-Asumare :0
-https://www.guilded.gg/i/bEz0RL5k
-Ewen <@!471389206900375553>
-https://cdn.discordapp.com/attachments/157973774631698432/813532849331372082/video0.mp4
-poopdark.
-Guided is discord but piss<:trol:703042192498753546>
-pisscord with ***free emote gifs***
-which is so subtle you wouldnt notice if, but is actually really nice and noticeable once its pointed out
-also you remember how i mentioned the water?
-by just adding noise and jumble tool shit ot a reflection?
-fortnite?
-anyway yes time to commit sleep, gn
-https://cdn.discordapp.com/attachments/532646533087363093/562694663593525258/Screenshot_2019-03-27-21-41-302.png
-Can someone put like a clown car rampage to this?
-but even then, the people who'd also use both would just likely end up on discord too
-i feel like, big games that have communities on discord would work decent with guilded
-the criticism*
-however the file size limit isn't a problem, pretty sure that's high
-new and better platform, even if other people moved over
-https://www.guilded.gg/i/MkdAQAKp
-Guilded <:trollcringe:798662857955737671>
-https://cdn.discordapp.com/attachments/212597110770630656/813636595844120586/video0.mp4
-https://www.youtube.com/watch?v=ZZujisNZuw0
-so fuck him, i'm not letting him do it a third
-Who is Troy McClure?
-so what?
-https://m.youtube.com/watch?v=Fsrb1IlPTxY
-Can we get a mof tier list???
-https://cdn.discordapp.com/attachments/789999799792959488/801424956508209172/image0-11.gif
-"im worth atleast 19.99$"
-https://cdn.discordapp.com/attachments/621823918033993738/813512410748289034/video0.mp4
-https://tenor.com/view/aliens-i-want-to-believe-spaceship-mothership-ufo-gif-9472798
-stop being on the spectrum <:trollol:747054901011415074>
-anan!help
-https://cdn.discordapp.com/attachments/682441433298239494/812276857671778304/video0_13.mp4
-Uh oh, gamer
-pod people 1.0
-https://media.discordapp.net/attachments/705679956021215264/814219672479596604/unknown.png https://cdn.discordapp.com/attachments/705679956021215264/814219748124524594/unknown.png
-"Angels are human." does not state anyone else as human
-also, this is progressively getting funnier
-because <@!344496372600406026> was born on the year 0
-Do you consider Creation Club DLC?
-https://cdn.discordapp.com/attachments/714335267053502576/814212247991615488/video1.mp4
-https://cdn.discordapp.com/attachments/740113394501156899/814278548000735252/image0.png
-"A mouse trap. It's supposed to be like a trap from among us!"
-ross > ross 2 > gambit
-https://cdn.discordapp.com/attachments/676635519463063552/813955363249717288/video0_64.mp4
-istesem de atamam zaten .d
-To bet!
-sus like among us!!!
-https://tenor.com/view/noluyo-lan-noluyo-day%C4%B1-noluyo-lan-he-uyanan-day%C4%B1-gif-18242774
-https://cdn.discordapp.com/attachments/797271513400344628/814418011137376316/italy.mp4
-https://www.youtube.com/watch?v=fS11U9_CSCM
-that's 2:25 so like 6 or 7 for you or something
-https://cdn.discordapp.com/attachments/740113394501156899/814491342515339314/video0.mp4
-https://cdn.discordapp.com/attachments/740113394501156899/808615580013297694/xBPP4wl-pIGcA2jc_1.mp4
-https://tenor.com/view/irony-hub-jefferson-cut-gif-19731378
-https://media.discordapp.net/attachments/781610364437135382/814496548801085500/image0-349.jpg?width=481&height=473
-damn babe that's so poggers \*cups my hands around your balls*
-Why is M.O.T.H. horny for this shit
-just mute the teacher or something <:trol:703042192498753546>
-my wife <:trol:703042192498753546>
-that's not jerma?
-https://tenor.com/view/longest-name-gif-7519562
-https://cdn.discordapp.com/attachments/541708356122050571/814576363645698048/among-us-tattoos-fb.png
-Faltas tu por q eres morado :D
-Tengo abrigo como es posible >:o
-YA DEJATE DEL CIRCO WUE >:V
-Agarrenemos a madrazos Joto >:v
-Pero como ._.?
-https://media.discordapp.net/attachments/740113394501156899/813456215937908737/4yzg1p.gif
-https://media.discordapp.net/attachments/740113394501156899/813456225735016488/4yzg6o.gif
-https://cdn.discordapp.com/attachments/708715309107904526/813082955190501446/Senko.mp4
-https://www.youtube.com/watch?v=wA_-y9SGUBg
-how long do you think ur gonna last before getting banned lmao <@!315583881124380674>
-https://www.youtube.com/watch?v=HOdi5PpsVNs
-For the Wii or NES?
-https://www.youtube.com/watch?v=Hkdf7SEiQFE
-https://youtu.be/YrCTHodtzb4
-https://youtu.be/YImQl5jyUW4
-Chad troll?
-you are unable to say that due to the melanin, or lack thereof in your skin.
-https://youtu.be/EK7o0kKidNk
-yo <@!377842589082058773> you check my guilded profile recently btw
-Black power ranger <:funwaa:772150374269976586>
-https://media.discordapp.net/attachments/744571374206713866/814793940724744192/unknown.png
-now he just does lore right? so its just kinda shitty
-https://youtu.be/I8GQ-K89614
-also Arceus game finally!!!
-https://cdn.discordapp.com/emojis/791800541483237416.gif?v=1
-https://cdn.discordapp.com/emojis/719197666927575061.gif?v=1
-https://cdn.discordapp.com/emojis/706651566794604605.gif?v=1
-https://cdn.discordapp.com/emojis/706651597471481926.gif?v=1
-https://cdn.discordapp.com/emojis/719215117983678566.gif?v=1
-https://media.discordapp.net/attachments/795323735728455771/797569712045293568/ezgif-7-92ea5d911635.gif
-https://cdn.discordapp.com/emojis/704292890788102225.gif?v=1
-Benim botum ekler misin www. discord.ly/kolay-bot
-Poor Taro, woke p on time
-sure <:trol:703042192498753546>
-https://tenor.com/view/famarasmashplayer-gif-18615625
-_p https://youtu.be/gkTb9GP9lVI
-same<:trol:703042192498753546>
-Now that Daft punk broke up we dont need france anymore <@!377842589082058773>
-but it'll be funny<:trol:703042192498753546>
-my son emergency buttoned and now im on trial for abuse and murder!
-https://media.discordapp.net/attachments/740113394501156899/814141124833837184/image0.gif
-https://media.discordapp.net/attachments/729504711677444177/747288196530044928/IMG5894438944645830736.gif
-https://tenor.com/view/crying-hamster-cry-tears-wipe-tears-gif-16276044
-https://tenor.com/view/booboo-honey-gif-20499560
-https://media.discordapp.net/attachments/740113394501156899/811263105656160296/image0-73.gif
-https://cdn.discordapp.com/attachments/683618854576193568/774115584794689556/image0.gif
-on the server?
-https://youtu.be/kuf3AgjUcyk
-btw yall know roughly what this movie is, yes?
-fun fact, everyone was naked for this scene, including camera crew and director.
-yes, stats
-will you be there?
-nice, stats
-also, officer is absolute gamer
-when does the summer sale start?
-https://cdn.discordapp.com/attachments/609073992833433620/814537617579704361/video0-5.mp4
-haha piss...
-https://www.youtube.com/watch?v=G6rJ-PXxUmk
-https://media.discordapp.net/attachments/740113394501156899/812079839699140659/image0.gif
-Different server?
-Can I have a aomine simp role <:emoji_5:814680145201332246>
-https://www.youtube.com/watch?v=lSt9Z7WHfdE
-https://youtu.be/lCVu2C8dc-U
-we should play jackbox<:trol:703042192498753546>
-https://tenor.com/view/curious-cat-cute-gif-12968403
-https://www.youtube.com/watch?v=qaXBE3OLzrc
-https://www.youtube.com/watch?v=WVcx29q3ey4
-foundry.png
-https://www.youtube.com/watch?v=8dDrssQhnvI
-Al pet <@736484255282102352>
-yeah ok buddy i dont see a 200% completion rating
-I logged onto my old Amino account *shiver*
-webpanel.norsbot.xyz
-212 bot .d  ?
-gg <:trol:703042192498753546>
-just, absolute gamer of a teacher
-It sounds so...
-i mean, T'IS ROBOTIC CAMERA WITH FEET
-sorry, not feet
-gaming rn<:trol:703042192498753546>
-Look, no touch
-Art by <@!246645730280865792>
-touch your lamp?
-Thanks! Fun session :)
-and like, break the tower
-https://www.youtube.com/c/CasualNavigation/videos lonk
-i changed it lmao <:trol:703042192498753546>
-helLO!
-https://cdn.discordapp.com/attachments/759192495782625292/815979756147179550/Maxamillion.mp4
-Wilbur or Dream?
-the bodies 52.376552,5.198303
-goteem*
-little changes<:trol:703042192498753546>
-WTF SH4DOWY?!
-also eve invite kate to the server cringe man <@481398331130511371>
-among us?
-hi <@!379717926883688449>
-did you call in  the vent channel or something?
-its you.
-quick, whats the half life of uranium-238
-1016 W Flagler St, Miami, FL 33130, United States
-you tryna break it off with your girl for a smaller chick?
-dw ;)
-"chillin, hbu?"
-https://tenor.com/view/walter-white-breaking-bad-sad-crying-phone-gif-20022348
-Can I join your server?
-white, brown, grey, what you need?
-course, forever and ever
-https://media.discordapp.net/attachments/721548426960961649/782526458986758144/image0.gif
-https://cdn.discordapp.com/attachments/776892708899258388/815928992422821888/video0.mp4
-Ill only do it if im streaming: flooosh:
-so why am I being advertised to people?
-also I dont know if ***he*** wants to be here
-https://cdn.discordapp.com/attachments/667057945233850379/816088430009253888/muted.mp4
-https://cdn.discordapp.com/attachments/659630509894271001/815683441504288868/control.mp4
-his virginity?
-Is he all white?
-yes, am female
-right?
-Gambit you're my special *little man*
-Mans boutta say, 5'4
-about to join vc and then leave<:trol:703042192498753546>
-egg chris?
-what do you do?
-Question is, how are you?
-but like <@!344496372600406026> what
-Take care of yourself man :)
-remember when you watched tellytubbies?
-Today on the 7:30 o'clock news: <@!471389206900375553> hates tellytubby children, <@!614834112892633108> is unboxing csgo crates, <@!344496372600406026> is still flying a ship, <@!382570718660919296> is hacking, <@!377842589082058773> is playing valorant and<@!472901716723892248> is saying based for the 50th time in the last minute.
-https://cdn.discordapp.com/attachments/505818199749558290/816392788001161317/image0.jpg
-Pog :D
-It was a flash game?
-bigrat.monster
-https://discord.new/MQHKHCvPR6my
-https://tenor.com/view/gypsycrusader-paul-miller-pogchamp-gif-19438856
-https://www.youtube.com/watch?v=7za0ySy3Igc
-that's what he was arrested for according to the article?
-a dance of fire and ice?
-that game u were playing yesterday?
-https://media.discordapp.net/attachments/534293272701435931/648967476234813460/undertale_text_box-1.gif
-Modest!
-I have a feeling every predator tries to eat *one*
-Solid 60%+ chance its fake
-Chemist moff is wave!!
-Illegal!!
-The plunger is the best facemask!
-Papodorito!
-have you ever done an etheral?
-speaking of moffs, i have a weeb moff
-remember, as long as you practice, you'll get better
-oh yea, speaking of which
-comms?
-motha t home:
-is that you?
-https://youtu.be/cfJE4g55Cm0
-do you still talk to this person <@!382570718660919296>
-https://youtu.be/voYG2NrU5iQ
-https://cdn.discordapp.com/attachments/781610364437135382/816779253114077234/video1-1.mp4
-better*
-i can pay in another way ;3
-you didn't know?
-yo is this the penis store?
-Remember seprios?
-DO YOU WANT ONE OR NOT?????????
-does it mean based?
-thank you :(
-What's your YTMND username?
-can't be, i'm thin af
-Hola alguien con vida ? <a:RewardsKingdomWumpus:789832500863565825>
-https://cdn.discordapp.com/attachments/699727870846697496/770706333095428137/poormoth.mp4
-apologies*
-yo u up to play?
-etas?
-estas?
-just ok?
-ip is different?
-Is it murder? Is it a very inappropriate scene? We may never know
-https://www.youtube.com/watch?v=mfJZ8R0Dy6g
-Aaaa squeaky!!
-https://cdn.discordapp.com/attachments/813847229835116595/816862410891722792/20210303_211512.jpg
-Non humn..... Bad......
-https://cdn.discordapp.com/attachments/588795696761536512/816914929478402048/WOAH.mp4
-https://cdn.discordapp.com/attachments/815149329894998026/816221695068471356/standard_2.gif
-np c:
-i do <@!144308736083755009>
-you still improved by 9 seconds, keep going until 1 30
-https://tenor.com/view/as-text-animated-text-gif-17645974
-https://media.discordapp.net/attachments/763666290006687756/793971408660070450/mavi_tik.gif
-https://discord.com/assets/893165570015b53aad1a6999d13ea7d8.svg
-https://www.youtube.com/watch?v=thxdP2BDI4g
-there are also side games such as Touhou 14.5, 15.5, 12.5, 12.8, etc etc
-Yeh, sorry I was at work yesterday and I forgot to pm erryone
-You're downtime time may vary, but think of something your character will do in their free time that might progress to a learning a feat, studying a spell, communicating with patrons, etc etc.
-typeracer?
-thats a neat idea then!
-how much is electricity in kw/h where you live??
-fool, i dont want it to be true
-schedule your own time?
-until then, just every so often open the downloads section and hit all these buttons:
-as hg,
-give <@777970229824978944>  20
-https://cdn.discordapp.com/emojis/436677926398853120.png?v=1
-5221 tl harcamam yokmu ?
-just checking!
-https://media.discordapp.net/attachments/604732995433267200/797640654544830485/1.png <@!104955761486012416> beevee
-https://www.youtube.com/watch?v=4tFyuk4-uDQ
-fingers crossed, she's at 147 health
-https://images-ext-2.discordapp.net/external/rKUt7kzZhKKxnKd4Nz2q4JmvCgrUARFe5G0hAL0Ap_8/https/media.discordapp.net/attachments/740113394501156899/815647859469713419/image0.png?width=344&height=473
-hey, you didn't want antman torch a dragon so you good
-ho you actually did Yan?
-Including the one to ERP <@!151661421845807104> <:moffflooshed:793888459046780929>
-show?
-download the mod<:trol:703042192498753546>
-Noldu ?
-Komikmi ?
-Aww thx ^^
-https://cdn.discordapp.com/attachments/432178579690881035/817770341472403466/cat_asshole.gif
-https://cdn.discordapp.com/attachments/812271483962785792/816666343738048543/ezgif.com-gif-maker.gif
-73 once I get my hands on states <:handl:762342323153272904><:handr:682005697340375086>
-https://media.discordapp.net/attachments/740113394501156899/811979767548346368/image0-63.gif
-https://cdn.discordapp.com/attachments/781610364437135382/817573418530111508/image0-116-1.png
-https://media.discordapp.net/attachments/296056831514509312/755908199151960195/image0-1-1.gif
-The mouse is your primary method of surveying the battle, selecting units and structures, and issuing orders.
-To pan the camera, simple move the mouse pointer to the edge of the screen. Do this now.
-You can zoom in on something to see it up close by spinning the mouse wheel forward. Do this now.
-{WHEN SQUAD CAP IS REACHED} To increase the number of Squads you can field in Dawn of War, you click on the research items located on your Stronghold.
-Remember, holding Strategic Points increases your Requisition Resource. Without sufficient Requisition Resource, you cannot build the force you need to ensure your dominance of the battlefield.
-https://www.homestuck.com/images/storyfiles/hs2/02828.gif
-Mario gonna be incorrectly framed, charged, and executed for defacing a government monument by the Piantan dictatorship put in control of Isle Delfino by the CIA after the Piantans democratically elected a Socialist to their presidency
-https://cdn.discordapp.com/attachments/605890709953970183/818052641115340800/20210306_081142.png
-the Chad Teddy Roosevelt: gets shot and continues his speech anyways
-https://tenor.com/view/your-house-24hours-explosion-workfrank-risk-universalis-gif-18533596
-hell 2 <:trol:703042192498753546>
-https://cdn.discordapp.com/attachments/797902824267972688/818163628951207956/video0-121.mp4
-https://www.youtube.com/watch?v=A2aR-tnD8g0
-https://www.youtube.com/watch?v=QdO4SCrffy8
-https://cdn.discordapp.com/attachments/740113394501156899/818546614657876048/image0.jpg
-SNAKES CAN'T BE FAT-
-Yeah !
-connect 4 <:trol:703042192498753546>
-https://www.youtube.com/watch?v=_o6VJ4Z9Sqw
-currently employed as librarian by ~~rei ayanami~~ a murderous and dubiously genocidal ai-turned-human with daddy issues
-https://cdn.discordapp.com/attachments/740113394501156899/818819594663231508/video0.mp4
-Pellicud hawk moth!
-https://images-ext-2.discordapp.net/external/l7b0kkU_Aylx7VIJqaJOM_VHp3ivWZpvWmE-cgFFa_s/https/static-cdn.jtvnw.net/jtv_user_pictures/a4ff7ce8-f26a-4331-bbac-4db6831267d1-profile_image-300x300.png
-i also get told to 'get off that now', *that* referring to my insulin pump
-have some friends :)
-https://cdn.discordapp.com/attachments/469316956412051476/817221865952378880/abs.mp4
-Please address me as Moff/Moth
-arcaea?
-https://media.discordapp.net/attachments/564544696995676177/677517102877507594/emote.gif
-You bet!
-https://tenor.com/view/departure-gif-19473779
-he actually might have i was afk <@!472901716723892248>
-https://youtu.be/u16rulOIlkc
-Cake check *cuts off arm*
-Good. primary systems still functional
-https://cdn.discordapp.com/attachments/435343167722881025/819337428502315059/1615256211844.webm
-https://youtu.be/N5QYijFfOaQ
-Defo gonna do it with her <:trol:703042192498753546> <:trol:703042192498753546> <:trol:703042192498753546>
-me when mom say burger king for dinner (i like bruger king*
-i dont have the fastest pc already, so adding a recording on top of that might end bad
-March 20th 7pm you pick the game.
-id commission more if i had anything i wanted. 
-https://store.steampowered.com/app/935940/Croquet_Pro_2/
-I understand! Please don't feel the need to commission me or encourage others to do so
-youre gonna be big aspev, i just know it
-was worried !
-game takes place in russia so we are fine <:clueless:567901955574202419>
-Which is defined as a mental illness...
-moral*
-morale =/= moral
-imminent 40% joke
-that was the best strea, though
-THE ONE THING YOU SHOULD TAKE SERIOUS FOLLOWS THIS MESSAGE: (Don't take anything i say too seriously, this does not apply to this law"
-Mothperson on a 12th or 13th century Mimbres-Pottery style plate.
-https://tenor.com/view/epic-embed-fail-ryan-gosling-cereal-embed-failure-laugh-at-this-user-gif-20627924
-https://pyx-2.pretendyoure.xyz/zy/
-https://tenor.com/view/dog-mouth-funny-doggo-get-tf-outta-here-gif-17940358
-Just that one?
-you know it right?
-And you know what's next to that church?
-rule 9 is the most enforced rule :DDDDDDDD
-https://cdn.discordapp.com/attachments/711808075643748393/820028944685203507/80230967_488005115165914_3853435002884718592_n-1-1.mp4
-https://cdn.discordapp.com/attachments/482273961430876191/820062061228195840/Jew_Know_It.png
-I bet :4
-literally water + power -> thorium don't question it it just works
-https://cdn.discordapp.com/attachments/659954234212745238/820149889311703040/toroidal_piece_of_shit.gif
-im going to make a new word that the whole Hispanic community <:trol:703042192498753546>
-https://youtu.be/eLMhjrp-oB0
-https://cdn.discordapp.com/attachments/653279604491943936/817370076935225364/video0-279-1.mp4
-https://tenor.com/view/catch-and-release-pufferfish-blowfish-nah-vm-nevermind-gif-16501777
-https://tenor.com/view/cord-gregcord-jakecord-starfish-lillicord-gif-18308249
-For me it was ||The traitor lord, his two mask hits and super fast movement just destroyed me||
-https://media.discordapp.net/attachments/661301296648814601/818680466932367380/bug.gif
-can you do it again?
-Most I remember was uber muscle and it was spoiled, idk maybe something new ae
-https://www.youtube.com/watch?v=mbCHT8nx608
-want it?
-our ??????????
-Is anyone interested in playing jackbox?
-https://media.discordapp.net/attachments/451093541687656458/792860657182834738/what.gif
-https://cdn.discordapp.com/attachments/224191655375273985/800429271239098378/StargateMaterials_v2.png
-And for that I died, trapped in a prison of my own making...              ... At least until 5 to 21 days have passed
-I mean, you can, in theory, survive the bus.
-https://www.youtube.com/watch?v=ctxfE7niGsk
-https://media.discordapp.net/attachments/142480770265513984/819313629928357918/pnzisnuinok.gif
-people tried to say that dream merch > adidas
-innit? is that an mcyt reference
-a crown? is that an mcyt reference?
-Suicidal bitches!
-Reset your modem. When you reset your modem, this will also reset the IP address. ...
-Any other facts?
-Variant ranger, and no Kiro, it doesn't sit well with me, do it with another DM, but we've argued this since yesterday and the answer has been stuck as no
-If you wanna blame me for leaving, take that to encino
-https://arcaneeye.com/players/dnd-5e-races/aarakocra-5e/
-I don't recall exactly but I think Eris is even more broken than that.
-https://cdn.discordapp.com/attachments/326826573951008769/824827951811002368/moth.png
-remember this <@!344496372600406026>
-My school hasn't adapted to the hour change so technically you started 1 hour early for me
-Ho you weren't talking to me
-https://media.discordapp.net/attachments/479672895082201109/805978587417149460/cirnoBALLIN.gif
-I mean this in the nicest way possible, this makes me want to throw a cup at your head
-https://media.discordapp.net/attachments/551522150822051872/825067771716698182/3422.gif
-the only one that's usually relevant is if someone misses me I can redirect their hit unto someone else
+A few hours grace before the madness begins again.
+A gift of a flower will soon be made to you.
+A long-forgotten loved one will appear soon.
+Buy the negatives at any price.
+A tall, dark stranger will have more fun than you.
+A visit to a fresh place will bring strange work.
+A visit to a strange place will bring fresh work.
+A vivid and creative mind characterizes you.
+Abandon the search for Truth; settle for a good fantasy.
+Accent on helpful side of your nature.  Drain the moat.
+Advancement in position.
+After your lover has gone you will still have PEANUT BUTTER!
+Afternoon very favorable for romance.  Try a single person for a change.
+Alimony and bribes will engage a large share of your wealth.
+All the troubles you have will pass away very quickly.
+Among the lucky, you are the chosen one.
+An avocado-tone refrigerator would look good on your resume.
+An exotic journey in downtown Newark is in your future.
+Another good night not to sleep in a eucalyptus tree.
+Are you a turtle?
+Are you ever going to do the dishes?  Or will you change your major to biology?
+Are you making all this up as you go along?
+Are you sure the back door is locked?
+Artistic ventures highlighted.  Rob a museum.
+Avert misunderstanding by calm, poise, and balance.
+Avoid gunfire in the bathroom tonight.
+Avoid reality at all costs.
+Bank error in your favor.  Collect $200.
+Be careful!  Is it classified?
+Be careful!  UGLY strikes 9 out of 10!
+Be cautious in your daily affairs.
+Be cheerful while you are alive.
+Be different: conform.
+Be free and open and breezy!  Enjoy!  Things won't get any better so
+get used to it.
+Be security conscious -- National defense is at stake.
+Beauty and harmony are as necessary to you as the very breath of life.
+Best of all is never to have been born.  Second best is to die soon.
+Better hope the life-inspector doesn't come around while you have your life in such a mess.
+Beware of a dark-haired man with a loud tie.
+Beware of a tall black man with one blond shoe.
+Beware of a tall blond man with one black shoe.
+Beware of Bigfoot!
+Beware of low-flying butterflies.
+Beware the one behind you.
+Blow it out your ear.
+Break into jail and claim police brutality.
+Bridge ahead.  Pay troll.
+Caution: breathing may be hazardous to your health.
+Caution: Keep out of reach of children.
+Celebrate Hannibal Day this year.  Take an elephant to lunch.
+Change your thoughts and you change your world.
+Cheer Up!  Things are getting worse at a slower rate.
+Chess tonight.
+Chicken Little only has to be right once.
+Chicken Little was right.
+Cold hands, no gloves.
+Communicate!  It can't make things any worse.
+Courage is your greatest present need.
+Day of inquiry.  You will be subpoenaed.
+Do not overtax your powers.
+Do not sleep in a eucalyptus tree tonight.
+Do nothing unless you must, and when you must act -- hesitate.
+Do something unusual today.  Pay a bill.
+Do what comes naturally.  Seethe and fume and throw a tantrum.
+Domestic happiness and faithful friends.
+Don't feed the bats tonight.
+Don't get stuck in a closet -- wear yourself out.
+Don't get to bragging.
+Don't go surfing in South Dakota for a while.
+Don't hate yourself in the morning -- sleep till noon.
+Don't kiss an elephant on the lips today.
+Don't let your mind wander -- it's too little to be let out alone.
+Don't look back, the lemmings are gaining on you.
+Don't look now, but the man in the moon is laughing at you.
+Don't look now, but there is a multi-legged creature on your shoulder.
+Don't plan any hasty moves.  You'll be evicted soon anyway.
+Don't read any sky-writing for the next two weeks.
+Don't read everything you believe.
+Don't relax!  It's only your tension that's holding you together.
+Don't tell any big lies today.  Small ones can be just as effective.
+Don't worry so loud, your roommate can't think.
+Don't Worry, Be Happy.
+Don't worry.  Life's too long.
+Don't you feel more like you do now than you did when you came in?
+Don't you wish you had more energy... or less ambition?
+Everything that you know is wrong, but you can be straightened out.
+Everything will be just tickety-boo today.
+Excellent day for putting Slinkies on an escalator.
+Excellent day to have a rotten day.
+Excellent time to become a missing person.
+Executive ability is prominent in your make-up.
+Exercise caution in your daily affairs.
+Expect a letter from a friend who will ask a favor of you.
+Expect the worst, it's the least you can do.
+Fine day for friends.
+So-so day for you.
+Fine day to work off excess energy.  Steal something heavy.
+Fortune: You will be attacked next Wednesday at 3:15 p.m. by six samurai sword wielding purple fish glued to Harley-Davidson motorcycles.
+Oh, and have a nice day!
+Future looks spotty.  You will spill soup in late evening.
+Generosity and perfection are your everlasting goals.
+Give him an evasive answer.
+Give thought to your reputation.  Consider changing name and moving to a new town.
+Give your very best today.  Heaven knows it's little enough.
+Go to a movie tonight.  Darkness becomes you.
+Good day for a change of scene.  Repaper the bedroom wall.
+Good day for overcoming obstacles.  Try a steeplechase.
+Good day to deal with people in high places; particularly lonely stewardesses.
+Good day to let down old friends who need help.
+Good news from afar can bring you a welcome visitor.
+Good news.  Ten weeks from Friday will be a pretty good day.
+Good night to spend with family, but avoid arguments with your mate's new lover.
+Green light in A.M. for new projects.  Red light in P.M. for traffic tickets.
+Hope that the day after you die is a nice day.
+If you can read this, you're too close.
+If you learn one useless thing every day, in a single year you'll learn
+365 useless things.
+If you sow your wild oats, hope for a crop failure.
+If you stand on your head, you will get footprints in your hair.
+If you think last Tuesday was a drag, wait till you see what happens tomorrow!
+If your life was a horse, you'd have to shoot it.
+In the stairway of life, you'd best take the elevator.
+Increased knowledge will help you now.  Have mate's phone bugged.
+Is that really YOU that is reading this?
+Is this really happening?
+It is so very hard to be an
+on-your-own-take-care-of-yourself-because-there-is-no-one-else-to-do-it-for-you grown-up.
+It may or may not be worthwhile, but it still has to be done.
+It was all so different before everything changed.
+It's all in the mind, ya know.
+It's lucky you're going so slowly, because you're going in the wrong direction.
+Just because the message may never be received does not mean it is not worth sending.
+Just to have it is enough.
+Keep emotionally active.  Cater to your favorite neurosis.
+Keep it short for pithy sake.
+Lady Luck brings added income today.  Lady friend takes it away tonight.
+Learn to pause -- or nothing worthwhile can catch up to you.
+Let me put it this way: today is going to be a learning experience.
+Life is to you a dashing and bold adventure.
+Life, loathe it or ignore it, you can't like it.
+Live in a world of your own, but always welcome visitors.
+Living your life is a task so difficult, it has never been attempted before.
+Long life is in store for you.
+Look afar and see the end from the beginning.
+Love is in the offing.  Be affectionate to one who adores you.
+Make a wish, it might come true.
+Many changes of mind and mood; do not hesitate too long.
+Never be led astray onto the path of virtue.
+Never commit yourself!  Let someone else commit you.
+Never give an inch!
+Never look up when dragons fly overhead.
+Never reveal your best argument.
+Next Friday will not be your lucky day.  As a matter of fact, you don't
+have a lucky day this year.
+Of course you have a purpose -- to find a purpose.
+People are beginning to notice you.  Try dressing before you leave the house.
+Perfect day for scrubbing the floor and other exciting things.
+Questionable day.
+Ask somebody something.
+Reply hazy, ask again later.
+Save energy: be apathetic.
+Ships are safe in harbor, but they were never meant to stay there.
+Slow day.  Practice crawling.
+Snow Day -- stay home.
+So this is it.  We're going to die.
+So you're back... about time...
+Someone is speaking well of you.
+Someone is speaking well of you.
+How unusual!
+Someone whom you reject today, will reject you tomorrow.
+Stay away from flying saucers today.
+Stay away from hurricanes for a while.
+Stay the curse.
+That secret you've been guarding, isn't.
+The time is right to make new friends.
+The whole world is a tuxedo and you are a pair of brown shoes.
+There is a 20 chance of tomorrow.
+There is a fly on your nose.
+There was a phone call for you.
+There will be big changes for you but you will be happy.
+Things will be bright in P.M.  A cop will shine a light in your face.
+Think twice before speaking, but don't say "think think click click".
+This life is yours.  Some of it was given to you; the rest, you made yourself.
+This will be a memorable month -- no matter how hard you try to forget it.
+Time to be aggressive.  Go after a tattooed Virgo.
+Today is National Existential Ennui Awareness Day.
+Today is the first day of the rest of the mess.
+Today is the first day of the rest of your life.
+Today is the last day of your life so far.
+Today is the tomorrow you worried about yesterday.
+Today is what happened to yesterday.
+Today's weirdness is tomorrow's reason why.
+Tomorrow will be cancelled due to lack of interest.
+Tomorrow, this will be part of the unchangeable past but fortunately, it can still be changed today.
+Tomorrow, you can be anywhere.
+Tonight you will pay the wages of sin; Don't forget to leave a tip.
+Tonight's the night: Sleep in a eucalyptus tree.
+Troubled day for virgins over 16 who are beautiful and wealthy and live
+in eucalyptus trees.
+Truth will out this morning.  (Which may really mess things up.)
+Try the Moo Shu Pork.  It is especially good today.
+Try to get all of your posthumous medals in advance.
+Try to have as good a life as you can under the circumstances.
+Try to relax and enjoy the crisis.
+Try to value useful qualities in one who loves you.
+Tuesday After Lunch is the cosmic time of the week.
+Tuesday is the Wednesday of the rest of your life.
+What happened last night can happen again.
+While you recently had your problems on the run, they've regrouped and are making another attack.
+Write yourself a threatening letter and pen a defiant reply.
+You are a bundle of energy, always on the go.
+You are a fluke of the universe; you have no right to be here.
+You are a very redundant person, that's what kind of person you are.
+You are always busy.
+You are as I am with You.
+You are capable of planning your future.
+You are confused; but this is your normal state.
+You are deeply attached to your friends and acquaintances.
+You are destined to become the commandant of the fighting men of the department of transportation.
+You are dishonest, but never to the point of hurting a friend.
+You are fairminded, just and loving.
+You are farsighted, a good planner, an ardent lover, and a faithful friend.
+You are fighting for survival in your own sweet and gentle way.
+You are going to have a new love affair.
+You are magnetic in your bearing.
+You are not dead yet.  But watch for further reports.
+You are number 6!  Who is number one?
+You are only young once, but you can stay immature indefinitely.
+You are scrupulously honest, frank, and straightforward.  Therefore you have few friends.
+You are sick, twisted and perverted.  I like that in a person.
+You are so boring that when I see you my feet go to sleep.
+You are standing on my toes.
+You are taking yourself far too seriously.
+You are the only person to ever get this message.
+You are wise, witty, and wonderful, but you spend too much time reading this sort of trash.
+You attempt things that you do not even plan because of your extreme stupidity.
+You can create your own opportunities this week.  Blackmail a senior executive.
+You can do very well in speculation where land or anything to do with dirt is concerned.
+You can rent this space for only $5 a week.
+You could live a better life, if you had a better mind and a better body.
+You definitely intend to start living sometime soon.
+You dialed 5483.
+You display the wonderful traits of charm and courtesy.
+You don't become a failure until you're satisfied with being one.
+You enjoy the company of other people.
+You feel a whole lot more like you do now than you did when you used to.
+You fill a much-needed gap.
+You get along very well with everyone except animals and people.
+You had some happiness once, but your parents moved away, and you had to leave it behind.
+You have a deep appreciation of the arts and music.
+You have a deep interest in all that is artistic.
+You have a reputation for being thoroughly reliable and trustworthy.
+A pity that it's totally undeserved.
+You have a strong appeal for members of the opposite sex.
+You have a strong appeal for members of your own sex.
+You have a strong desire for a home and your family interests come first.
+You have a truly strong individuality.
+You have a will that can be influenced by all with whom you come in contact.
+You have an ability to sense and know higher truth.
+You have an ambitious nature and may make a name for yourself.
+You have an unusual equipment for success.  Be sure to use it properly.
+You have an unusual magnetic personality.  Don't walk too close to metal objects which are not fastened down.
+You have an unusual understanding of the problems of human relationships.
+You have been selected for a secret mission.
+You have Egyptian flu: you're going to be a mummy.
+You have had a long-term stimulation relative to business.
+You have literary talent that you should take pains to develop.
+You have many friends and very few living enemies.
+You have no real enemies.
+You have taken yourself too seriously.
+You have the body of a 19 year old.  Please return it before it gets wrinkled.
+You have the capacity to learn from mistakes.  You'll learn a lot today.
+You have the power to influence all with whom you come in contact.
+You learn to write as if to someone else because NEXT YEAR YOU WILL BE "SOMEONE ELSE."
+You like to form new friendships and make new acquaintances.
+You look like a million dollars.  All green and wrinkled.
+You look tired.
+You love peace.
+You love your home and want it to be beautiful.
+You may be gone tomorrow, but that doesn't mean that you weren't here today.
+You may be infinitely smaller than some things, but you're infinitely larger than others.
+You may be recognized soon.  Hide.
+You may get an opportunity for advancement today.  Watch it!
+You may worry about your hair-do today, but tomorrow much peanut butter will be sold.
+You need more time; and you probably always will.
+You need no longer worry about the future.  This time tomorrow you'll be dead.
+You never hesitate to tackle the most difficult problems.
+You never know how many friends you have until you rent a house on the beach.
+You now have Asian Flu.
+You own a dog, but you can only feed a cat.
+You plan things that you do not even attempt because of your extreme caution.
+You possess a mind not merely twisted, but actually sprained.
+You prefer the company of the opposite sex, but are well liked by your own.
+You recoil from the crude; you tend naturally toward the exquisite.
+You seek to shield those you love and you like the role of the provider.
+You shall be rewarded for a dastardly deed.
+You should emulate your heroes, but don't carry it too far.  Especially if they are dead.
+You should go home.
+You single-handedly fought your way into this hopeless mess.
+You teach best what you most need to learn.
+You too can wear a nose mitten.
+You two ought to be more careful--your love could drag on for years and years.
+You will always get the greatest recognition for the job you least like.
+You will always have good luck in your personal affairs.
+You will attract cultured and artistic people to your home.
+You will be a winner today.  Pick a fight with a four-year-old.
+You will be advanced socially, without any special effort on your part.
+You will be aided greatly by a person whom you thought to be unimportant.
+You will be attacked by a beast who has the body of a wolf, the tail of a lion, and the face of Donald Duck.
+You will be audited by the Internal Revenue Service.
+You will be awarded a medal for disregarding safety in saving someone.
+You will be awarded some great honor.
+You will be awarded the Nobel Peace Prize... posthumously.
+You will be called upon to help a friend in trouble.
+You will be divorced within a year.
+You will be given a post of trust and responsibility.
+You will be held hostage by a radical group.
+You will be honored for contributing your time and skill to a worthy cause.
+You will be imprisoned for contributing your time and skill to a bank robbery.
+You will be married within a year, and divorced within two.
+You will be married within a year.
+You will be misunderstood by everyone.
+You will be recognized and honored as a community leader.
+You will be reincarnated as a toad; and you will be much happier.
+You will be run over by a beer truck.
+You will be run over by a bus.
+You will be singled out for promotion in your work.
+You will be successful in love.
+You will be surprised by a loud noise.
+You will be surrounded by luxury.
+You will be the last person to buy a Chrysler.
+You will be the victim of a bizarre joke.
+You will be Told about it Tomorrow.  Go Home and Prepare Thyself.
+You will be traveling and coming into a fortune.
+You will be winged by an anti-aircraft battery.
+You will become rich and famous unless you don't.
+You will contract a rare disease.
+You will engage in a profitable business activity.
+You will experience a strong urge to do good; but it will pass.
+You will feel hungry again in another hour.
+You will forget that you ever knew me.
+You will gain money by a fattening action.
+You will gain money by a speculation or lottery.
+You will gain money by an illegal action.
+You will gain money by an immoral action.
+You will get what you deserve.
+You will give someone a piece of your mind, which you can ill afford.
+You will have a long and boring life.
+You will have a long and unpleasant discussion with your supervisor.
+You will have domestic happiness and faithful friends.
+You will have good luck and overcome many hardships.
+You will have long and healthy life.
+You will hear good news from one you thought unfriendly to you.
+You will inherit millions of dollars.
+You will inherit some money or a small piece of land.
+You will live a long, healthy, happy life and make bags of money.
+You will live to see your grandchildren.
+You will lose your present job and have to become a door to door mayonnaise salesman.
+You will meet an important person who will help you advance professionally.
+You will never know hunger.
+You will not be elected to public office this year.
+You will obey or molten silver will be poured into your ears.
+You will outgrow your usefulness.
+You will overcome the attacks of jealous associates.
+You will pass away very quickly.
+You will pay for your sins.  If you have already paid, please disregard this message.
+You will pioneer the first Martian colony.
+You will probably marry after a very brief courtship.
+You will reach the highest possible point in your business or profession.
+You will receive a legacy which will place you above want.
+You will remember something that you should not have forgotten.
+You will soon forget this.
+You will soon meet a person who will play an important role in your life.
+You will step on the night soil of many countries.
+You will stop at nothing to reach your objective, but only because your brakes are defective.
+You will triumph over your enemy.
+You will visit the Dung Pits of Glive soon.
+You will win success in whatever calling you adopt.
+You will wish you hadn't.
+You work very hard.  Don't try to think as well.
+You worry too much about your job.  Stop it.  You are not paid enough to worry.
+You would if you could but you can't so you won't.
+You'd like to do it instantaneously, but that's too slow.
+You'll be called to a post requiring ability in handling groups of people.
+You'll be sorry...
+You'll feel devilish tonight.  Toss dynamite caps under a flamenco dancer's heel.
+You'll feel much better once you've given up hope.
+You'll never be the man your mother was!
+You'll never see all the places, or read all the books, but fortunately,
+they're not all recommended.
+You'll wish that you had done some of the hard things when they were easier to do.
+You're a card which will have to be dealt with.
+You're almost as happy as you think you are.
+You're at the end of the road again.
+You're being followed.  Cut out the hanky-panky for a few days.
+You're currently going through a difficult transition period called "Life."
+You're definitely on their list.  The question to ask next is what list it is.
+You're growing out of some of your problems, but there are others that you're growing into.
+You're not my type.  For that matter, you're not even my species!!!
+You're ugly and your mother dresses you funny.
+You're working under a slight handicap.  You happen to be human.
+You've been leading a dog's life.  Stay off the furniture.
+Your aim is high and to the right.
+Your aims are high, and you are capable of much.
+Your analyst has you mixed up with another patient.  Don't believe a thing he tells you.
+Your best consolation is the hope that the things you failed to get weren't really worth having.
+Your boss climbed the corporate ladder, wrong by wrong.
+Your boss is a few sandwiches short of a picnic.
+Your boyfriend takes chocolate from strangers.
+Your business will assume vast proportions.
+Your business will go through a period of considerable expansion.
+Your depth of comprehension may tend to make you lax in worldly ways.
+Your domestic life may be harmonious.
+Your fly might be open (but don't check it just now).
+Your goose is cooked.
+(Your current chick is burned up too!)
+Your heart is pure, and your mind clear, and your soul devout.
+Your ignorance cramps my conversation.
+Your life would be very empty if you had nothing to regret.
+Your love life will be happy and harmonious.
+Your love life will be... interesting.
+Your lover will never wish to leave you.
+Your lucky color has faded.
+Your lucky number has been disconnected.
+Your lucky number is 3552664958674928.  Watch for it everywhere.
+Your mode of life will be changed for the better because of good news soon.
+Your mode of life will be changed for the better because of new developments.
+Your motives for doing whatever good deed you may have in mind will be misinterpreted by somebody.
+Your nature demands love and your happiness depends on it.
+Your object is to save the world, while still leading a pleasant life.
+Your own qualities will help prevent your advancement in the world.
+Your present plans will be successful.
+Your reasoning is excellent -- it's only your basic assumptions that are wrong.
+Your reasoning powers are good, and you are a fairly good planner.
+Your sister swims out to meet troop ships.
+Your society will be sought by people of taste and refinement.
+Your step will soil many countries.
+Your supervisor is thinking about you.
+Your talents will be recognized and suitably rewarded.
+Your temporary financial embarrassment will be relieved in a surprising manner.
+Your true value depends entirely on what you are compared with.
+Occasionally the tip of the round might lie to you. Don't panic, this is normal.
+To defeat the slaughter demon, shoot at it until it dies.
+Sometimes you won't be able to avoid dying no matter how good you are at the game. Try not to stress too much about it.
+When a round ends nearly everything about it is lost forever, leave your salt behind with it.
+Killing the entire station isn't fun except when it is.
+You can win a pulse rifle from the arcade machine. Honest.
+Just like real life the entropy of the game can only increase with time. If things aren't on fire yet, just wait.
+Completing your objectives is good practice, but the best antagonists will strive to do more than the bare minimum to really leave an impression.
+The more obscure and underused a game mechanic is, the less likely your victims are to be able to deal with it.
+Space is cold and it will quickly freeze you to death if you don't protect yourself. This isn't how thermodynamics really works but just go with it.
+Blobs are weak to fire! Use a flame thrower for maximum damage!
+Cleanbot.
+The wizard is supposed to be extremely strong in one on one combat, stop getting mad about it.
+Sometimes a round will just be a bust. C'est la vie.
+This is a game that is constantly being developed for. Expect things to be added, removed, fixed, and broken on a daily basis.
+It's fun to try and predict the round type from the tip of the round message.
+The quartermaster is not a head of staff and will never be one.
+The bird remembers.
+Your sprite represents your hitbox, so that afro makes you easier to kill. The sacrifices we make for style.
+Sometimes admins will just do stuff. Roll with it.
+The remake will never come out.
+Plenty of things that aren't traditionally considered weapons can still be used to slowly brutalize someone to death, get creative!
+DEATH IS IMMINENT!
+This game is older than most of the people playing it.
+Do not go gentle into that good night.
+Flashbangs can weaken blob tiles, allowing for you and the crew to easily destroy them.
+Just the tip?
+Some people are unable to read text on a game where half of it is based on text.
+As the Captain, you can use a whetstone to sharpen your fancy fountain pen for extra robustness.
+As the Lawyer, you are the last bastion of roleplay-focused jobs. Even the curator got a whip to go fight people with, that sellout!
+There are at least 11 ways to get through plastic flaps. How many can you name?
+FEED ME A STRAY CAT
+Did you know that tossing the clown into a singularity will either increase or decrease its size by a large amount?
+Most items have names longer than "soap".
+Demoman takes skill.
+Ask and you shall receive.
