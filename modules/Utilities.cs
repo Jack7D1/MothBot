@@ -62,7 +62,7 @@ namespace MothBot.modules
 
                 case "prependbackupchatters":
                     await src.Channel.SendMessageAsync("Prepending backups...");
-                    await Chatterbot.PrependBackupChatters(src.Channel);
+                    Chatterbot.PrependBackupChatters(src.Channel);
                     break;
 
                 //Data/debug

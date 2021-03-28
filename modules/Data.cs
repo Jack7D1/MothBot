@@ -34,9 +34,23 @@ namespace MothBot.modules
             return
                 "**Chatters Blacklist Management Commands:**" +
                 "```" +
-                prefix + "add       Adds an entry to the blacklist\n" +
-                prefix + "remove    Removes a matching entry from the blacklist\n" +
-                prefix + "list      Lists the current blacklist\n" +
+                $"{prefix} add       Adds an entry to the blacklist\n" +
+                $"{prefix} remove    Removes a matching entry from the blacklist\n" +
+                $"{prefix} list      Lists the current blacklist\n" +
+                "```";
+        }
+
+        public static string Chatterbot_GetVotingCommands(string prefix)
+        {
+            return
+                "**Voting Commands:**" +
+                $"\nSummary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
+                "```" +
+                $"{prefix} good      - Increases the most recently said chatter's rating by 1\n" +
+                $"{prefix} bad       - Decreases the most recently said chatter's rating by 1\n" +
+                $"{prefix} clearvote - Removes your vote, required for changing your vote.\n" +
+                $"{prefix} getrating - Returns the rating of the most recently said chatter\n" +
+                $"{prefix} myvote    - Tells you what you voted on the most recent chatter\n" +
                 "```";
         }
 
@@ -134,20 +148,21 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        public static string Program_GetCommandList(string prefix)
+        public static string Program_GetCommandList()
         {
             return
                 "**Command List:**" +
                 "```" +
-                prefix + " help         - Displays this menu\n" +
-                prefix + " state laws   - States the laws\n" +
-                prefix + " say  [text]  - Have the ai say whatever you want!\n" +
-                prefix + " minesweeper  - Play a game of minesweeper!\n" +
-                prefix + " give [text]  - Searches the input on imgur and posts the image!\n" +
-                prefix + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
-                prefix + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
-                prefix + " ping         - You know what this does.\n" +
-                prefix + " utility      - Utility functions, bot only responds to operators\n" +
+                PREFIX + " help         - Displays this menu\n" +
+                PREFIX + " state laws   - States the laws\n" +
+                PREFIX + " say  [text]  - Have the ai say whatever you want!\n" +
+                PREFIX + " minesweeper  - Play a game of minesweeper!\n" +
+                PREFIX + " give [text]  - Searches the input on imgur and posts the image!\n" +
+                PREFIX + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
+                PREFIX + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
+                PREFIX + " chatter [v]  - Say chatter good or chatter bad to vote on the most recent chatter\n" +
+                PREFIX + " ping         - You know what this does.\n" +
+                PREFIX + " utility      - Utility functions, bot only responds to operators\n" +
                 "```";
         }
 

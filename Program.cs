@@ -31,8 +31,6 @@ namespace MothBot
             // Filter messages
             if (msg.Author.IsBot)   //If message author is a bot, ignore
                 return;
-            if (!Portals.IsPortal(msg.Channel))
-                await Chatterbot.ChatterHandler(msg);
 
             await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
@@ -45,6 +43,37 @@ namespace MothBot
                 {
                     await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
                 }
+            else if (!Portals.IsPortal(msg.Channel))
+                await Chatterbot.ChatterHandler(msg);
+        }
+
+        private static void Crash(Exception ex)    //Catch fatal exceptions and safely shutdown the program.
+        {
+            client.StopAsync();   //Prevent further inputs immediately.
+            Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
+                $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
+                $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
+                "Crash logging finished, saving data and shutting down safely...\n");
+            Environment.Exit(ex.HResult);
+        }
+
+        private static void ProcessExit(object sender, EventArgs e)
+        {
+            Portals.SavePortals();
+            Chatterbot.SaveChatters();
+            Chatterbot.SaveBlacklist();
+            client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
+        }
+
+        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
+        {
+            try
+            {
+                _ = new Chatterbot();
+                _ = new Portals();
+            }
+            catch (Exception ex) { Crash(ex); }
+            return Task.CompletedTask;
         }
 
         private static async Task RootCommandHandler(SocketMessage msg)
@@ -89,7 +118,7 @@ namespace MothBot
 
                 case "help":
                 case "commands":
-                    await msg.Channel.SendMessageAsync(Data.Program_GetCommandList(Data.PREFIX));
+                    await msg.Channel.SendMessageAsync(Data.Program_GetCommandList());
                     break;
 
                 case "laws":
@@ -112,6 +141,10 @@ namespace MothBot
 
                 case "roll":
                     await Dice.Roll(msg.Channel, args);
+                    break;
+
+                case "chatter":
+                    await Chatterbot.VoteHandler(msg, args);
                     break;
 
                 case "ping":
@@ -138,35 +171,6 @@ namespace MothBot
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens
-        }
-
-        private static void ProcessExit(object sender, EventArgs e)
-        {
-            Portals.SavePortals();
-            Chatterbot.SaveChatters();
-            Chatterbot.SaveBlacklist();
-            client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes.
-        }
-
-        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
-        {
-            try
-            {
-                _ = new Chatterbot();
-                _ = new Portals();
-            }
-            catch (Exception ex) { Crash(ex); }
-            return Task.CompletedTask;
-        }
-
-        private static void Crash(Exception ex)    //Catch fatal exceptions and safely shutdown the program.
-        {
-            client.StopAsync();   //Prevent further inputs immediately.
-            Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
-                $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
-                $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
-                "Crash logging finished, saving data and shutting down safely...\n");
-            Environment.Exit(ex.HResult);
         }
     }
 }
