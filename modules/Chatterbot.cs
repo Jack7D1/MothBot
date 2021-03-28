@@ -129,7 +129,7 @@ namespace MothBot.modules
         public static async Task ChatterHandler(SocketMessage src)
         {
             bool mentionsMe = false, doNotSave = false;
-            if ((src.Channel as ITextChannel).IsNsfw)
+            if (src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw)
                 doNotSave = true;
             foreach (SocketUser mention in src.MentionedUsers)
             {
@@ -393,7 +393,7 @@ namespace MothBot.modules
             {
                 if (Origin_msg == 0)
                     return null;
-                return (Program.client.GetChannel(Origin_channel) as ITextChannel).GetMessageAsync(Origin_msg).Result;
+                return (Program.client.GetChannel(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating

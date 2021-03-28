@@ -195,9 +195,9 @@ namespace MothBot.modules
                 channelId = chId;
             }
 
-            public ITextChannel GetChannel() //returns null if not found
+            public IMessageChannel GetChannel() //returns null if not found
             {
-                return Program.client.GetChannel(channelId) as ITextChannel;
+                return Program.client.GetChannel(channelId) as IMessageChannel;
             }
 
             public IGuild GetGuild()    //returns null if not found
