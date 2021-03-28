@@ -16,7 +16,7 @@ namespace MothBot.modules
         //PARAMS_Chatterbot
         public const ushort CHATTERS_CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
         public const ushort CHATTERS_CHANCE_TO_SAVE = 16;
-        public const ushort CHATTERS_MAX_COUNT = 4096;
+        public const ushort CHATTERS_MAX_COUNT = 2048;
         //END PARAMS
 
         //PATHS

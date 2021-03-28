@@ -22,11 +22,21 @@ namespace MothBot.modules
                     throw new Exception("NO FILEDATA");
                 chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
                 CleanupChatters();
+                if (chatters.Count > Data.CHATTERS_MAX_COUNT)
+                    throw new Exception("CHATTER OVERFLOW");
             }
             catch (Exception ex) when (ex.Message == "NO FILEDATA")
             {
                 Logging.LogtoConsoleandFile($"No chatters found at {Data.PATH_CHATTERS}, running with empty...");
                 chatters.Clear();
+                return;
+            }
+            catch (Exception ex) when (ex.Message == "CHATTER OVERFLOW")
+            {
+                int overflow = chatters.Count - Data.CHATTERS_MAX_COUNT;
+                Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
+                for (int i = overflow; i > 0; i--)
+                    RemoveLowestRated();
                 return;
             }
         }
