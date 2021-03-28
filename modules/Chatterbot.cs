@@ -235,7 +235,7 @@ namespace MothBot.modules
                         if (args == "good")
                             vote = true;
                         if (latestChatter.AddVote(msg.Author.Id, vote))
-                            await msg.Channel.SendMessageAsync($"Vote of {args} placed sucessfully.");
+                            await msg.Channel.SendMessageAsync($"Vote of \"{args}\" placed sucessfully.");
                         else
                             await msg.Channel.SendMessageAsync("You have already placed a vote for this chatter!");
                     }
@@ -248,8 +248,8 @@ namespace MothBot.modules
                         await msg.Channel.SendMessageAsync("You haven't voted on this chatter!");
                     break;
 
-                case "getrating":
-                    await msg.Channel.SendMessageAsync($"Most recent chatter has a rating of {latestChatter.Rating()}, with {latestChatter.Votes.Count} votes.");
+                case "rating":
+                    await msg.Channel.SendMessageAsync($"Most recent chatter has a rating of {latestChatter.Rating()}, with {latestChatter.Votes.Count} vote(s).");
                     break;
 
                 case "myvote":
