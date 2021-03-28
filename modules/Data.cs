@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MothBot.modules
 {
     internal class Data
-    //Class comprises of static command lists and just general lists of everything that can be called from anywhere to print.
+    //Class comprises of static lists and strings that can be called from anywhere. Bot parameters are found here.
     //This also contains subroutines used for reading and writing to save files in a standardized manner.
     {
         //PARAMS

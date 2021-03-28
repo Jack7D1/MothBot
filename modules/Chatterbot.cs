@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,20 +9,19 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));
-        private static readonly List<Chatter> chatters = new List<Chatter>();
+        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));  //Contains strings that will be filtered out of chatters, such as discord invite links.
+        private static readonly List<Chatter> chatters;
 
-        //Contains strings that will be filtered out of chatters, such as discord invite links.
-        public Chatterbot()
+        static Chatterbot()
         {
             try
             {
+                chatters = new List<Chatter>();
                 string fileData = Data.Files_Read_String(Data.PATH_CHATTERS);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
                     throw new Exception("NO FILEDATA");
-                List<Chatter> fileChatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
-                foreach (Chatter chatter in fileChatters)
-                    chatters.Add(chatter);
+                chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
+
                 CleanupChatters();
             }
             catch (Exception ex) when (ex.Message == "NO FILEDATA")
@@ -65,17 +65,6 @@ namespace MothBot.modules
                     if (inStr.Contains(blacklister.ToLower()))
                         return false;
             return true;
-        }
-
-        public static async Task AddChatterHandler(SocketMessage src)
-        {
-            if (Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && !ShouldIgnore(src) && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
-            {
-                if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
-                    chatters.RemoveAt(0);
-                chatters.Add(new Chatter(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '), src.Author.Id, (src.Author as SocketGuildUser).Guild.Id));
-                await SaveChatters();
-            }
         }
 
         public static async Task BlacklistHandler(SocketMessage msg, string command) //Expects to be called from the utilities chain with the keyword 'blacklist'.
@@ -143,22 +132,35 @@ namespace MothBot.modules
 
         public static async Task ChatterHandler(SocketMessage src)
         {
-            bool mentionsMothbot = false;
-            foreach (SocketUser user in src.MentionedUsers)
-                if (user.Id == Data.MY_ID)
-                {
-                    mentionsMothbot = true;
-                    break;
-                }
-
-            if (mentionsMothbot || (Program.rand.Next(0, Data.CHATTERS_CHANCE_TO_CHAT) == 0 && !ShouldIgnore(src)))
+            bool mentionsMe = false, doNotSave = false;
+            if (Sanitize.IsChannelNsfw(src.Channel))
+                doNotSave = true;
+            foreach (SocketUser mention in src.MentionedUsers)
             {
+                if (mention.IsBot)
+                    doNotSave = true;
+                if (mention.Id == Data.MY_ID)
+                    mentionsMe = true;
+            }
+
+            if (mentionsMe || (Program.rand.Next(Data.CHATTERS_CHANCE_TO_CHAT) == 0))
+            {
+                //Send Chatter
                 string outStr = GetChatter();
                 if (outStr != null)
                     await src.Channel.SendMessageAsync(Sanitize.ReplaceAllMentionsWithID(outStr, src.Author.Id));
+                //Save Chatter
+                if (!doNotSave && Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
+                {
+                    if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
+                        chatters.RemoveAt(0);
+                    chatters.Add(new Chatter(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
+                    await SaveChatters();
+                }
             }
         }
-        private static Chatter GetLowestRated()
+
+        /*private static Chatter GetLowestRated()
         {
             int worst = GetLowestRating();
             List<Chatter> candidates = chatters;
@@ -178,25 +180,25 @@ namespace MothBot.modules
                 if (chatter.Rating < bottom)
                     bottom = chatter.Rating;
             return bottom;
-        }
+        }*/
 
         public static Task PrependBackupChatters(ISocketMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
+            List<Chatter> chatterstoprepend = new List<Chatter>();
             List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
             if (chatters.Count + backupchatters.Count > Data.CHATTERS_MAX_COUNT)
             {
                 int overshoot = chatters.Count + backupchatters.Count - Data.CHATTERS_MAX_COUNT;
-                if(ch != null)
+                if (ch != null)
                     ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max line count [{Data.CHATTERS_MAX_COUNT}] by {overshoot} lines. Deleting excess from prepend before saving.");
                 backupchatters.RemoveRange(0, overshoot);
             }
-
             foreach (string chatter in backupchatters)
-                if (chatters.Count == 0)
-                    chatters.Add(new Chatter(chatter));
-                else
-                    chatters.Insert(0, new Chatter(chatter));
-            if(ch != null)
+                chatterstoprepend.Add(new Chatter(chatter));
+
+            chatters.InsertRange(0, chatterstoprepend);
+
+            if (ch != null)
                 ch.SendMessageAsync("Prepend successful");
             Logging.LogtoConsoleandFile("CHATTERS: Prepend successful.");
             SaveChatters();
@@ -238,34 +240,104 @@ namespace MothBot.modules
                 return chatters[Program.rand.Next(0, chatters.Count)].Content;
         }
 
-        private static bool ShouldIgnore(SocketMessage src)
+        private class Chatter
         {
-            if (Sanitize.IsChannelNsfw(src.Channel))
-                return true;
-            foreach (SocketUser mention in src.MentionedUsers)
-                if (mention.IsBot)
-                    return true;
-            return false;
-        }
-
-        private class Chatter   
-        {
-            public ulong Channel_last_used;
-            public int Rating;  //When implementing rating ensure to create some kind of restriction
-            public ulong Time_last_used;
+            [JsonRequired]
             public readonly string Content;
+
+            public readonly ulong Origin_author;
+            public readonly ulong Origin_channel;
             public readonly ulong Origin_guild;
-            public readonly ulong Origin_user;
+            public readonly ulong Origin_msg;
+            public readonly List<Voter> Votes;
+            public ulong Channel_last_used;
+            public ulong Msg_last_used;
 
             [JsonConstructor]
-            public Chatter(string content, ulong origin_user = 0, ulong origin_guild = 0, int rating = 0, ulong time_last_used = 0, ulong channel_last_used = 0)
+            public Chatter(string content, ulong origin_author = 0, ulong origin_msg = 0, ulong origin_channel = 0, ulong origin_guild = 0, ulong msg_last_used = 0, ulong channel_last_used = 0, List<Voter> votes = null)
             {
                 Content = content;
-                Origin_user = origin_user;
-                Origin_guild = origin_guild;
-                Rating = rating;
-                Time_last_used = time_last_used;
+                Msg_last_used = msg_last_used;
                 Channel_last_used = channel_last_used;
+                Origin_author = origin_author;
+                Origin_msg = origin_msg;
+                Origin_channel = origin_channel;
+                Origin_guild = origin_guild;
+                if (votes != null)
+                    Votes = votes;
+                else
+                    Votes = new List<Voter>();
+            }
+
+            public bool AddVote(ulong voterID, bool vote)  //Returns true or false based on if vote was counted.
+            {
+                if (HasVoted(voterID))
+                    return false;
+                Votes.Add(new Voter(vote, voterID));
+                return true;
+            }
+
+            public IUser Author()
+            {
+                return Program.client.GetUser(Origin_author);
+            }
+
+            public bool ClearVote(ulong voterID)    //Returns true or false based on if voter was found.
+            {
+                foreach (Voter voter in Votes)
+                    if (voter.VoterID == voterID)
+                    {
+                        Votes.Remove(voter);
+                        return true;
+                    }
+                return false;
+            }
+
+            public bool HasVoted(ulong userID)
+            {
+                foreach (Voter voter in Votes)
+                    if (voter.VoterID == userID)
+                        return true;
+                return false;
+            }
+
+            public IMessage LastUsed()
+            {
+                return (Program.client.GetChannel(Channel_last_used) as IMessageChannel).GetMessageAsync(Msg_last_used).Result;
+            }
+
+            public IGuild OriginGuild()
+            {
+                return Program.client.GetGuild(Origin_guild);
+            }
+
+            public IMessage OriginMessage()
+            {
+                return (Program.client.GetChannel(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
+            }
+
+            public int Rating()   //Calculates and returns rating
+            {
+                int rating = 0;
+                foreach (Voter voter in Votes)
+                    if (voter.Vote)
+                        rating++;
+                    else
+                        rating--;
+                return rating;
+            }
+
+            public class Voter
+            {
+                public readonly bool Vote;
+                public readonly ulong VoterID;
+
+                [JsonConstructor]
+                public Voter(bool vote, ulong voterID)
+                {
+                    Vote = vote;
+                    VoterID = voterID;
+                }
             }
         }
     }

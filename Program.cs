@@ -32,10 +32,8 @@ namespace MothBot
             if (msg.Author.IsBot)   //If message author is a bot, ignore
                 return;
             if (!Portals.IsPortal(msg.Channel))
-            {
-                await Chatterbot.AddChatterHandler(msg);
                 await Chatterbot.ChatterHandler(msg);
-            }
+
             await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
             if (input.IndexOf($"{Data.PREFIX} ") == 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
