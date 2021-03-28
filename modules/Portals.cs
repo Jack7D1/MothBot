@@ -35,19 +35,18 @@ namespace MothBot.modules
 
         public static async Task BroadcastHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
         {
-            if (GetPortal(msg.Channel) is Portal)
+            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
             {
-                if (!msg.Content.StartsWith(Data.PREFIX))
+                if (Chatterbot.ContentsBlacklisted(msg.Content))
                     await BroadcastAsync(msg);
             }
         }
 
         public static bool IsPortal(IMessageChannel ch)
         {
-            if (GetPortal(ch) is Portal)
+            if (GetPortal(ch) is Portal && !(ch as ITextChannel).IsNsfw)
                 return true;
-            else
-                return false;
+            return false;
         }
 
         public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal", 'args' is expected to be everything following keyword, minus space.
@@ -63,12 +62,17 @@ namespace MothBot.modules
                     case "open":
                         if (!GuildHasPortal(user.Guild))
                         {
-                            Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
-                            portals.Add(portal);
-                            await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Data.PREFIX} portal close\" or delete this channel!");
-                            Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
-                            await CheckPortals();
-                            SavePortals();
+                            if (!(msg.Channel as ITextChannel).IsNsfw)
+                            {
+                                Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
+                                portals.Add(portal);
+                                await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Data.PREFIX} portal close\" or delete this channel!");
+                                Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
+                                await CheckPortals();
+                                SavePortals();
+                            }
+                            else
+                                await msg.Channel.SendMessageAsync("NSFW channels cannot be portals!");
                         }
                         else
                             await msg.Channel.SendMessageAsync("This server already has a portal!");
@@ -191,9 +195,9 @@ namespace MothBot.modules
                 channelId = chId;
             }
 
-            public IMessageChannel GetChannel() //returns null if not found
+            public ITextChannel GetChannel() //returns null if not found
             {
-                return Program.client.GetChannel(channelId) as IMessageChannel;
+                return Program.client.GetChannel(channelId) as ITextChannel;
             }
 
             public IGuild GetGuild()    //returns null if not found

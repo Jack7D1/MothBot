@@ -1,4 +1,4 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using System;
 using System.Threading.Tasks;
 
@@ -15,7 +15,7 @@ namespace MothBot.modules
         private static readonly string bombString = ":bomb:";
         private static readonly string[] spoilerTag = { "||", "||" };
 
-        public async static Task MinesweeperHandlerAsync(ISocketMessageChannel ch, byte gridHeight = DEFAULT_GRIDSIZE, byte gridWidth = DEFAULT_GRIDSIZE, ushort bombs = DEFAULT_BOMBS)
+        public async static Task MinesweeperHandlerAsync(IMessageChannel ch, byte gridHeight = DEFAULT_GRIDSIZE, byte gridWidth = DEFAULT_GRIDSIZE, ushort bombs = DEFAULT_BOMBS)
         {
             bool[,] bombSpace = new bool[8, 8];
             byte[,] numSpace = new byte[8, 8];

@@ -23,7 +23,7 @@ namespace MothBot.modules
             return false;
         }
 
-        public static async Task UtilitiesHandlerAsync(SocketMessage src)
+        public static async Task UtilitiesHandlerAsync(SocketMessage src, string command)
         {
             if (!IsOperator(src.Author))   //You do not have permission
             {
@@ -31,8 +31,7 @@ namespace MothBot.modules
                 return;
             }
 
-            string command, keyword, args;
-            command = src.Content.ToLower().Substring(Data.PREFIX.Length + " utility".Length); //We now have all text that follows the prefix and the word utility.
+            string keyword, args;
             if (command.IndexOf(' ') == 0)
                 command = command.Substring(1);
             if (command.Contains(' '))
@@ -45,17 +44,13 @@ namespace MothBot.modules
                 keyword = command;
                 args = "";
             }
+            args = args.ToLower();
             if (keyword == "")
                 keyword = "commands";
+
             switch (keyword)    //Ensure switch is ordered similarly to command list
             {
                 //General
-                case "commands":
-                case "help":
-                    string prefix = Data.PREFIX + " utility ";
-                    await src.Channel.SendMessageAsync(Data.Utilities_GetCommandList(prefix));
-                    break;
-
                 case "blacklist":
                     await Chatterbot.BlacklistHandler(src, args);
                     break;
@@ -124,7 +119,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await src.Channel.SendMessageAsync("Function does not exist or error in syntax.");
+                    await src.Channel.SendMessageAsync(Data.Utilities_GetCommandList());
                     break;
             }
         }

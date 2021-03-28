@@ -1,4 +1,4 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using System;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,7 +58,7 @@ namespace MothBot.modules
             }
         }
 
-        public static async Task ImageSearchHandlerAsync(ISocketMessageChannel channel, string searchquery)
+        public static async Task ImageSearchHandlerAsync(IMessageChannel channel, string searchquery)
         {
             string photoLink = ImageSearch(searchquery);
             if (photoLink == null)      //sry couldn't find ur photo :c

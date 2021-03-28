@@ -1,11 +1,11 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
     internal class Dice
     {
-        public static async Task Roll(ISocketMessageChannel channel, int quantity, int sides, int offset)
+        public static async Task Roll(IMessageChannel channel, int quantity, int sides, int offset)
         {
             if (quantity <= 0)
             {
@@ -35,7 +35,7 @@ namespace MothBot.modules
             }
         }
 
-        public static async Task Roll(ISocketMessageChannel channel, string args)
+        public static async Task Roll(IMessageChannel channel, string args)
         {
             try
             {

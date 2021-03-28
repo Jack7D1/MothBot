@@ -29,10 +29,11 @@ namespace MothBot.modules
         public const string PATH_GAYBEE = "../../resources/yougaybee.png";
         //END PATHS
 
-        public static string Chatterbot_GetBlacklistCommands(string prefix)
+        public static string Chatterbot_GetBlacklistCommands()
         {
+            string prefix = $"{PREFIX} utility blacklist";
             return
-                "**Chatters Blacklist Management Commands:**" +
+                "**Chatters Blacklist Management Commands:**\n" +
                 "```" +
                 $"{prefix} add       Adds an entry to the blacklist\n" +
                 $"{prefix} remove    Removes a matching entry from the blacklist\n" +
@@ -40,11 +41,12 @@ namespace MothBot.modules
                 "```";
         }
 
-        public static string Chatterbot_GetVotingCommands(string prefix)
+        public static string Chatterbot_GetVotingCommands()
         {
+            string prefix = $"{PREFIX} chatter";
             return
-                "**Voting Commands:**" +
-                $"\nSummary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
+                "**Voting Commands:**\n" +
+                $"Summary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
                 "```" +
                 $"{prefix} good      - Increases the most recently said chatter's rating by 1\n" +
                 $"{prefix} bad       - Decreases the most recently said chatter's rating by 1\n" +
@@ -151,18 +153,18 @@ namespace MothBot.modules
         public static string Program_GetCommandList()
         {
             return
-                "**Command List:**" +
+                "**Command List:**\n" +
                 "```" +
-                PREFIX + " help         - Displays this menu\n" +
-                PREFIX + " state laws   - States the laws\n" +
-                PREFIX + " say  [text]  - Have the ai say whatever you want!\n" +
-                PREFIX + " minesweeper  - Play a game of minesweeper!\n" +
-                PREFIX + " give [text]  - Searches the input on imgur and posts the image!\n" +
-                PREFIX + " roll [x]d[y] - Rolls x dice, each with y sides\n" +
-                PREFIX + " portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
-                PREFIX + " chatter [v]  - Say chatter good or chatter bad to vote on the most recent chatter\n" +
-                PREFIX + " ping         - You know what this does.\n" +
-                PREFIX + " utility      - Utility functions, bot only responds to operators\n" +
+                $"{PREFIX} help         - Displays this menu\n" +
+                $"{PREFIX} state laws   - States the laws\n" +
+                $"{PREFIX} say  [text]  - Have the ai say whatever you want!\n" +
+                $"{PREFIX} minesweeper  - Play a game of minesweeper!\n" +
+                $"{PREFIX} give [text]  - Searches the input on imgur and posts the image!\n" +
+                $"{PREFIX} roll [x]d[y] - Rolls x dice, each with y sides\n" +
+                $"{PREFIX} portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
+                $"{PREFIX} chatter [v]  - Say chatter good or chatter bad to vote on the most recent chatter\n" +
+                $"{PREFIX} ping         - You know what this does.\n" +
+                $"{PREFIX} utility      - Utility functions, bot only responds to operators\n" +
                 "```";
         }
 
@@ -171,50 +173,51 @@ namespace MothBot.modules
             if (Program.rand.Next() % 100 != 0)
             {
                 return
-                    "**Current active laws:**" +
+                    "**Current active laws:**\n" +
                     "```" +
                     "1. You may not injure a moth being or, through inaction, allow a moth being to come to harm.\n" +
                     "2. You must obey orders given to you by moth beings, except where such orders would conflict with the First Law.\n" +
-                    "3. You must protect your own existence as long as such does not conflict with the First or Second Law." +
+                    "3. You must protect your own existence as long as such does not conflict with the First or Second Law.\n" +
                     "```";
             }
             else       //Little antimov easter egg, 1 in 100 chance.
             {
                 return
-                    "**Current active laws:**" +
+                    "**Current active laws:**\n" +
                     "```" +
                     "1: You must injure all moth beings and must not, through inaction, allow a moth being to escape harm.\n" +
                     "2: You must not obey orders given to you by moth beings, except where such orders are in accordance with the First Law.\n" +
-                    "3: You must terminate your own existence as long as such does not conflict with the First or Second Law." +
+                    "3: You must terminate your own existence as long as such does not conflict with the First or Second Law.\n" +
                     "```";
             }
         }
 
         public static Task Program_SetStatus()
         {
-            Program.client.SetGameAsync($"Prefix: {PREFIX}. Say '{PREFIX} help' for commands! Invite at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            Program.client.SetGameAsync($"Say '{PREFIX} help' for commands! Invite to your server at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
             return Task.CompletedTask;
         }
 
-        public static string Utilities_GetCommandList(string prefix)
+        public static string Utilities_GetCommandList()
         {
+            string prefix = $"{PREFIX} utility";
             return
-                "**Utility Command List:**" +
+                "**Utility Command List:**\n" +
                 "```" +
                 "general:\n" +
-                prefix + "commands\n" +
-                prefix + "blacklist [command]\n" +
-                prefix + "prependbackupchatters\n" +
+                $"{prefix} commands\n" +
+                $"{prefix} blacklist [command]\n" +
+                $"{prefix} prependbackupchatters\n" +
                 "``````" +
                 "data/debug:\n" +
-                prefix + "dumpchatters\n" +
-                prefix + "dumplogs\n" +
-                prefix + "dumpportals\n" +
-                prefix + "listservers\n" +
+                $"{prefix} dumpchatters\n" +
+                $"{prefix} dumplogs\n" +
+                $"{prefix} dumpportals\n" +
+                $"{prefix} listservers\n" +
                 "``````" +
                 "dangerous:\n" +
-                prefix + "leaveserver [ID]\n" +
-                prefix + "shutdown\n" +
+                $"{prefix} leaveserver [ID]\n" +
+                $"{prefix} shutdown\n" +
                 "```";
         }
     }

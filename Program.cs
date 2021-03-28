@@ -34,7 +34,7 @@ namespace MothBot
 
             await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
-            if (input.IndexOf($"{Data.PREFIX} ") == 0)    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
+            if (input.StartsWith($"{Data.PREFIX} "))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
                 try
                 {
                     await RootCommandHandler(msg);
@@ -80,12 +80,6 @@ namespace MothBot
         {
             await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}] said ({msg.Content}) in #{msg.Channel}");
             await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
-
-            if (msg.Content.IndexOf($"{Data.PREFIX} utility") == 0)
-            {
-                await Utilities.UtilitiesHandlerAsync(msg);
-                return;
-            }
 
             //Begin Command Parser
             string command, keyword, args;
@@ -153,6 +147,10 @@ namespace MothBot
 
                 case "portal":
                     await Portals.PortalManagement(msg, args);
+                    break;
+
+                case "utility":
+                    await Utilities.UtilitiesHandlerAsync(msg, args);
                     break;
 
                 default:

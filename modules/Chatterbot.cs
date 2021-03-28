@@ -58,11 +58,8 @@ namespace MothBot.modules
                 if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
                     return false;
             }
-
-            if (blacklist.Count != 0)                           //Check against strings in the blacklist
-                foreach (string blacklister in blacklist)
-                    if (inStr.Contains(blacklister.ToLower()))
-                        return false;
+            if (ContentsBlacklisted(inStr))
+                return false;
             return true;
         }
 
@@ -124,7 +121,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands($"{Data.PREFIX} utility blacklist"));
+                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands());
                     break;
             }
         }
@@ -132,7 +129,7 @@ namespace MothBot.modules
         public static async Task ChatterHandler(SocketMessage src)
         {
             bool mentionsMe = false, doNotSave = false;
-            if (Sanitize.IsChannelNsfw(src.Channel))
+            if ((src.Channel as ITextChannel).IsNsfw)
                 doNotSave = true;
             foreach (SocketUser mention in src.MentionedUsers)
             {
@@ -167,7 +164,15 @@ namespace MothBot.modules
             }
         }
 
-        public static void PrependBackupChatters(ISocketMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+        public static bool ContentsBlacklisted(string inStr)
+        {
+            foreach (string blacklister in blacklist)
+                if (inStr.Contains(blacklister.ToLower()))
+                    return true;
+            return false;
+        }
+
+        public static void PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<Chatter> chatterstoprepend = new List<Chatter>();
             List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
@@ -265,7 +270,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands($"{Data.PREFIX} chatter"));
+                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands());
                     break;
             }
         }
@@ -388,7 +393,7 @@ namespace MothBot.modules
             {
                 if (Origin_msg == 0)
                     return null;
-                return (Program.client.GetChannel(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
+                return (Program.client.GetChannel(Origin_channel) as ITextChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating
