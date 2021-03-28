@@ -250,7 +250,7 @@ namespace MothBot.modules
                         if (args == "good")
                             vote = true;
                         if (latestChatter.AddVote(msg.Author.Id, vote))
-                            await msg.Channel.SendMessageAsync($"Vote of \"{args}\" placed sucessfully.");
+                            await msg.Channel.SendMessageAsync($"Vote of \"{args}\" placed successfully.");
                         else
                             await msg.Channel.SendMessageAsync("You have already placed a vote for this chatter!");
                     }
