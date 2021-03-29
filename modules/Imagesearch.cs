@@ -21,14 +21,13 @@ namespace MothBot.modules
             byte retries = 255;
             do
             {
-                int randNum = Program.rand.Next(1, 64);
+                int randNum = Program.rand.Next(1, 32);
                 for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
-                    link = webData.Substring(linkPtr + 31, 7);
                     if (linkPtr == -1 || linkPtr + 7 >= webData.Length)
                         break;
-
+                    link = webData.Substring(linkPtr + 31, 7);
                     webData = webData.Substring(linkPtr + 32);
                 }
                 if (CheckValid(link))

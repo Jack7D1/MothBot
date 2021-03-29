@@ -177,7 +177,7 @@ namespace MothBot.modules
         public static bool ContentsBlacklisted(string inStr)
         {
             foreach (string blacklister in blacklist)
-                if (inStr.Contains(blacklister.ToLower()))
+                if (inStr.ToLower().Contains(blacklister.ToLower()))
                     return true;
             return false;
         }
