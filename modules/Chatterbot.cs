@@ -115,7 +115,7 @@ namespace MothBot.modules
                         blacklist.Add(args);
                         SaveBlacklist();
                         SaveChatters();
-                        await msg.Channel.SendMessageAsync($"\"{args}\" added to chatters blacklist successfully");
+                        await msg.Channel.SendMessageAsync($"\"{args}\" added to blacklist successfully");
                     }
                     break;
 
@@ -126,7 +126,7 @@ namespace MothBot.modules
                     {
                         blacklist.Remove(args);
                         SaveBlacklist();
-                        await msg.Channel.SendMessageAsync($"\"{args}\" removed from chatters blacklist successfully");
+                        await msg.Channel.SendMessageAsync($"\"{args}\" removed from blacklist successfully");
                     }
                     break;
 
@@ -252,7 +252,16 @@ namespace MothBot.modules
                         if (latestChatter.AddVote(msg.Author.Id, vote))
                             await msg.Channel.SendMessageAsync($"Vote of \"{args}\" placed successfully.");
                         else
-                            await msg.Channel.SendMessageAsync("You have already placed a vote for this chatter!");
+                        {
+                            if (vote == latestChatter.GetVote(msg.Author.Id))
+                                await msg.Channel.SendMessageAsync($"You've already voted \"{args}\" on this chatter!");
+                            else
+                            {
+                                latestChatter.ClearVote(msg.Author.Id);
+                                latestChatter.AddVote(msg.Author.Id, vote);
+                                await msg.Channel.SendMessageAsync($"Your vote has been changed to \"{args}\" on this chatter.");
+                            }
+                        }
                     }
                     break;
 

@@ -22,11 +22,12 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        public static void Log(string str)
+        public static Task Log(string str)
         {
             OpenLogs();
             log.WriteLineAsync(str);
             log.Close();
+            return Task.CompletedTask;
         }
 
         public static async Task LogAsync(string str)
@@ -36,10 +37,11 @@ namespace MothBot.modules
             log.Close();
         }
 
-        public static void LogtoConsoleandFile(string str)
+        public static Task LogtoConsoleandFile(string str)
         {
             Console.WriteLine(str);
             Log(str);
+            return Task.CompletedTask;
         }
 
         public static async Task LogtoConsoleandFileAsync(string str)

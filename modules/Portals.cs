@@ -67,7 +67,7 @@ namespace MothBot.modules
                                 Portal portal = new Portal(user.Guild.Id, msg.Channel.Id);
                                 portals.Add(portal);
                                 await msg.Channel.SendMessageAsync($"Portal opened in this channel! To remove as a portal say \"{Data.PREFIX} portal close\" or delete this channel!");
-                                Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
+                                await Logging.LogtoConsoleandFile($"Portal created at {user.Guild.Name} [{msg.Channel.Name}]");
                                 await CheckPortals();
                                 SavePortals();
                             }
@@ -84,7 +84,7 @@ namespace MothBot.modules
                             {
                                 portals.Remove(portal);
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
-                                Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
+                                await Logging.LogtoConsoleandFile($"Portal deleted at {user.Guild.Name} [{msg.Channel.Name}]");
                                 await CheckPortals();
                                 SavePortals();
                             }

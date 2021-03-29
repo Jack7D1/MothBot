@@ -35,11 +35,38 @@ namespace MothBot.modules
             }
         }
 
+        public static async Task Roll(IMessageChannel channel, int quantity, int sides)
+        {
+            if (quantity <= 0)
+            {
+                await channel.SendMessageAsync("I can't roll 0 dice!");
+                return;
+            }
+            else if (sides <= 1)
+            {
+                await channel.SendMessageAsync("I'm not going to roll a die with that few sides.");
+                return;
+            }
+            else if (sides > 128 || quantity > 32)
+            {
+                await channel.SendMessageAsync("Max dice count is 32, max side count is 128!");
+                return;
+            }
+            else
+            {
+                byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
+
+                await channel.SendMessageAsync(StringBuilder(rolls, 0));
+            }
+        }
+
         public static async Task Roll(IMessageChannel channel, string args)
         {
             try
             {
                 string[] Quantity_Sides = args.Split('d');
+                if (Quantity_Sides[0].Length == 0)  //Allows for shorthand rolling with just d20 instead of 1d20
+                    Quantity_Sides[0] = "1";
                 if (args.Contains('+'))
                 {
                     string[] Sides_Offset = Quantity_Sides[1].Split('+');

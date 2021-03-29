@@ -10,22 +10,19 @@ namespace MothBot.modules
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
         private const string linkSearch = "https://imgur.com/search?q=";
-        private const byte maxRetries = 128;
         private static readonly System.Net.WebClient _webClient = new System.Net.WebClient();
 
         public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
-            searchTerm = linkSearch + searchTerm;
-            searchTerm = searchTerm.Replace(' ', '+');
+            searchTerm = (linkSearch + searchTerm).Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);
-            string webData = Encoding.UTF8.GetString(raw);
-            string link = "";
+            string webData = Encoding.UTF8.GetString(raw), link = "";
             int linkPtr = -1;
-            byte retries = maxRetries;
+            byte retries = 255;
             do
             {
-                byte randNum = (byte)Program.rand.Next(1, 64);
-                for (byte i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
+                int randNum = Program.rand.Next(1, 64);
+                for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
                     link = webData.Substring(linkPtr + 31, 7);
@@ -36,7 +33,7 @@ namespace MothBot.modules
                 }
                 if (CheckValid(link))
                 {
-                    Console.WriteLine("Image found, took " + (maxRetries - retries) + " tries.");
+                    Console.WriteLine($"Image found, took {255 - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
                 retries--;
@@ -62,14 +59,14 @@ namespace MothBot.modules
         {
             string photoLink = ImageSearch(searchquery);
             if (photoLink == null)      //sry couldn't find ur photo :c
-                await channel.SendMessageAsync("Could not find photo of " + searchquery + "... :bug:");
+                await channel.SendMessageAsync($"Could not find photo of {searchquery}... :bug:");
             else
                 await channel.SendMessageAsync(photoLink);
         }
 
         private static bool CheckValid(string inStr)
         {
-            if (inStr == null || inStr == "8e3iAyI")
+            if (inStr == null || Chatterbot.ContentsBlacklisted(inStr))
                 return false;
             for (byte i = 0; i < 7; i++)
                 if (!((inStr[i] >= '0' && inStr[i] <= '9') || (inStr[i] >= 'a' && inStr[i] <= 'z') || (inStr[i] >= 'A' && inStr[i] <= 'Z')))
@@ -78,8 +75,10 @@ namespace MothBot.modules
             byte[] raw = _webClient.DownloadData(linkHeader + inStr + linkFooter);
             if (raw.Length < 1000)   //Imgur fallback page is very small compared to normal pages
                 return false;
-            else
-                return true;
+            string webData = Encoding.UTF8.GetString(raw);
+            if (Chatterbot.ContentsBlacklisted(webData))
+                return false;
+            return true;
         }
     }
 }
