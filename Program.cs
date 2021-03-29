@@ -137,6 +137,12 @@ namespace MothBot
                     await Dice.Roll(msg.Channel, args);
                     break;
 
+
+                case "good":
+                case "bad":
+                    await Chatterbot.VoteHandler(msg, keyword);
+                    break;
+
                 case "chatter":
                     await Chatterbot.VoteHandler(msg, args);
                     break;
