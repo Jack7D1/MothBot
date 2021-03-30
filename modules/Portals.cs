@@ -44,7 +44,7 @@ namespace MothBot.modules
 
         public static bool IsPortal(IMessageChannel ch)
         {
-            if (GetPortal(ch) is Portal && !(ch as ITextChannel).IsNsfw)
+            if (GetPortal(ch.Id) is Portal && !(ch as ITextChannel).IsNsfw)
                 return true;
             return false;
         }
@@ -60,7 +60,7 @@ namespace MothBot.modules
                 switch (args)
                 {
                     case "open":
-                        if (!GuildHasPortal(user.Guild))
+                        if (!GuildHasPortal(user.Guild.Id))
                         {
                             if (!(msg.Channel as ITextChannel).IsNsfw)
                             {
@@ -80,7 +80,7 @@ namespace MothBot.modules
 
                     case "close":
                         {
-                            if (GetPortal(msg.Channel) is Portal portal)
+                            if (GetPortal(msg.Channel.Id) is Portal portal)
                             {
                                 portals.Remove(portal);
                                 await msg.Channel.SendMessageAsync("Portal successfully closed");
@@ -141,18 +141,18 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private static Portal GetPortal(IMessageChannel ch) //If not a portal returns null
+        private static Portal GetPortal(ulong ch) //If not a portal returns null
         {
             foreach (Portal portal in portals)
-                if (portal.channelId == ch.Id)
+                if (portal.channelId == ch)
                     return portal;
             return null;
         }
 
-        private static bool GuildHasPortal(SocketGuild guild)   //Returns true if the input guild has a portal already
+        private static bool GuildHasPortal(ulong guildId)   //Returns true if the input guild has a portal already
         {
             foreach (Portal portal in portals)
-                if (guild.Id == portal.guildId)
+                if (guildId == portal.guildId)
                     return true;
             return false;
         }

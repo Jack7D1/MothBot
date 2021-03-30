@@ -29,7 +29,7 @@ namespace MothBot
         private static async Task Client_MessageRecieved(SocketMessage msg)
         {
             //Protect designated server from everyone mentions.
-            if ((msg.Channel as ITextChannel).GuildId == 733421105448222771)
+            if (msg.Channel is ITextChannel && (msg.Channel as ITextChannel).GuildId == 733421105448222771)
                 if (msg.MentionedEveryone)
                 {
                     await msg.DeleteAsync();
@@ -85,7 +85,11 @@ namespace MothBot
 
         private static async Task RootCommandHandler(SocketMessage msg)
         {
-            await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}] said ({msg.Content}) in #{msg.Channel}");
+            string guildid = "";
+            if (msg.Channel is ITextChannel)
+                guildid = $", {(msg.Channel as ITextChannel).Guild.Name} [{(msg.Channel as ITextChannel).GuildId}]";
+
+            await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}][{msg.Author.Id}] said ({msg.Content}) in #{msg.Channel}{guildid}");
             await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
 
             //Begin Command Parser
@@ -143,7 +147,6 @@ namespace MothBot
                 case "roll":
                     await Dice.Roll(msg.Channel, args);
                     break;
-
 
                 case "good":
                 case "bad":
