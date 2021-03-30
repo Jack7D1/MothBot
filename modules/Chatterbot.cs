@@ -375,7 +375,7 @@ namespace MothBot.modules
             {
                 if (Origin_author == 0)
                     return null;
-                return Program.client.GetUser(Origin_author);
+                return Program.restClient.GetUserAsync(Origin_author).Result;
             }
 
             public bool ClearVote(ulong voterID)    //Returns true or false based on if voter was found.
@@ -409,14 +409,14 @@ namespace MothBot.modules
             {
                 if (Origin_guild == 0)
                     return null;
-                return Program.client.GetGuild(Origin_guild);
+                return Program.restClient.GetGuildAsync(Origin_guild).Result;
             }
 
             public IMessage OriginMsg() //Returns null if NA
             {
                 if (Origin_msg == 0)
                     return null;
-                return (Program.client.GetChannel(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
+                return (Program.restClient.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating

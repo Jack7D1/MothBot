@@ -197,12 +197,12 @@ namespace MothBot.modules
 
             public IMessageChannel GetChannel() //returns null if not found
             {
-                return Program.client.GetChannel(channelId) as IMessageChannel;
+                return Program.restClient.GetChannelAsync(channelId).Result as IMessageChannel;
             }
 
             public IGuild GetGuild()    //returns null if not found
             {
-                return Program.client.GetGuild(guildId);
+                return Program.restClient.GetGuildAsync(guildId).Result;
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using Discord.Rest;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -80,7 +81,7 @@ namespace MothBot.modules
                     {
                         string outStr = "```CURRENT JOINED SERVERS:\n";
                         foreach (SocketGuild guild in Program.client.Guilds)
-                            outStr += $"{guild.Name} [{guild.Id}], owned by {guild.Owner.Username} [{guild.OwnerId}]\n";
+                            outStr += $"{guild.Name} [{guild.Id}], owned by {Program.restClient.GetUserAsync(guild.OwnerId).Result.Username} [{guild.OwnerId}]\n";
                         await src.Channel.SendMessageAsync(outStr + "```");
                     }
                     break;
