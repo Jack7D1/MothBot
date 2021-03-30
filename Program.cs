@@ -28,6 +28,13 @@ namespace MothBot
 
         private static async Task Client_MessageRecieved(SocketMessage msg)
         {
+            //Protect designated server from everyone mentions.
+            if ((msg.Channel as ITextChannel).GuildId == 733421105448222771)
+                if (msg.MentionedEveryone)
+                {
+                    await msg.DeleteAsync();
+                    return;
+                }
             // Filter messages
             if (msg.Author.IsBot)   //If message author is a bot, ignore
                 return;

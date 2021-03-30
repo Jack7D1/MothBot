@@ -10,11 +10,11 @@ namespace MothBot.modules
             char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
             const byte ID_LENGTH = 18;
 
-            if (inStr.Length < ID_LENGTH + "<@>".Length || !inStr.Contains("<@") || !inStr.Substring(inStr.IndexOf("<@")).Contains('>'))
+            if (inStr.Length < (ID_LENGTH + "<@>").Length || !inStr.Contains("<@") || !inStr.Substring(inStr.IndexOf("<@")).Contains('>'))
                 return ScrubEveryoneandHereMentions(inStr);
 
             string outStr = inStr, refStr = inStr;
-            while (refStr.Length >= ID_LENGTH + "<@>".Length && refStr.Contains("<@") && refStr.Substring(refStr.IndexOf("<@")).Contains('>'))
+            while (refStr.Length >= (ID_LENGTH + "<@>").Length && refStr.Contains("<@") && refStr.Substring(refStr.IndexOf("<@")).Contains('>'))
             {
                 int IDStartIndex = refStr.IndexOfAny(number, refStr.IndexOf("<@"), ID_LENGTH);
                 outStr = outStr.Replace(refStr.Substring(IDStartIndex, ID_LENGTH), $"{ID}");
