@@ -50,7 +50,7 @@ namespace MothBot.modules
                 "```" +
                 $"{prefix} good      - Increases the most recently said chatter's rating by 1\n" +
                 $"{prefix} bad       - Decreases the most recently said chatter's rating by 1\n" +
-                $"{prefix} clearvote - Removes your vote, required for changing your vote.\n" +
+                $"{prefix} clearvote - Removes your vote.\n" +
                 $"{prefix} getrating - Returns the rating of the most recently said chatter\n" +
                 $"{prefix} myvote    - Tells you what you voted on the most recent chatter\n" +
                 "```";
