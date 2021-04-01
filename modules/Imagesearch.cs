@@ -16,21 +16,26 @@ namespace MothBot.modules
         {
             searchTerm = (linkSearch + searchTerm).Replace(' ', '+');
             byte[] raw = _webClient.DownloadData(searchTerm);
-            string webData = Encoding.UTF8.GetString(raw), link = "";
+            string webData, link = "";
             int linkPtr = -1;
             byte retries = 255;
             do
             {
+                webData = Encoding.UTF8.GetString(raw);
                 int randNum = Program.rand.Next(1, 128);
+                bool EOF = false;
                 for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
                     if (linkPtr == -1 || linkPtr + 7 >= webData.Length)
+                    {
+                        EOF = true;
                         break;
+                    }
                     link = webData.Substring(linkPtr + 31, 7);
                     webData = webData.Substring(linkPtr + 32);
                 }
-                if (CheckValid(link))
+                if (!EOF && CheckValid(link))
                 {
                     Console.WriteLine($"Image found, took {byte.MaxValue - retries} tries.");
                     return linkHeader + link + linkFooter;
@@ -65,7 +70,7 @@ namespace MothBot.modules
 
         private static bool CheckValid(string inStr)
         {
-            if (inStr == null || Chatterbot.ContentsBlacklisted(inStr))
+            if (inStr.Length < 7 || Chatterbot.ContentsBlacklisted(inStr))
                 return false;
             for (byte i = 0; i < 7; i++)
                 if (!((inStr[i] >= '0' && inStr[i] <= '9') || (inStr[i] >= 'a' && inStr[i] <= 'z') || (inStr[i] >= 'A' && inStr[i] <= 'Z')))
