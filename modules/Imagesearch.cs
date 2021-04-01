@@ -21,7 +21,7 @@ namespace MothBot.modules
             byte retries = 255;
             do
             {
-                int randNum = Program.rand.Next(1, 32);
+                int randNum = Program.rand.Next(1, 128);
                 for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
@@ -32,7 +32,7 @@ namespace MothBot.modules
                 }
                 if (CheckValid(link))
                 {
-                    Console.WriteLine($"Image found, took {255 - retries} tries.");
+                    Console.WriteLine($"Image found, took {byte.MaxValue - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
                 retries--;
@@ -74,8 +74,7 @@ namespace MothBot.modules
             byte[] raw = _webClient.DownloadData(linkHeader + inStr + linkFooter);
             if (raw.Length < 1000)   //Imgur fallback page is very small compared to normal pages
                 return false;
-            string webData = Encoding.UTF8.GetString(raw);
-            if (Chatterbot.ContentsBlacklisted(webData))
+            if (Chatterbot.ContentsBlacklisted(Encoding.UTF8.GetString(raw)))
                 return false;
             return true;
         }
