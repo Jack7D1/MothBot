@@ -18,7 +18,7 @@ namespace MothBot.modules
             byte[] raw = _webClient.DownloadData(searchTerm);
             string webData, link = "";
             int linkPtr = -1;
-            byte retries = 255;
+            byte maxretries = 255, retries = maxretries;
             do
             {
                 webData = Encoding.UTF8.GetString(raw);
@@ -37,7 +37,7 @@ namespace MothBot.modules
                 }
                 if (!EOF && CheckValid(link))
                 {
-                    Console.WriteLine($"Image found, took {byte.MaxValue - retries} tries.");
+                    Console.WriteLine($"Image found, took {maxretries - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
                 retries--;
@@ -78,8 +78,6 @@ namespace MothBot.modules
             //Internet validate
             byte[] raw = _webClient.DownloadData(linkHeader + inStr + linkFooter);
             if (raw.Length < 1000)   //Imgur fallback page is very small compared to normal pages
-                return false;
-            if (Chatterbot.ContentsBlacklisted(Encoding.UTF8.GetString(raw)))
                 return false;
             return true;
         }
