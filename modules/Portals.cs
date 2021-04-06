@@ -37,7 +37,7 @@ namespace MothBot.modules
         {
             if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
             {
-                if (Chatterbot.ContentsBlacklisted(msg.Content))
+                if (!Chatterbot.ContentsBlacklisted(msg.Content))
                     await BroadcastAsync(msg);
             }
         }

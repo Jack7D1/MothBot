@@ -12,20 +12,16 @@ namespace MothBot
     {
         //See data module for parameters
         public static DiscordSocketClient client = new DiscordSocketClient();
-        public static DiscordRestClient restClient = new DiscordRestClient();
 
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
+        public static DiscordRestClient restClient = new DiscordRestClient();
 
         public static void Main(string[] args)  //Initialization
         {
-            try
-            {
-                _ = new Logging();
-                Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
-                //Keep at bottom of init
-                new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
-            }
-            catch (Exception ex) { Crash(ex); }
+            _ = new Logging();
+            Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
+            //Keep at bottom of init
+            new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
         }
 
         private static async Task Client_MessageRecieved(SocketMessage msg)
@@ -56,11 +52,13 @@ namespace MothBot
                 await Chatterbot.ChatterHandler(msg);
         }
 
-        private static void Crash(Exception ex)    //Catch fatal exceptions and safely shutdown the program.
+        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             client.StopAsync();   //Prevent further inputs immediately.
+            Exception ex = e.ExceptionObject as Exception;
             Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
                 $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
+                $"FROM: {sender}\n" +
                 $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
                 "Crash logging finished, saving data and shutting down safely...\n");
             Environment.Exit(ex.HResult);
@@ -77,12 +75,8 @@ namespace MothBot
 
         private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
         {
-            try
-            {
-                _ = new Chatterbot();
-                _ = new Portals();
-            }
-            catch (Exception ex) { Crash(ex); }
+            _ = new Chatterbot();
+            _ = new Portals();
             return Task.CompletedTask;
         }
 
@@ -165,6 +159,7 @@ namespace MothBot
                     break;
 
                 case "portal":
+                case "portals":
                     await Portals.PortalManagement(msg, args);
                     break;
 
@@ -180,6 +175,7 @@ namespace MothBot
         private async Task MainAsync()
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
             client.Ready += Ready;

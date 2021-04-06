@@ -14,8 +14,8 @@ namespace MothBot.modules
         public const ulong MY_ID = 765202973495656538;
         public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
         //PARAMS_Chatterbot
-        public const ushort CHATTERS_CHANCE_TO_CHAT = 32;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
-        public const ushort CHATTERS_CHANCE_TO_SAVE = 16;
+        public const ushort CHATTERS_CHANCE_TO_CHAT = 40;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        public const ushort CHATTERS_CHANCE_TO_SAVE = 15;
         public const ushort CHATTERS_MAX_COUNT = 2048;
         //END PARAMS
 
@@ -51,7 +51,7 @@ namespace MothBot.modules
                 $"{prefix} good      - Increases the most recently said chatter's rating by 1\n" +
                 $"{prefix} bad       - Decreases the most recently said chatter's rating by 1\n" +
                 $"{prefix} clearvote - Removes your vote.\n" +
-                $"{prefix} getrating - Returns the rating of the most recently said chatter\n" +
+                $"{prefix} rating - Returns the rating of the most recently said chatter\n" +
                 $"{prefix} myvote    - Tells you what you voted on the most recent chatter\n" +
                 "```";
         }
