@@ -112,7 +112,7 @@ namespace MothBot.modules
             foreach (Portal portal in portaldupe)
                 if (portal.GetChannel() is IMessageChannel ch)
                 {
-                    if (msg.Channel != ch)
+                    if (msg.Channel.Id != ch.Id)
                         await ch.SendMessageAsync($"*{msg.Author.Username} in [{(msg.Author as IGuildUser).Guild.Name}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
                 }
                 else

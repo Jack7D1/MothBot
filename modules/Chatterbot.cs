@@ -164,9 +164,7 @@ namespace MothBot.modules
             //Save Chatter
             if (!doNotSave && Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
-                if (chatters.Count == Data.CHATTERS_MAX_COUNT)
-                    RemoveLowestRated();
-                if (chatters.Count > Data.CHATTERS_MAX_COUNT)
+                if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
                 else
                     chatters.Add(new Chatter(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
