@@ -40,14 +40,18 @@ namespace MothBot
             await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
             if (input.StartsWith($"{Data.PREFIX} "))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
-                try
+#if !DEBUG
+            try
+#endif
                 {
-                    await RootCommandHandler(msg);
+                await RootCommandHandler(msg);
                 }
+#if !DEBUG
                 catch (Exception ex)
                 {
                     await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
                 }
+#endif
             else if (!Portals.IsPortal(msg.Channel))
                 await Chatterbot.ChatterHandler(msg);
         }

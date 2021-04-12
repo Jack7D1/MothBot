@@ -238,7 +238,6 @@ namespace MothBot.modules
                         break;
                     }
             }
-
             switch (args)
             {
                 case "good":
@@ -248,7 +247,7 @@ namespace MothBot.modules
                         if (args == "good")
                             vote = true;
                         if (latestChatter.AddVote(msg.Author.Id, vote))
-                            await msg.Channel.SendMessageAsync($"Vote of \"{args}\" placed successfully.");
+                            await msg.AddReactionAsync(new Emoji("\u2705"));
                         else
                         {
                             if (vote == latestChatter.GetVote(msg.Author.Id))
@@ -257,7 +256,7 @@ namespace MothBot.modules
                             {
                                 latestChatter.ClearVote(msg.Author.Id);
                                 latestChatter.AddVote(msg.Author.Id, vote);
-                                await msg.Channel.SendMessageAsync($"Your vote has been changed to \"{args}\" on this chatter.");
+                                await msg.AddReactionAsync(new Emoji("\u2705"));
                             }
                         }
                     }
@@ -265,7 +264,7 @@ namespace MothBot.modules
 
                 case "clearvote":
                     if (latestChatter.ClearVote(msg.Author.Id))
-                        await msg.Channel.SendMessageAsync("Vote successfully removed.");
+                        await msg.AddReactionAsync(new Emoji("\u2705"));
                     else
                         await msg.Channel.SendMessageAsync("You haven't voted on this chatter!");
                     break;
