@@ -113,7 +113,14 @@ namespace MothBot.modules
                 if (portal.GetChannel() is IMessageChannel ch)
                 {
                     if (msg.Channel.Id != ch.Id)
-                        await ch.SendMessageAsync($"*{msg.Author.Username} in [{(msg.Author as IGuildUser).Guild.Name}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
+                    {
+                        string username = msg.Author.Username, guildname = (msg.Author as IGuildUser).Guild.Name;
+                        if (Chatterbot.ContentsBlacklisted(username))
+                            username = "User";
+                        if (Chatterbot.ContentsBlacklisted(guildname))
+                            guildname = "Server";
+                        await ch.SendMessageAsync($"*{username} in [{guildname}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
+                    }
                 }
                 else
                     portals.Remove(portal);

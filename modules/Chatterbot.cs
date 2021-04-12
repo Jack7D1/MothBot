@@ -10,6 +10,7 @@ namespace MothBot.modules
     internal class Chatterbot
     {
         private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));  //Contains strings that will be filtered out of chatters, such as discord invite links.
+        //The blacklist should also be used for filtering out mature materials from chatters and bot output.
         private static readonly List<Chatter> chatters;
 
         static Chatterbot()
