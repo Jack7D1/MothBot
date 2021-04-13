@@ -3,6 +3,7 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -10,6 +11,7 @@ namespace MothBot.modules
     internal class Chatterbot
     {
         private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));  //Contains strings that will be filtered out of chatters, such as discord invite links.
+
         //The blacklist should also be used for filtering out mature materials from chatters and bot output.
         private static readonly List<Chatter> chatters;
 
@@ -48,9 +50,6 @@ namespace MothBot.modules
             if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0)     //Catch empty strings
                 return false;
 
-            foreach (char c in inStr.ToCharArray())     //Strings may not contain characters above UTF16 0000BF
-                if (c > 0xBF)
-                    return false;
             {
                 ushort uniqueChars = 0;
                 string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
@@ -176,10 +175,13 @@ namespace MothBot.modules
 
         public static bool ContentsBlacklisted(string inStr)
         {
-            if (!inStr.IsNormalized())
-                inStr = inStr.Normalize();
+            foreach (char c in inStr.ToCharArray())     //Strings may not contain characters above UTF16 0000BF
+                if (c > 0xBF)
+                    return true;
+
+            inStr = inStr.ToUpperInvariant().Normalize(NormalizationForm.FormKC);
             foreach (string blacklister in blacklist)
-                if (inStr.ToLower().Contains(blacklister.ToLower()))
+                if (inStr.Contains(blacklister.ToUpperInvariant().Normalize(NormalizationForm.FormKC)))
                     return true;
             return false;
         }

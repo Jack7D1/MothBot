@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MothBot.modules
 {
     internal class Sanitize
-        //Largely public functions used for text input/output cleanup and regulation
+    //Largely public functions used for text input/output cleanup and regulation
     {
         public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //holy moly
         {

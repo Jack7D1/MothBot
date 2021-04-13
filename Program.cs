@@ -133,7 +133,8 @@ namespace MothBot
                     break;
 
                 case "say":
-                    await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(Data.PREFIX.Length + "say ".Length));
+                    if(!Chatterbot.ContentsBlacklisted(msg.Content))
+                        await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(Data.PREFIX.Length + "say ".Length));
                     await msg.DeleteAsync();
                     break;
 
