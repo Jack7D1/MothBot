@@ -90,6 +90,7 @@ namespace MothBot.modules
                 args = "";
             }
             args = args.ToLower();
+
             switch (keyword)
             {
                 case "list":
@@ -175,6 +176,8 @@ namespace MothBot.modules
 
         public static bool ContentsBlacklisted(string inStr)
         {
+            if (!inStr.IsNormalized())
+                inStr = inStr.Normalize();
             foreach (string blacklister in blacklist)
                 if (inStr.ToLower().Contains(blacklister.ToLower()))
                     return true;
