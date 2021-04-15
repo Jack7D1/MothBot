@@ -1,9 +1,11 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
 using MothBot.modules;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MothBot
@@ -12,7 +14,8 @@ namespace MothBot
     {
         //See data module for parameters
         public static DiscordSocketClient client = new DiscordSocketClient();
-
+        public static CommandService commands = new CommandService();
+        public static Assembly commandlist = typeof(ModuleBase<SocketCommandContext>).Assembly;
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
         public static DiscordRestClient restClient = new DiscordRestClient();
 
@@ -40,18 +43,7 @@ namespace MothBot
             await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
             if (input.StartsWith($"{Data.PREFIX} "))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
-#if !DEBUG
-            try
-#endif
-                {
                 await RootCommandHandler(msg);
-                }
-#if !DEBUG
-                catch (Exception ex)
-                {
-                    await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
-                }
-#endif
             else if (!Portals.IsPortal(msg.Channel))
                 await Chatterbot.ChatterHandler(msg);
         }
@@ -133,7 +125,7 @@ namespace MothBot
                     break;
 
                 case "say":
-                    if(!Chatterbot.ContentsBlacklisted(msg.Content))
+                    if (!Chatterbot.ContentsBlacklisted(msg.Content))
                         await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(Data.PREFIX.Length + "say ".Length));
                     await msg.DeleteAsync();
                     break;
@@ -184,6 +176,8 @@ namespace MothBot
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
             client.Ready += Ready;
+            await commands.AddModulesAsync(commandlist, null);
+            
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
             await restClient.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
             await Data.Program_SetStatus();
@@ -191,5 +185,14 @@ namespace MothBot
 
             await Task.Delay(-1);   //Sit here while the async listens
         }
+    }
+
+    public class GeneralModule : ModuleBase<SocketCommandContext>
+    {
+        [Command("say")]
+        [Summary("Have the ai say whatever you want!")]
+        public Task SayAsync(
+            [Remainder][Summary("The text to echo")] string echo)
+            => ReplyAsync(echo);
     }
 }
