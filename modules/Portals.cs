@@ -115,11 +115,10 @@ namespace MothBot.modules
                     if (msg.Channel.Id != ch.Id)
                     {
                         string username = msg.Author.Username, guildname = (msg.Author as IGuildUser).Guild.Name;
-                        if (Chatterbot.ContentsBlacklisted(username))
-                            username = "User";
-                        if (Chatterbot.ContentsBlacklisted(guildname))
-                            guildname = "Server";
-                        await ch.SendMessageAsync($"*{username} in [{guildname}] says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"");
+                        string outmsg = $"*{username} says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"";
+                        if (Chatterbot.ContentsBlacklisted(outmsg))
+                            break;
+                        await ch.SendMessageAsync();
                     }
                 }
                 else
