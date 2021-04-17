@@ -107,7 +107,7 @@ namespace MothBot.modules
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
         {
-            string outmsg = $"*{msg.Author.Username} says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"";
+            string outmsg = $"*{msg.Author.Username} says* \" {Sanitize.ScrubRoleMentions(msg.Content)} \"";
             if (!Chatterbot.ContentsBlacklisted(outmsg))
             {
                 List<Portal> portaldupe = portals;
