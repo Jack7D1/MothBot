@@ -18,6 +18,9 @@ namespace MothBot
 
         public static void Main(string[] args)  //Initialization
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
             _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
@@ -179,8 +182,6 @@ namespace MothBot
 
         private async Task MainAsync()
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
             client.Ready += Ready;

@@ -9,7 +9,7 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
-        private static readonly List<string> blacklist = new List<string>(Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST));  //Contains strings that will be filtered out of chatters, such as discord invite links.
+        private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links.
 
         //The blacklist should also be used for filtering out mature materials from chatters and bot output.
         private static readonly List<Chatter> chatters;
@@ -18,6 +18,8 @@ namespace MothBot.modules
         {
             try
             {
+                foreach (string blacklister in Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST))
+                    blacklist.Add(Sanitize.Dealias(blacklister));
                 chatters = new List<Chatter>();
                 string fileData = Data.Files_Read_String(Data.PATH_CHATTERS);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
@@ -87,7 +89,7 @@ namespace MothBot.modules
                 keyword = command;
                 args = "";
             }
-            args = args.ToLower();
+            args = Sanitize.Dealias(args);
 
             switch (keyword)
             {
@@ -176,7 +178,7 @@ namespace MothBot.modules
         {
             inStr = Sanitize.Dealias(inStr);
             foreach (string blacklister in blacklist)
-                if (inStr.Contains(Sanitize.Dealias(blacklister)))
+                if (inStr.Contains(blacklister))
                     return true;
             return false;
         }
