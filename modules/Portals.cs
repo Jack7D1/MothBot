@@ -37,8 +37,7 @@ namespace MothBot.modules
         {
             if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
             {
-                if (!Chatterbot.ContentsBlacklisted(msg.Content))
-                    await BroadcastAsync(msg);
+                await BroadcastAsync(msg);
             }
         }
 
@@ -108,21 +107,21 @@ namespace MothBot.modules
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
         {
-            List<Portal> portaldupe = portals;
-            foreach (Portal portal in portaldupe)
-                if (portal.GetChannel() is IMessageChannel ch)
-                {
-                    if (msg.Channel.Id != ch.Id)
+            string outmsg = $"*{msg.Author.Username} says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"";
+            if (!Chatterbot.ContentsBlacklisted(outmsg))
+            {
+                List<Portal> portaldupe = portals;
+                foreach (Portal portal in portaldupe)
+                    if (portal.GetChannel() is IMessageChannel ch)
                     {
-                        string username = msg.Author.Username, guildname = (msg.Author as IGuildUser).Guild.Name;
-                        string outmsg = $"*{username} says* \"{Sanitize.ScrubRoleMentions(msg.Content)}\"";
-                        if (Chatterbot.ContentsBlacklisted(outmsg))
-                            break;
-                        await ch.SendMessageAsync();
+                        if (msg.Channel.Id != ch.Id)
+                        {
+                            await ch.SendMessageAsync(outmsg);
+                        }
                     }
-                }
-                else
-                    portals.Remove(portal);
+                    else
+                        portals.Remove(portal);
+            }
         }
 
         private static Task ChannelDestroyed(SocketChannel arg)

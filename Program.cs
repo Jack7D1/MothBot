@@ -43,9 +43,9 @@ namespace MothBot
 #if !DEBUG
             try
 #endif
-                {
+            {
                 await RootCommandHandler(msg);
-                }
+            }
 #if !DEBUG
                 catch (Exception ex)
                 {
@@ -133,7 +133,7 @@ namespace MothBot
                     break;
 
                 case "say":
-                    if(!Chatterbot.ContentsBlacklisted(msg.Content))
+                    if (!Chatterbot.ContentsBlacklisted(msg.Content))
                         await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(Data.PREFIX.Length + "say ".Length));
                     await msg.DeleteAsync();
                     break;
@@ -186,7 +186,12 @@ namespace MothBot
             client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
             await restClient.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
+
+#if (!DEBUG)
             await Data.Program_SetStatus();
+#else
+            await client.SetGameAsync("DEBUG MODE, DATA SAVED IN DEBUG MODE WILL BE LOST");
+#endif
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens

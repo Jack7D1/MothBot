@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -175,13 +174,9 @@ namespace MothBot.modules
 
         public static bool ContentsBlacklisted(string inStr)
         {
-            foreach (char c in inStr.ToCharArray())     //Strings may not contain characters above UTF16 0000BF
-                if (c > 0xBF)
-                    return true;
-
-            inStr = inStr.ToUpperInvariant().Normalize(NormalizationForm.FormKC);
+            inStr = Sanitize.Dealias(inStr);
             foreach (string blacklister in blacklist)
-                if (inStr.Contains(blacklister.ToUpperInvariant().Normalize(NormalizationForm.FormKC)))
+                if (inStr.Contains(Sanitize.Dealias(blacklister)))
                     return true;
             return false;
         }
