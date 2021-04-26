@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Dice
+    internal static class Dice
     {
         public static async Task Roll(IMessageChannel channel, int quantity, int sides, int offset)
         {

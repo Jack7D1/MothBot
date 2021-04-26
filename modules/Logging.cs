@@ -7,7 +7,7 @@ namespace MothBot.modules
 {
     internal class Logging
     {
-        private static StreamWriter log;
+        private static StreamWriter log = new StreamWriter(Data.PATH_LOGS, true);
 
         public Logging()
         {
@@ -24,17 +24,15 @@ namespace MothBot.modules
 
         public static Task Log(string str)
         {
-            OpenLogs();
             log.WriteLineAsync(str);
-            log.Close();
+            log.Flush();
             return Task.CompletedTask;
         }
 
         public static async Task LogAsync(string str)
         {
-            OpenLogs();
             await log.WriteLineAsync(str);
-            log.Close();
+            log.Flush();
         }
 
         public static Task LogtoConsoleandFile(string str)
@@ -48,11 +46,6 @@ namespace MothBot.modules
         {
             Console.WriteLine(str);
             await LogAsync(str);
-        }
-
-        private static void OpenLogs()
-        {
-            log = new StreamWriter(Data.PATH_LOGS, true);
         }
 
         private static void ProcessExit(object sender, EventArgs e)

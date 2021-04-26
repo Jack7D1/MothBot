@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Data
+    internal static class Data
     //Class comprises of static lists and strings that can be called from anywhere. Bot parameters are found here.
     //This also contains subroutines used for reading and writing to save files in a standardized manner.
     {
@@ -48,11 +48,12 @@ namespace MothBot.modules
                 "**Voting Commands:**\n" +
                 $"Summary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
                 "```" +
-                $"{prefix} good      - Increases the most recently said chatter's rating by 1\n" +
-                $"{prefix} bad       - Decreases the most recently said chatter's rating by 1\n" +
-                $"{prefix} clearvote - Removes your vote.\n" +
-                $"{prefix} rating - Returns the rating of the most recently said chatter\n" +
-                $"{prefix} myvote    - Tells you what you voted on the most recent chatter\n" +
+                $"{prefix} good         - Increases the most recently said chatter's rating by 1\n" +
+                $"{prefix} bad          - Decreases the most recently said chatter's rating by 1\n" +
+                $"{prefix} clearvote    - Removes your vote.\n" +
+                $"{prefix} rating       - Returns the rating of the most recently said chatter\n" +
+                $"{prefix} myvote       - Tells you what you voted on the most recent chatter\n" +
+                $"{prefix} leaderboard  - Lists the top 3 highest rated chatters." +
                 "```";
         }
 
@@ -164,7 +165,6 @@ namespace MothBot.modules
                 $"{PREFIX} portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
                 $"{PREFIX} chatter [v]  - Say chatter good or chatter bad to vote on the most recent chatter\n" +
                 $"{PREFIX} ping         - You know what this does.\n" +
-                $"{PREFIX} utility      - Utility functions, bot only responds to operators\n" +
                 "```";
         }
 
@@ -205,7 +205,6 @@ namespace MothBot.modules
                 "**Utility Command List:**\n" +
                 "```" +
                 "general:\n" +
-                $"{prefix} commands\n" +
                 $"{prefix} blacklist [command]\n" +
                 $"{prefix} prependbackupchatters\n" +
                 "``````" +

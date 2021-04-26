@@ -21,21 +21,17 @@ namespace MothBot
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
+
             _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
+            Custom.Init();
+
             //Keep at bottom of init
-            new Program().MainAsync().GetAwaiter().GetResult();    //Begin async program
+            new Program().MainAsync().GetAwaiter().GetResult();    //Start Runtime
         }
 
         private static async Task Client_MessageRecieved(SocketMessage msg)
         {
-            //Protect designated server from everyone mentions.
-            if (msg.Channel is ITextChannel && (msg.Channel as ITextChannel).GuildId == 733421105448222771)
-                if (msg.MentionedEveryone)
-                {
-                    await msg.DeleteAsync();
-                    return;
-                }
             // Filter messages
             if (msg.Author.IsBot)   //If message author is a bot, ignore
                 return;
@@ -44,11 +40,11 @@ namespace MothBot
             string input = msg.Content.ToLower();
             if (input.StartsWith($"{Data.PREFIX} "))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
 #if !DEBUG
-            try
+                try
 #endif
-            {
-                await RootCommandHandler(msg);
-            }
+                {
+                    await RootCommandHandler(msg);
+                }
 #if !DEBUG
                 catch (Exception ex)
                 {
@@ -191,7 +187,7 @@ namespace MothBot
 #if (!DEBUG)
             await Data.Program_SetStatus();
 #else
-            await client.SetGameAsync("DEBUG MODE, DATA SAVED IN DEBUG MODE WILL BE LOST");
+            await client.SetGameAsync("DEBUG MODE ENABLED, DATA SAVED IN DEBUG MODE WILL BE LOST");
 #endif
             await client.StartAsync();
 

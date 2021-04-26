@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Utilities
+    internal static class Utilities
     {
-        private static readonly List<ulong> operatorIDs = new List<ulong>{   //Discord user IDs of allowed operators, in ulong format.
+        private static readonly ulong[] operatorIDs = {   //Discord user IDs of allowed operators, in ulong format.
             238735900597682177, //Dex
             206920373952970753, //Jack
         };

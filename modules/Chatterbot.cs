@@ -288,10 +288,68 @@ namespace MothBot.modules
                         await msg.Channel.SendMessageAsync("You haven't voted on this chatter!");
                     break;
 
+                case "leaderboard":
+                    {
+                        if (!(GetLeaders() is List<Chatter> places))
+                        {
+                            await msg.Channel.SendMessageAsync("Could not generate chatter leaderboard, ratings too similar or too few chatters!");
+                            break;
+                        }
+                        List<string> outmsgs = new List<string> { "**Leaderboard**" };
+                        string[] ribbon = { ":first_place:", ":second_place:", ":third_place:" };
+
+                        for(int i = 0; i < 3; i++ )
+                        {
+                            outmsgs.Add(ribbon[i]);
+                            outmsgs.Add($"Chatter: \" {places[i].Content} \"");
+                            string creditstr;
+                            if (places[i].Author() is IUser usr && places[i].OriginGuild() is IGuild guild)
+                                creditstr = $"Accreddited to {usr.Username}, who said it in {guild.Name}.\n";
+                            else
+                                creditstr = "Could not find original author of this chatter.\n";
+                            outmsgs.Add($"{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
+
+                        }
+                        foreach (string outmsg in outmsgs)
+                            await msg.Channel.SendMessageAsync(outmsg);
+                    }
+                    break;
+
                 default:
                     await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands());
                     break;
             }
+        }
+
+        private static List<Chatter> GetLeaders()    //Gets the threee highest rated chatters, returns null if unsuccessful.
+        {
+            List<Chatter> places = new List<Chatter> { null, null, null };
+            int firstscore = Int32.MinValue, secondscore = Int32.MinValue, thirdscore = Int32.MinValue;
+
+            foreach (Chatter chatter in chatters)   //Get the highest rating
+                if (chatter.Rating() > firstscore)
+                    firstscore = chatter.Rating();
+            foreach (Chatter chatter in chatters)   //Second highest rating
+                if (chatter.Rating() > secondscore && chatter.Rating() < firstscore)
+                    secondscore = chatter.Rating();
+            foreach (Chatter chatter in chatters)   //Third highest rating
+                if (chatter.Rating() > thirdscore && chatter.Rating() < secondscore)
+                    thirdscore = chatter.Rating();
+            if (firstscore == Int32.MinValue || secondscore == Int32.MinValue || thirdscore == Int32.MinValue)
+                return null;
+
+            foreach(Chatter chatter in chatters)
+            {
+                if (places[0] == null && chatter.Rating() == firstscore)
+                    places[0] = chatter;
+                else if (places[1] == null && chatter.Rating() == secondscore)
+                    places[1] = chatter;
+                else if (places[2] == null && chatter.Rating() == thirdscore)
+                    places[2] = chatter;
+                if (!places.Contains(null))
+                    break;
+            }
+            return places;
         }
 
         private static void CleanupChatters()

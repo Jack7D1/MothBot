@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Imagesearch
+    internal static class Imagesearch
     {
         private const string linkFooter = ".jpg";
         private const string linkHeader = "https://i.imgur.com/";
