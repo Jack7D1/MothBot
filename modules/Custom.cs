@@ -19,12 +19,12 @@ namespace MothBot.modules
 
         private static async Task MessageRecieved(IMessage msg)
         {
-            if (!guilds.TryGetValue((msg.Channel as IGuildChannel).GuildId, out GuildSettings settings))
-                return;
-
-            //Protect designated servers from @everyone and @here mentions.
-            if (settings.massPingsBlocked && msg.MentionedEveryone)
-                await msg.DeleteAsync();
+            if (msg.Channel is IGuildChannel && guilds.TryGetValue((msg.Channel as IGuildChannel).GuildId, out GuildSettings settings))
+            {
+                //Protect designated servers from @everyone and @here mentions.
+                if (settings.massPingsBlocked && msg.MentionedEveryone)
+                    await msg.DeleteAsync();
+            }
         }
 
         private struct GuildSettings
