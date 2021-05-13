@@ -38,10 +38,11 @@ namespace MothBot.modules
             Program.client.GuildMemberUpdated += GuildMemberUpdated;
         }
 
-        private static async Task GuildMemberUpdated(IGuildUser prev, IGuildUser current)
+        private static Task GuildMemberUpdated(IGuildUser prev, IGuildUser current)
         {
             if (ContainsBad($"{current.Activity}{current.Nickname}{current.Status}{current.Username}"))
                 Chatterbot.AddBlacklister(current.Username);
+            return Task.CompletedTask;
         }
 
         private static async Task MessageRecieved(IMessage msg)
