@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MothBot.modules
 {
-    internal class Sanitize
+    internal static class Sanitize
     //Largely public functions used for text input/output cleanup and regulation
     {
         public static string Dealias(string inStr) //Returns a dealiased version of a string, destroys input detail in exchange for comparability.

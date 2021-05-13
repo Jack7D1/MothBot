@@ -42,9 +42,9 @@ namespace MothBot
 #if !DEBUG
                 try
 #endif
-                {
-                    await RootCommandHandler(msg);
-                }
+            {
+                await RootCommandHandler(msg);
+            }
 #if !DEBUG
                 catch (Exception ex)
                 {

@@ -74,6 +74,20 @@ namespace MothBot.modules
             return true;
         }
 
+        public static bool AddBlacklister(string entry)  //Returns false if already present
+        {
+            entry = Sanitize.Dealias(entry);
+            if (blacklist.Contains(entry))
+                return false;
+            else
+            {
+                blacklist.Add(entry);
+                SaveBlacklist();
+                SaveChatters();
+                return true;
+            }
+        }
+
         public static async Task BlacklistHandler(SocketMessage msg, string command) //Expects to be called from the utilities chain with the keyword 'blacklist'.
         {
             string keyword, args;
@@ -89,7 +103,6 @@ namespace MothBot.modules
                 keyword = command;
                 args = "";
             }
-            args = Sanitize.Dealias(args);
 
             switch (keyword)
             {
@@ -108,28 +121,19 @@ namespace MothBot.modules
                     break;
 
                 case "add":
-                    if (blacklist.Contains(args))
-                        await msg.Channel.SendMessageAsync("Entry already in blacklist.");
-                    else if (args.Length < 3)
+                    if (args.Length < 3)
                         await msg.Channel.SendMessageAsync("Minimum 3 characters for blacklist entries");
-                    else
-                    {
-                        blacklist.Add(args);
-                        SaveBlacklist();
-                        SaveChatters();
+                    else if (AddBlacklister(args))
                         await msg.Channel.SendMessageAsync($"\"{args}\" added to blacklist successfully");
-                    }
+                    else
+                        await msg.Channel.SendMessageAsync("Entry already in blacklist.");
                     break;
 
                 case "remove":
-                    if (!blacklist.Contains(args))
-                        await msg.Channel.SendMessageAsync("Entry not found in blacklist");
-                    else
-                    {
-                        blacklist.Remove(args);
-                        SaveBlacklist();
+                    if (RemoveBlacklister(args))
                         await msg.Channel.SendMessageAsync($"\"{args}\" removed from blacklist successfully");
-                    }
+                    else
+                        await msg.Channel.SendMessageAsync("Entry not found in blacklist");
                     break;
 
                 default:
@@ -137,7 +141,6 @@ namespace MothBot.modules
                     break;
             }
         }
-
         public static async Task ChatterHandler(SocketMessage src)
         {
             bool mentionsMe = false, doNotSave = false;
@@ -298,7 +301,7 @@ namespace MothBot.modules
                         List<string> outmsgs = new List<string> { "**Leaderboard**" };
                         string[] ribbon = { ":first_place:", ":second_place:", ":third_place:" };
 
-                        for(int i = 0; i < 3; i++ )
+                        for (int i = 0; i < 3; i++)
                         {
                             outmsgs.Add(ribbon[i]);
                             outmsgs.Add($"Chatter: \" {places[i].Content} \"");
@@ -308,7 +311,6 @@ namespace MothBot.modules
                             else
                                 creditstr = "Could not find original author of this chatter.\n";
                             outmsgs.Add($"{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
-
                         }
                         foreach (string outmsg in outmsgs)
                             await msg.Channel.SendMessageAsync(outmsg);
@@ -319,6 +321,34 @@ namespace MothBot.modules
                     await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands());
                     break;
             }
+        }
+
+        private static void CleanupChatters()
+        {
+            List<Chatter> chattersout = new List<Chatter>();
+            List<string> chattersContents = new List<string>();
+            foreach (Chatter chatter in chatters)                //Test every entry for acceptableness and kill possible duplicates
+            {
+                if (Custom.ContainsBad(chatter.Content, out List<string> matches))
+                    AddBlacklister(matches[0]);
+                if (AcceptableChatter(chatter.Content) && !chattersContents.Contains(chatter.Content))
+                {
+                    chattersout.Add(chatter);
+                    chattersContents.Add(chatter.Content);
+                }
+            }
+            //Move them over
+            chatters.Clear();
+            foreach (Chatter chatter in chattersout)
+                chatters.Add(chatter);
+        }
+
+        private static Chatter GetChatter() //Requires output sanitization still
+        {
+            if (chatters.Count == 0)
+                return null;
+            else
+                return chatters[Program.rand.Next(0, chatters.Count)];
         }
 
         private static List<Chatter> GetLeaders()    //Gets the threee highest rated chatters, returns null if unsuccessful.
@@ -338,7 +368,7 @@ namespace MothBot.modules
             if (firstscore == Int32.MinValue || secondscore == Int32.MinValue || thirdscore == Int32.MinValue)
                 return null;
 
-            foreach(Chatter chatter in chatters)
+            foreach (Chatter chatter in chatters)
             {
                 if (places[0] == null && chatter.Rating() == firstscore)
                     places[0] = chatter;
@@ -352,30 +382,18 @@ namespace MothBot.modules
             return places;
         }
 
-        private static void CleanupChatters()
+        private static bool RemoveBlacklister(string blacklister)   //Returns false if not found in blacklist
         {
-            List<Chatter> chattersout = new List<Chatter>();
-            List<string> chattersContents = new List<string>();
-            foreach (Chatter chatter in chatters)                //Test every entry for acceptableness and kill possible duplicates
-                if (AcceptableChatter(chatter.Content) && !chattersContents.Contains(chatter.Content))
-                {
-                    chattersout.Add(chatter);
-                    chattersContents.Add(chatter.Content);
-                }
-            //Move them over
-            chatters.Clear();
-            foreach (Chatter chatter in chattersout)
-                chatters.Add(chatter);
-        }
-
-        private static Chatter GetChatter() //Requires output sanitization still
-        {
-            if (chatters.Count == 0)
-                return null;
+            blacklister = Sanitize.Dealias(blacklister);
+            if (!blacklist.Contains(blacklister))
+                return false;
             else
-                return chatters[Program.rand.Next(0, chatters.Count)];
+            {
+                blacklist.Remove(blacklister);
+                SaveBlacklist();
+                return true;
+            }
         }
-
         private static void RemoveLowestRated()   //Deletes one member of chatters with the lowest rating, will choose at random between multiple members with the same lowest rating.
         {
             int lowest = int.MaxValue;

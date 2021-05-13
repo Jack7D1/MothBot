@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Minesweeper
+    internal static class Minesweeper
     {
         private const ushort DEFAULT_BOMBS = 16;
         private const byte DEFAULT_GRIDSIZE = 8;
