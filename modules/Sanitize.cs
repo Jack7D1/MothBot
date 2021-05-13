@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MothBot.modules
 {
@@ -64,21 +65,15 @@ namespace MothBot.modules
             return outStr;
         }
 
-        public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //holy moly
+        public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //regex saves the day
         {
-            char[] number = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            const byte ID_LENGTH = 18;
-
-            if (inStr.Length < (ID_LENGTH + "<@>").Length || !inStr.Contains("<@") || !inStr.Substring(inStr.IndexOf("<@")).Contains('>'))
+            if (inStr.Length < (18 + "<@>").Length || !Regex.IsMatch(inStr, @"<@\d{18}>"))
                 return ScrubEveryoneandHereMentions(inStr);
 
-            string outStr = inStr, refStr = inStr;
-            while (refStr.Length >= (ID_LENGTH + "<@>").Length && refStr.Contains("<@") && refStr.Substring(refStr.IndexOf("<@")).Contains('>'))
-            {
-                int IDStartIndex = refStr.IndexOfAny(number, refStr.IndexOf("<@"), ID_LENGTH);
-                outStr = outStr.Replace(refStr.Substring(IDStartIndex, ID_LENGTH), $"{ID}");
-                refStr = refStr.Substring(refStr.IndexOf('>') + 1);
-            }
+            MatchCollection mentions = Regex.Matches(inStr, @"<@\d{18}>");
+            string outStr = inStr;
+            foreach (Match mention in mentions)
+                outStr = outStr.Replace(mention.Value, $"<@{ID}>");
             return ScrubEveryoneandHereMentions(outStr);
         }
 
