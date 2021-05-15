@@ -167,6 +167,11 @@ namespace MothBot
                     await Portals.PortalManagement(msg, args);
                     break;
 
+                //Below are not listed in the commands block.
+                case "dealias":
+                    await msg.Channel.SendMessageAsync(Sanitize.Dealias(args));
+                    break;
+
                 case "utility":
                     await Utilities.UtilitiesHandlerAsync(msg, args);
                     break;

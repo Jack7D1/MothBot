@@ -10,28 +10,28 @@ namespace MothBot.modules
     {
         public static string Dealias(string inStr) //Returns a dealiased version of a string, destroys input detail in exchange for comparability.
         {   //While this is not entirely accurate, it is consistent, which is adequate for the purpose of comparison.
-            inStr = inStr.Normalize(NormalizationForm.FormKC).ToUpperInvariant().Normalize(NormalizationForm.FormKC);
+            inStr = inStr.Normalize(NormalizationForm.FormKC);
             //Confusable table:
-            List<char> A = new List<char> { 'ᗅ', 'Ꭺ', 'ꓮ', 'а', 'a', 'ɑ', 'α', '@' };
+            List<char> A = new List<char> { 'ᗅ', 'Ꭺ', 'ꓮ', 'а', 'a', 'ɑ', 'α', '@', 'ä' };
             List<char> B = new List<char> { 'ꓐ', 'Ᏼ', 'ᗷ', 'b', 'ᑲ', 'Ꮟ', 'ᖯ' };
-            List<char> C = new List<char> { 'ꓚ', 'Ꮯ', 'с', 'c', 'ᴄ', 'ⲥ' };
+            List<char> C = new List<char> { 'ꓚ', 'Ꮯ', 'с', 'c', 'ᴄ', 'ⲥ', '©' };
             List<char> D = new List<char> { 'Ꭰ', 'ꓓ', 'ᗪ', 'ᗞ', 'ԁ', 'ꓒ', 'd', 'Ꮷ', 'ᑯ' };
-            List<char> E = new List<char> { 'ꓰ', 'ⴹ', 'Ꭼ', 'ꬲ', 'e', 'е', 'ҽ', '3' };
+            List<char> E = new List<char> { 'ꓰ', 'ⴹ', 'Ꭼ', 'ꬲ', 'e', 'е', 'ҽ', '3', 'Ҽ' };
             List<char> F = new List<char> { 'ᖴ', 'ꓝ', 'ꬵ', 'f', 'ꞙ', 'ẝ' };
             List<char> G = new List<char> { 'Ꮐ', 'Ᏻ', 'ꓖ', 'ɡ', 'ց', 'ᶃ', 'g' };
             List<char> H = new List<char> { 'ꓧ', 'Ꮋ', 'ᕼ', 'հ', 'Ꮒ', 'h', 'һ' };
-            List<char> I = new List<char> { 'ǀ', 'ᛁ', 'ߊ', 'l', 'ⵏ', '1', '۱', 'ꓲ', 'ו', 'ן', 'ı', 'Ꭵ', 'і', 'ꙇ', 'i', 'ɩ', 'ι', 'ɪ', 'ӏ', '!' };
+            List<char> I = new List<char> { 'ǀ', 'ᛁ', 'ߊ', 'l', 'ⵏ', '1', '۱', 'ꓲ', 'ו', 'ן', 'ı', 'Ꭵ', 'і', 'ꙇ', 'i', 'ɩ', 'ι', 'ɪ', 'ӏ', '!'};
             List<char> J = new List<char> { 'ꓙ', 'Ꭻ', 'ᒍ', 'ϳ', 'ј', 'j' };
             List<char> K = new List<char> { 'ᛕ', 'Ꮶ', 'ꓗ', 'k' };
-            List<char> L = new List<char> { 'ꓡ', 'ᒪ', 'Ꮮ', 'ǀ', 'ߊ', 'l', 'ⵏ', '1', 'ꓲ' };
+            List<char> L = new List<char> { 'ꓡ', 'ᒪ', 'Ꮮ', 'ǀ', 'ߊ', 'l', 'ⵏ', '1', 'ꓲ', 'Ƚ', 'ʅ' };
             List<char> M = new List<char> { 'ᗰ', 'ᛖ', 'Ꮇ', 'ꓟ', 'm' };
-            List<char> N = new List<char> { 'ꓠ', 'ո', 'ռ', 'n' };
+            List<char> N = new List<char> { 'ꓠ', 'ո', 'ռ', 'n', 'ɳ' };
             List<char> O = new List<char> { '߀', 'ଠ', '০', '୦', '〇', 'ዐ', '0', 'ꓳ', 'ⵔ', '၀', 'σ', 'օ', 'ᴏ', '๐', '໐', 'ᴑ', 'ဝ', 'ⲟ', 'ഠ', '०', '੦', '૦', '௦', '౦', '೦', '൦', 'o', 'о', 'ο', 'ჿ' };
             List<char> P = new List<char> { 'ꓑ', 'Ꮲ', 'ᑭ', 'р', 'p', 'ρ', 'ⲣ' };
             List<char> Q = new List<char> { 'ⵕ', 'q', 'գ', 'զ', 'ԛ' };
-            List<char> R = new List<char> { 'Ꭱ', 'Ꮢ', 'ꓣ', 'ᖇ', 'r', 'г', 'ⲅ', 'ᴦ', 'ꭇ', 'ꭈ' };
-            List<char> S = new List<char> { 'ꓢ', 'Ꮪ', 'ꜱ', 's', 'ѕ', 'ƽ' };
-            List<char> T = new List<char> { 'Ꭲ', 'ꓔ', 't' };
+            List<char> R = new List<char> { 'Ꭱ', 'Ꮢ', 'ꓣ', 'ᖇ', 'r', 'г', 'ⲅ', 'ᴦ', 'ꭇ', 'ꭈ', 'ɾ' };
+            List<char> S = new List<char> { 'ꓢ', 'Ꮪ', 'ꜱ', 's', 'ѕ', 'ƽ', 'ʂ' };
+            List<char> T = new List<char> { 'Ꭲ', 'ꓔ', 't', 'ƚ' };
             List<char> U = new List<char> { 'ሀ', 'ꓴ', 'ᑌ', 'ꭒ', 'υ', 'u', 'ʋ', 'ᴜ', 'ս', 'ꭎ', 'ꞟ', 'µ' };
             List<char> V = new List<char> { 'ꓦ', '٧', '۷', 'ⴸ', 'Ꮩ', 'ᐯ', 'ᴠ', 'ѵ', 'v', 'ט', 'ν' };
             List<char> W = new List<char> { 'Ꮃ', 'Ꮤ', 'ꓪ', 'ᴡ', 'ѡ', 'ա', 'w', 'ԝ', 'ɯ' };
