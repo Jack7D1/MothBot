@@ -20,7 +20,7 @@ namespace MothBot.modules
                     if (unicodeCategory != UnicodeCategory.NonSpacingMark)
                         stringBuilder.Append(c);
                 }
-                inStr = stringBuilder.ToString();
+                inStr = stringBuilder.ToString().Replace(" ", "").Replace("_", "").Replace("-", "");
             }
             //Massive table of manually mapped characters based on their alphabet lookalikes
             //Confusable table:

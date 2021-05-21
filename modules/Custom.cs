@@ -23,17 +23,17 @@ namespace MothBot.modules
             //if (msg.Channel is IGuildChannel && guilds.TryGetValue((msg.Channel as IGuildChannel).GuildId, out GuildSettings settings))
             {
             }
-            if (Regex.IsMatch($"{msg.Content}{msg.Author.Status}{msg.Author.Username}", @":[^\s\n]{0,16}trans(?=[^a-fh-rt-zA-FH-RT-Z0-9])[^\s\n]{0,16}:|\([a-zA-Z]{2,6}\/[a-zA-Z]{2,6}\)"))   //Supremacy movements will not be tolerated.
+            if (Regex.IsMatch($"{msg.Content}{msg.Author.Status}{msg.Author.Username}", @":[^\s\n]{0,16}trans(?=[^a-fh-rt-zA-FH-RT-Z0-9])[^\s\n]{0,16}:|(\(|^)[a-zA-Z]{2,6}\/[a-zA-Z]{2,6}(\)|$)"))   //Supremacy movements will not be tolerated.
                 Chatterbot.AddBlacklister(msg.Author.Username);
         }
 
         private struct GuildSettings
         {
-            public readonly bool generichere;
+            public readonly bool a2;
 
-            public GuildSettings(bool generic = false)
+            public GuildSettings(bool a = false)
             {
-                generichere = generic;
+                a2 = a;
             }
         }
     }
