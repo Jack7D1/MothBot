@@ -328,15 +328,11 @@ namespace MothBot.modules
             List<Chatter> chattersout = new List<Chatter>();
             List<string> chattersContents = new List<string>();
             foreach (Chatter chatter in chatters)                //Test every entry for acceptableness and kill possible duplicates
-            {
-                if (Custom.ContainsBad(chatter.Content, out List<string> matches))
-                    AddBlacklister(matches[0]);
                 if (AcceptableChatter(chatter.Content) && !chattersContents.Contains(chatter.Content))
                 {
                     chattersout.Add(chatter);
                     chattersContents.Add(chatter.Content);
                 }
-            }
             //Move them over
             chatters.Clear();
             foreach (Chatter chatter in chattersout)
