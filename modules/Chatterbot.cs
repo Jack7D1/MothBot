@@ -4,6 +4,9 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -19,7 +22,6 @@ namespace MothBot.modules
         private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links. Also used for filtering mature materials from bot output.
 
         private static readonly List<Chatter> chatters;
-
         static Chatterbot()
         {
             Program.client.ReactionAdded += ReactionAdded;
@@ -29,10 +31,11 @@ namespace MothBot.modules
                 foreach (string blacklister in Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST))
                     blacklist.Add(Sanitize.Dealias(blacklister));
                 chatters = new List<Chatter>();
-                string fileData = Data.Files_Read_String(Data.PATH_CHATTERS);
+                string fileData = File.ReadAllText(Data.PATH_CHATTERS, Encoding.UTF8);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
                     throw new Exception("NO FILEDATA");
-                chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
+                
+                chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
                 CleanupChatters();
                 if (chatters.Count > CHATTERS_MAX_COUNT)
                     throw new Exception("CHATTER OVERFLOW");
@@ -183,7 +186,7 @@ namespace MothBot.modules
                 if (chatters.Count >= CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
                 else
-                    chatters.Add(new Chatter(Sanitize.ScrubMentions(src.Content, false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
+                    chatters.Add(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
                 SaveChatters();
             }
         }
@@ -309,7 +312,7 @@ namespace MothBot.modules
         {
             CleanupChatters();
             string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
-            Data.Files_Write(Data.PATH_CHATTERS, outStr);
+            File.WriteAllText(Data.PATH_CHATTERS, outStr, Encoding.UTF8);
         }
 
         private static void CleanupChatters()
