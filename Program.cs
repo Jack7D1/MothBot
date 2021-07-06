@@ -21,10 +21,7 @@ namespace MothBot
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
-
-            _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
-            Custom.Init();
 
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Start Runtime
@@ -36,21 +33,16 @@ namespace MothBot
             if (msg.Author.IsBot)   //If message author is a bot, ignore
                 return;
 
-            await Portals.BroadcastHandlerAsync(msg);
             string input = msg.Content.ToLower();
             if (input.StartsWith($"{Data.PREFIX} "))    //Filter out messages starting with prefix but not as a whole word (eg. if prefix is 'bot' we want to look at 'bot command' but not 'bots command'
-#if !DEBUG
                 try
-#endif
-            {
-                await RootCommandHandler(msg);
-            }
-#if !DEBUG
+                {
+                    await RootCommandHandler(msg);
+                }
                 catch (Exception ex)
                 {
                     await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
                 }
-#endif
             else if (!Portals.IsPortal(msg.Channel))
                 await Chatterbot.ChatterHandler(msg);
         }
@@ -74,13 +66,6 @@ namespace MothBot
             Chatterbot.SaveBlacklist();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes
             restClient.LogoutAsync();
-        }
-
-        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
-        {
-            _ = new Chatterbot();
-            _ = new Portals();
-            return Task.CompletedTask;
         }
 
         private static async Task RootCommandHandler(SocketMessage msg)
@@ -133,7 +118,7 @@ namespace MothBot
 
                 case "say":
                     if (!Chatterbot.ContentsBlacklisted(msg.Content))
-                        await msg.Channel.SendMessageAsync(Sanitize.ScrubRoleMentions(msg.Content).Substring(Data.PREFIX.Length + "say ".Length));
+                        await msg.Channel.SendMessageAsync(Sanitize.ScrubMentions(msg.Content, false).Substring(Data.PREFIX.Length + "say ".Length));
                     await msg.DeleteAsync();
                     break;
 
@@ -149,13 +134,8 @@ namespace MothBot
                     await Dice.Roll(msg.Channel, args);
                     break;
 
-                case "good":
-                case "bad":
-                    await Chatterbot.VoteHandler(msg, keyword);
-                    break;
-
                 case "chatter":
-                    await Chatterbot.VoteHandler(msg, args);
+                    await Chatterbot.CommandHandler(msg, args);
                     break;
 
                 case "ping":
@@ -185,15 +165,10 @@ namespace MothBot
         {
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
-            client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
             await restClient.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
 
-#if (!DEBUG)
             await Data.Program_SetStatus();
-#else
-            await client.SetGameAsync("DEBUG MODE ENABLED, DATA SAVED IN DEBUG MODE WILL BE LOST");
-#endif
             await client.StartAsync();
 
             await Task.Delay(-1);   //Sit here while the async listens

@@ -18,8 +18,8 @@ namespace MothBot.modules
             byte[] raw = _webClient.DownloadData(searchTerm);
             string webData, link = "";
             int linkPtr = -1;
-            byte maxretries = 255, retries = maxretries;
-            do
+            byte maxretries = 255;
+            for (byte retries = maxretries; retries > 0; retries--)
             {
                 webData = Encoding.UTF8.GetString(raw);
                 int randNum = Program.rand.Next(1, 128);
@@ -40,9 +40,8 @@ namespace MothBot.modules
                     Console.WriteLine($"Image found, took {maxretries - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
-                retries--;
                 webData = webData.Substring(linkPtr + 32);
-            } while (retries > 0);
+            }
             //Last ditch effort to find *something*! Shooting for the top result.
             webData = Encoding.UTF8.GetString(raw);
             linkPtr = webData.IndexOf(@"<img alt="""" src=""//i.imgur.com/") + 31;

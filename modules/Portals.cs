@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Portals
+    internal static class Portals
     {
         private static readonly List<Portal> portals = new List<Portal>();
 
-        public Portals()
+        static Portals()
         {
             Program.client.ChannelDestroyed += ChannelDestroyed;
             Program.client.LeftGuild += LeftGuild;
+            Program.client.MessageReceived += MessageRecieved;
             try
             {
                 string fileData = Data.Files_Read_String(Data.PATH_PORTALS);
@@ -23,7 +24,6 @@ namespace MothBot.modules
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
                 foreach (Portal portal in filePortals)
                     portals.Add(portal);
-                CheckPortals();
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
@@ -33,7 +33,7 @@ namespace MothBot.modules
             }
         }
 
-        public static async Task BroadcastHandlerAsync(SocketMessage msg) //Recieves every message the bot sees
+        public static async Task MessageRecieved(SocketMessage msg)
         {
             if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
             {
@@ -116,7 +116,7 @@ namespace MothBot.modules
                     content += $"\n{attachment.Url}";
             }
 
-            string outmsg = $"*{msg.Author.Username} says* \" {Sanitize.ScrubRoleMentions(content)} \"";
+            string outmsg = $"*{msg.Author.Username} says* \" {Sanitize.ScrubMentions(content)} \"";
             if (!Chatterbot.ContentsBlacklisted(outmsg))
             {
                 await CheckPortals();
@@ -168,7 +168,6 @@ namespace MothBot.modules
                     return true;
             return false;
         }
-
         private static Task LeftGuild(SocketGuild arg)
         {
             CheckPortals();

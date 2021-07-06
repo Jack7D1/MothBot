@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
@@ -7,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Chatterbot
+    internal static class Chatterbot
     {
-        private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links.
+        private const ushort CHATTERS_CHANCE_TO_CHAT = 96;
 
-        //The blacklist should also be used for filtering out mature materials from chatters and bot output.
+        //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        private const ushort CHATTERS_CHANCE_TO_SAVE = 8;
+
+        private const ushort CHATTERS_MAX_COUNT = 2048;
+        private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links. Also used for filtering mature materials from bot output.
+
         private static readonly List<Chatter> chatters;
 
         static Chatterbot()
         {
+            Program.client.ReactionAdded += ReactionAdded;
+            Program.client.ReactionRemoved += ReactionRemoved;
             try
             {
                 foreach (string blacklister in Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST))
@@ -26,7 +34,7 @@ namespace MothBot.modules
                     throw new Exception("NO FILEDATA");
                 chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData);
                 CleanupChatters();
-                if (chatters.Count > Data.CHATTERS_MAX_COUNT)
+                if (chatters.Count > CHATTERS_MAX_COUNT)
                     throw new Exception("CHATTER OVERFLOW");
             }
             catch (Exception ex) when (ex.Message == "NO FILEDATA")
@@ -37,7 +45,7 @@ namespace MothBot.modules
             }
             catch (Exception ex) when (ex.Message == "CHATTER OVERFLOW")
             {
-                int overflow = chatters.Count - Data.CHATTERS_MAX_COUNT;
+                int overflow = chatters.Count - CHATTERS_MAX_COUNT;
                 Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
                 for (int i = overflow; i > 0; i--)
                     RemoveLowestRated();
@@ -141,6 +149,7 @@ namespace MothBot.modules
                     break;
             }
         }
+
         public static async Task ChatterHandler(SocketMessage src)
         {
             bool mentionsMe = false, doNotSave = false;
@@ -155,7 +164,7 @@ namespace MothBot.modules
                         return;
             }
 
-            if (mentionsMe || (Program.rand.Next(Data.CHATTERS_CHANCE_TO_CHAT) == 0))
+            if (mentionsMe || (Program.rand.Next(CHATTERS_CHANCE_TO_CHAT) == 0))
             {
                 //Send Chatter
                 Chatter outChatter = GetChatter();
@@ -163,64 +172,23 @@ namespace MothBot.modules
                 {
                     outChatter.Channel_last_used = src.Channel.Id;
                     outChatter.Time_last_used = DateTime.Now.Ticks;
-                    await src.Channel.SendMessageAsync(Sanitize.ReplaceAllMentionsWithID(outChatter.Content, src.Author.Id));
+                    RestMessage chatter = await src.Channel.SendMessageAsync(Sanitize.ReplaceAllMentionsWithID(outChatter.Content, src.Author.Id));
+                    await chatter.AddReactionAsync(new Emoji("⬆️"));
+                    await chatter.AddReactionAsync(new Emoji("⬇️"));
                 }
             }
             //Save Chatter
-            if (!doNotSave && Program.rand.Next(Data.CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
+            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
-                if (chatters.Count >= Data.CHATTERS_MAX_COUNT)
+                if (chatters.Count >= CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
                 else
-                    chatters.Add(new Chatter(Sanitize.ScrubRoleMentions(src.Content).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
+                    chatters.Add(new Chatter(Sanitize.ScrubMentions(src.Content, false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
                 SaveChatters();
             }
         }
 
-        public static bool ContentsBlacklisted(string inStr)
-        {
-            inStr = Sanitize.Dealias(inStr);
-            foreach (string blacklister in blacklist)
-                if (inStr.Contains(blacklister))
-                    return true;
-            return false;
-        }
-
-        public static void PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
-        {
-            List<Chatter> chatterstoprepend = new List<Chatter>();
-            List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
-            int overshoot = chatters.Count + backupchatters.Count - Data.CHATTERS_MAX_COUNT;
-            if (overshoot > 0)
-            {
-                if (ch != null)
-                    ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max count [{Data.CHATTERS_MAX_COUNT}] by {overshoot}. Deleting excess from prepend before saving.");
-                backupchatters.RemoveRange(0, overshoot);
-            }
-            foreach (string chatter in backupchatters)
-                chatterstoprepend.Add(new Chatter(chatter));
-
-            chatters.InsertRange(0, chatterstoprepend);
-
-            if (ch != null)
-                ch.SendMessageAsync("Prepend successful");
-            Logging.LogtoConsoleandFile($"CHATTERS: Prepend Completed with {overshoot} items removed due to limit of {Data.CHATTERS_MAX_COUNT} entries.");
-            SaveChatters();
-        }
-
-        public static void SaveBlacklist()
-        {
-            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, blacklist);
-        }
-
-        public static void SaveChatters()
-        {
-            CleanupChatters();
-            string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
-            Data.Files_Write(Data.PATH_CHATTERS, outStr);
-        }
-
-        public static async Task VoteHandler(SocketMessage msg, string args)    //Expects to be called from main command tree with the keyword chatter to vote on the most recently used chatter in the sent channel.
+        public static async Task CommandHandler(SocketMessage msg, string args)    //Expects to be called from main command tree with the keyword chatter to vote on the most recently used chatter in the sent channel.
         {
             Chatter latestChatter = null;
             if (args.Length > 0)
@@ -231,9 +199,9 @@ namespace MothBot.modules
                     if (chatter.Channel_last_used == msg.Channel.Id && chatter.Time_last_used > latestTime)
                         latestTime = chatter.Time_last_used;
                 }
-                if (latestTime == 0)
+                if (latestTime == 0 || (DateTime.Now - DateTime.FromBinary(latestTime)).TotalHours > 6)
                 {
-                    await msg.Channel.SendMessageAsync("I can't find any chatters in this channel, check if this is the correct channel.");
+                    await msg.Channel.SendMessageAsync("I can't find any recently sent chatters in this channel, check if this is the correct channel or that you aren't refrencing a non-chatter message.");
                     return;
                 }
 
@@ -246,28 +214,6 @@ namespace MothBot.modules
             }
             switch (args)
             {
-                case "good":
-                case "bad":
-                    {
-                        bool vote = false;
-                        if (args == "good")
-                            vote = true;
-                        if (latestChatter.AddVote(msg.Author.Id, vote))
-                            await msg.AddReactionAsync(new Emoji("\u2705"));
-                        else
-                        {
-                            if (vote == latestChatter.GetVote(msg.Author.Id))
-                                await msg.Channel.SendMessageAsync($"You've already voted \"{args}\" on this chatter!");
-                            else
-                            {
-                                latestChatter.ClearVote(msg.Author.Id);
-                                latestChatter.AddVote(msg.Author.Id, vote);
-                                await msg.AddReactionAsync(new Emoji("\u2705"));
-                            }
-                        }
-                    }
-                    break;
-
                 case "clearvote":
                     if (latestChatter.ClearVote(msg.Author.Id))
                         await msg.AddReactionAsync(new Emoji("\u2705"));
@@ -303,14 +249,14 @@ namespace MothBot.modules
 
                         for (int i = 0; i < 3; i++)
                         {
-                            outmsgs.Add(ribbon[i]);
-                            outmsgs.Add($"Chatter: \" {places[i].Content} \"");
-                            string creditstr;
-                            if (places[i].Author() is IUser usr && places[i].OriginGuild() is IGuild guild)
-                                creditstr = $"Accreddited to {usr.Username}, who said it in {guild.Name}.\n";
-                            else
-                                creditstr = "Could not find original author of this chatter.\n";
-                            outmsgs.Add($"{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
+                            string username = "Anonymous";
+                            if (places[i].Author() is IUser usr)
+                            {
+                                username = usr.Username;
+                            }
+
+                            string creditstr = $"Accreddited to {username}.\n";
+                            outmsgs.Add($"{ribbon[i]} \nChatter: \" {places[i].Content} \" \n{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
                         }
                         foreach (string outmsg in outmsgs)
                             await msg.Channel.SendMessageAsync(outmsg);
@@ -321,6 +267,49 @@ namespace MothBot.modules
                     await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands());
                     break;
             }
+        }
+
+        public static bool ContentsBlacklisted(string inStr)
+        {
+            inStr = Sanitize.Dealias(inStr);
+            foreach (string blacklister in blacklist)
+                if (inStr.Contains(blacklister))
+                    return true;
+            return false;
+        }
+
+        public static void PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+        {
+            List<Chatter> chatterstoprepend = new List<Chatter>();
+            List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
+            int overshoot = chatters.Count + backupchatters.Count - CHATTERS_MAX_COUNT;
+            if (overshoot > 0)
+            {
+                if (ch != null)
+                    ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max count [{CHATTERS_MAX_COUNT}] by {overshoot}. Deleting excess from prepend before saving.");
+                backupchatters.RemoveRange(0, overshoot);
+            }
+            foreach (string chatter in backupchatters)
+                chatterstoprepend.Add(new Chatter(chatter));
+
+            chatters.InsertRange(0, chatterstoprepend);
+
+            if (ch != null)
+                ch.SendMessageAsync("Prepend successful");
+            Logging.LogtoConsoleandFile($"CHATTERS: Prepend Completed with {overshoot} items removed due to limit of {CHATTERS_MAX_COUNT} entries.");
+            SaveChatters();
+        }
+
+        public static void SaveBlacklist()
+        {
+            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, blacklist);
+        }
+
+        public static void SaveChatters()
+        {
+            CleanupChatters();
+            string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
+            Data.Files_Write(Data.PATH_CHATTERS, outStr);
         }
 
         private static void CleanupChatters()
@@ -378,6 +367,58 @@ namespace MothBot.modules
             return places;
         }
 
+        private static Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
+        {
+            IUserMessage msg = message.DownloadAsync().Result;
+            IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
+
+            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
+                return Task.CompletedTask;
+
+            Chatter targetChatter = null;
+            foreach (Chatter chatter in chatters)
+                if (chatter.Content == msg.Content)
+                {
+                    targetChatter = chatter;
+                    break;
+                }
+            if (targetChatter == null) //Ensure this is a valid votable chatter
+                return Task.CompletedTask;
+            bool vote;
+            if (reaction.Emote.Name == "⬆️")
+                vote = true;
+            else if (reaction.Emote.Name == "⬇️")
+                vote = false;
+            else
+                return Task.CompletedTask;
+            if (!targetChatter.AddVote(usr.Id, vote))
+                msg.RemoveReactionAsync(reaction.Emote, usr);
+
+            return Task.CompletedTask;
+        }
+
+        private static Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
+        {
+            IUserMessage msg = message.DownloadAsync().Result;
+            IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
+
+            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
+                return Task.CompletedTask;
+
+            Chatter targetChatter = null;
+            foreach (Chatter chatter in chatters)
+                if (chatter.Content == msg.Content)
+                {
+                    targetChatter = chatter;
+                    break;
+                }
+            if (targetChatter == null) //Ensure this is a valid votable chatter
+                return Task.CompletedTask;
+            targetChatter.ClearVote(usr.Id);
+            msg.RemoveReactionsAsync(usr, new Emoji[] { new Emoji("⬆️"), new Emoji("⬇️") });
+            return Task.CompletedTask;
+        }
+
         private static bool RemoveBlacklister(string blacklister)   //Returns false if not found in blacklist
         {
             blacklister = Sanitize.Dealias(blacklister);
@@ -390,6 +431,7 @@ namespace MothBot.modules
                 return true;
             }
         }
+
         private static void RemoveLowestRated()   //Deletes one member of chatters with the lowest rating, will choose at random between multiple members with the same lowest rating.
         {
             int lowest = int.MaxValue;

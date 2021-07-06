@@ -9,14 +9,11 @@ namespace MothBot.modules
     internal static class Data
     //Class comprises of static lists and strings that can be called from anywhere. Bot parameters are found here.
     //This also contains subroutines used for reading and writing to save files in a standardized manner.
+    //Generally just functions and variables that aren't necessarily tied to a single class/module and are also called by multiple classes/modules.
     {
         //PARAMS
         public const ulong MY_ID = 765202973495656538;
         public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
-        //PARAMS_Chatterbot
-        public const ushort CHATTERS_CHANCE_TO_CHAT = 96;         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
-        public const ushort CHATTERS_CHANCE_TO_SAVE = 8;
-        public const ushort CHATTERS_MAX_COUNT = 2048;
         //END PARAMS
 
         //PATHS
@@ -48,8 +45,6 @@ namespace MothBot.modules
                 "**Voting Commands:**\n" +
                 $"Summary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
                 "```" +
-                $"{prefix} good         - Increases the most recently said chatter's rating by 1\n" +
-                $"{prefix} bad          - Decreases the most recently said chatter's rating by 1\n" +
                 $"{prefix} clearvote    - Removes your vote.\n" +
                 $"{prefix} rating       - Returns the rating of the most recently said chatter\n" +
                 $"{prefix} myvote       - Tells you what you voted on the most recent chatter\n" +

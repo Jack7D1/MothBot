@@ -90,17 +90,21 @@ namespace MothBot.modules
             return ScrubEveryoneandHereMentions(outStr);
         }
 
-        public static string ScrubRoleMentions(string inStr)
-        {   //Removes any mentions for roles.
-            List<SocketRole> roles = new List<SocketRole>();
-            foreach (SocketGuild guild in Program.client.Guilds)    //Gets a list of any possible role the bot could feasibly ever mention
-                foreach (SocketRole role in guild.Roles)
-                    roles.Add(role);
-            string outStr = inStr;
-            foreach (SocketRole role in roles)
-                if (outStr.Contains($"<@&{role.Id}>"))
-                    outStr = outStr.Replace($"<@&{role.Id}>", role.Name);   //Replace with name of role instead
-            return ScrubEveryoneandHereMentions(outStr);
+        public static string ScrubMentions(string inStr, bool usermentions = true, bool rolementions = true)
+        {
+            if (!(usermentions || rolementions))
+                return ScrubEveryoneandHereMentions(inStr);
+
+            foreach (SocketGuild guild in Program.client.Guilds)
+            {
+                if (usermentions)
+                    foreach (SocketUser user in guild.Users)
+                        inStr = inStr.Replace($"<@{user.Id}>", user.Username);
+                if (rolementions)
+                    foreach (SocketRole role in guild.Roles)
+                        inStr = inStr.Replace($"<@&{role.Id}>", role.Name);
+            }
+            return ScrubEveryoneandHereMentions(inStr);
         }
 
         private static string ScrubEveryoneandHereMentions(string inStr)  //Outputs a role ping scrubbed string, recieves target string for santization.

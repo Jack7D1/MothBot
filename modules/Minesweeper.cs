@@ -30,7 +30,7 @@ namespace MothBot.modules
                 GetMineMap(gridWidth, gridHeight, ref bombSpace, ref numSpace));
         }
 
-        private static string GetMineMap(byte gridWidth, byte gridHeight, ref bool[,] bombSpace, ref byte[,] numSpace) //Prints and spoilers game and returns as string
+        private static string GetMineMap(byte gridWidth, byte gridHeight, ref bool[,] bombSpace, ref byte[,] numSpace) //Spoilers game and returns as string
         {
             string mineMap = "";
             for (byte y = 0; y < gridHeight; y++)
