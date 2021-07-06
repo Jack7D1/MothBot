@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal static class Portals
+    internal class Portals
     {
         private static readonly List<Portal> portals = new List<Portal>();
 
-        static Portals()
+        public Portals()
         {
             Program.client.ChannelDestroyed += ChannelDestroyed;
             Program.client.LeftGuild += LeftGuild;
@@ -24,6 +24,7 @@ namespace MothBot.modules
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
                 foreach (Portal portal in filePortals)
                     portals.Add(portal);
+                CheckPortals();
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {

@@ -20,6 +20,8 @@ namespace MothBot
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
+
+            _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
 
             //Keep at bottom of init
@@ -53,6 +55,13 @@ namespace MothBot
             Chatterbot.SaveBlacklist();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes
             restClient.LogoutAsync();
+        }
+
+        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
+        {
+            _ = new Chatterbot();
+            _ = new Portals();
+            return Task.CompletedTask;
         }
 
         private static async Task RootCommandHandler(SocketMessage msg)
@@ -152,6 +161,7 @@ namespace MothBot
         {
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
+            client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
             await restClient.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
 

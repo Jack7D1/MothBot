@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal static class Chatterbot
+    internal class Chatterbot
     {
         private const ushort CHATTERS_CHANCE_TO_CHAT = 96;
 
