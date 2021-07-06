@@ -19,7 +19,6 @@ namespace MothBot
         public static void Main(string[] args)  //Initialization
         {
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
 
@@ -45,18 +44,6 @@ namespace MothBot
                 }
             else if (!Portals.IsPortal(msg.Channel))
                 await Chatterbot.ChatterHandler(msg);
-        }
-
-        private static void ExceptionHandler(object sender, UnhandledExceptionEventArgs e)
-        {
-            client.StopAsync();   //Prevent further inputs immediately.
-            Exception ex = e.ExceptionObject as Exception;
-            Logging.LogtoConsoleandFile("\n\n******[FATAL EXCEPTION]******\n" +
-                $"EXCEPTION TYPE: {ex.GetType()} (\"{ex.Message}\")\n" +
-                $"FROM: {sender}\n" +
-                $"**STACKTRACE:\n{ex.StackTrace}\n\n" +
-                "Crash logging finished, saving data and shutting down safely...\n");
-            Environment.Exit(ex.HResult);
         }
 
         private static void ProcessExit(object sender, EventArgs e)
