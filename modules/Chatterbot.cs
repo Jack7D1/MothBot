@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -22,6 +21,7 @@ namespace MothBot.modules
         private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links. Also used for filtering mature materials from bot output.
 
         private static readonly List<Chatter> chatters;
+
         static Chatterbot()
         {
             Program.client.ReactionAdded += ReactionAdded;
@@ -34,7 +34,7 @@ namespace MothBot.modules
                 string fileData = File.ReadAllText(Data.PATH_CHATTERS, Encoding.UTF8);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
                     throw new Exception("NO FILEDATA");
-                
+
                 chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
                 CleanupChatters();
                 if (chatters.Count > CHATTERS_MAX_COUNT)
@@ -194,7 +194,7 @@ namespace MothBot.modules
         public static async Task CommandHandler(SocketMessage msg, string args)    //Expects to be called from main command tree with the keyword chatter to vote on the most recently used chatter in the sent channel.
         {
             Chatter latestChatter = null;
-            if (args.Length > 0)
+            if (args.Length > 0 && args != "leaderboard")
             {
                 long latestTime = 0;
                 foreach (Chatter chatter in chatters)
@@ -254,9 +254,7 @@ namespace MothBot.modules
                         {
                             string username = "Anonymous";
                             if (places[i].Author() is IUser usr)
-                            {
                                 username = usr.Username;
-                            }
 
                             string creditstr = $"Accreddited to {username}.\n";
                             outmsgs.Add($"{ribbon[i]} \nChatter: \" {places[i].Content} \" \n{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
@@ -339,6 +337,21 @@ namespace MothBot.modules
                 return chatters[Program.rand.Next(0, chatters.Count)];
         }
 
+        private static Chatter GetChatterFromReaction(IUser usr, IUserMessage msg, SocketReaction reaction)
+        {
+            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
+                return null;
+
+            Chatter targetChatter = null;
+            foreach (Chatter chatter in chatters)
+                if (chatter.Content == msg.Content)
+                {
+                    targetChatter = chatter;
+                    break;
+                }
+            return targetChatter;
+        }
+
         private static List<Chatter> GetLeaders()    //Gets the threee highest rated chatters, returns null if unsuccessful.
         {
             List<Chatter> places = new List<Chatter> { null, null, null };
@@ -374,29 +387,24 @@ namespace MothBot.modules
         {
             IUserMessage msg = message.DownloadAsync().Result;
             IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
-
-            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
-                return Task.CompletedTask;
-
-            Chatter targetChatter = null;
-            foreach (Chatter chatter in chatters)
-                if (chatter.Content == msg.Content)
-                {
-                    targetChatter = chatter;
-                    break;
-                }
-            if (targetChatter == null) //Ensure this is a valid votable chatter
+            Chatter chatter = GetChatterFromReaction(usr, msg, reaction);
+            if (chatter == null)
                 return Task.CompletedTask;
             bool vote;
-            if (reaction.Emote.Name == "⬆️")
-                vote = true;
-            else if (reaction.Emote.Name == "⬇️")
-                vote = false;
-            else
-                return Task.CompletedTask;
-            if (!targetChatter.AddVote(usr.Id, vote))
-                msg.RemoveReactionAsync(reaction.Emote, usr);
+            switch (reaction.Emote.Name)
+            {
+                case "⬆️":
+                    vote = true;
+                    break;
 
+                case "⬇️":
+                    vote = false;
+                    break;
+
+                default:
+                    return Task.CompletedTask;
+            }
+            chatter.AddVote(usr.Id, vote);
             return Task.CompletedTask;
         }
 
@@ -404,21 +412,17 @@ namespace MothBot.modules
         {
             IUserMessage msg = message.DownloadAsync().Result;
             IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
-
-            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
+            Chatter chatter = GetChatterFromReaction(usr, msg, reaction);
+            if (chatter == null)
                 return Task.CompletedTask;
 
-            Chatter targetChatter = null;
-            foreach (Chatter chatter in chatters)
-                if (chatter.Content == msg.Content)
-                {
-                    targetChatter = chatter;
+            switch (reaction.Emote.Name)
+            {
+                case "⬆️":
+                case "⬇️":
+                    chatter.ClearVote(usr.Id);
                     break;
-                }
-            if (targetChatter == null) //Ensure this is a valid votable chatter
-                return Task.CompletedTask;
-            targetChatter.ClearVote(usr.Id);
-            msg.RemoveReactionsAsync(usr, new Emoji[] { new Emoji("⬆️"), new Emoji("⬇️") });
+            }
             return Task.CompletedTask;
         }
 
