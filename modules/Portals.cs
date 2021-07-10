@@ -44,10 +44,9 @@ namespace MothBot.modules
 
         public static async Task MessageRecieved(SocketMessage msg)
         {
-            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
-            {
+            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot)
                 await BroadcastAsync(msg);
-            }
+            
         }
 
         public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal", 'args' is expected to be everything following keyword, minus space.
