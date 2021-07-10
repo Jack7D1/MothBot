@@ -303,7 +303,15 @@ namespace MothBot.modules
 
         public static void SaveBlacklist()
         {
-            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, blacklist);
+            List<string> newBlacklist = new List<string>();
+            foreach (string blacklister in blacklist)
+            {
+                if (!newBlacklist.Contains(blacklister))
+                    newBlacklist.Add(blacklister);
+            }
+            blacklist.Clear();
+            blacklist.AddRange(newBlacklist);
+            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, newBlacklist);
         }
 
         public static void SaveChatters()
@@ -337,25 +345,25 @@ namespace MothBot.modules
                 return chatters[Program.rand.Next(0, chatters.Count)];
         }
 
-        private static Chatter GetChatterFromReaction(IUser usr, IUserMessage msg, SocketReaction reaction)
+        private static Chatter GetChatterFromMessage(IUserMessage msg)
         {
-            if (msg.Author.Id != Data.MY_ID || usr.IsBot)    //Ignore unrelated or undesired
-                return null;
-
             Chatter targetChatter = null;
-            foreach (Chatter chatter in chatters)
-                if (chatter.Content == msg.Content)
-                {
-                    targetChatter = chatter;
-                    break;
-                }
+            if (msg.Author.Id == Data.MY_ID)    //If it's a chatter I would have sent it
+            {
+                foreach (Chatter chatter in chatters)
+                    if (chatter.Content == msg.Content)
+                    {
+                        targetChatter = chatter;
+                        break;
+                    }
+            }
             return targetChatter;
         }
 
-        private static List<Chatter> GetLeaders()    //Gets the threee highest rated chatters, returns null if unsuccessful.
+        private static List<Chatter> GetLeaders()    //Gets the three highest rated chatters, returns null if unsuccessful.
         {
             List<Chatter> places = new List<Chatter> { null, null, null };
-            int firstscore = Int32.MinValue, secondscore = Int32.MinValue, thirdscore = Int32.MinValue;
+            int firstscore = int.MinValue, secondscore = int.MinValue, thirdscore = int.MinValue;
 
             foreach (Chatter chatter in chatters)   //Get the highest rating
                 if (chatter.Rating() > firstscore)
@@ -366,7 +374,7 @@ namespace MothBot.modules
             foreach (Chatter chatter in chatters)   //Third highest rating
                 if (chatter.Rating() > thirdscore && chatter.Rating() < secondscore)
                     thirdscore = chatter.Rating();
-            if (firstscore == Int32.MinValue || secondscore == Int32.MinValue || thirdscore == Int32.MinValue)
+            if (firstscore == int.MinValue || secondscore == int.MinValue || thirdscore == int.MinValue)
                 return null;
 
             foreach (Chatter chatter in chatters)
@@ -386,9 +394,9 @@ namespace MothBot.modules
         private static Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
-            IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
-            Chatter chatter = GetChatterFromReaction(usr, msg, reaction);
-            if (chatter == null)
+            IUser usr = Program.client.Rest.GetUserAsync(reaction.UserId).Result;
+            Chatter chatter = GetChatterFromMessage(msg);
+            if (chatter == null || usr.IsBot)
                 return Task.CompletedTask;
             bool vote;
             switch (reaction.Emote.Name)
@@ -411,9 +419,9 @@ namespace MothBot.modules
         private static Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
-            IUser usr = Program.restClient.GetUserAsync(reaction.UserId).Result;
-            Chatter chatter = GetChatterFromReaction(usr, msg, reaction);
-            if (chatter == null)
+            IUser usr = Program.client.Rest.GetUserAsync(reaction.UserId).Result;
+            Chatter chatter = GetChatterFromMessage(msg);
+            if (chatter == null || usr.IsBot)
                 return Task.CompletedTask;
 
             switch (reaction.Emote.Name)
@@ -496,7 +504,7 @@ namespace MothBot.modules
             {
                 if (Origin_author == 0)
                     return null;
-                return Program.restClient.GetUserAsync(Origin_author).Result;
+                return Program.client.Rest.GetUserAsync(Origin_author).Result;
             }
 
             public bool ClearVote(ulong voterID)    //Returns true or false based on if voter was found.
@@ -530,14 +538,14 @@ namespace MothBot.modules
             {
                 if (Origin_guild == 0)
                     return null;
-                return Program.restClient.GetGuildAsync(Origin_guild).Result;
+                return Program.client.Rest.GetGuildAsync(Origin_guild).Result;
             }
 
             public IMessage OriginMsg() //Returns null if NA
             {
                 if (Origin_msg == 0)
                     return null;
-                return (Program.restClient.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
+                return (Program.client.Rest.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating

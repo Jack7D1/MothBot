@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Rest;
 using Discord.WebSocket;
 using MothBot.modules;
 using System;
@@ -14,7 +13,6 @@ namespace MothBot
         public static DiscordSocketClient client = new DiscordSocketClient();
 
         public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
-        public static DiscordRestClient restClient = new DiscordRestClient();
 
         public static void Main(string[] args)  //Initialization
         {
@@ -50,11 +48,7 @@ namespace MothBot
 
         private static void ProcessExit(object sender, EventArgs e)
         {
-            Portals.SavePortals();
-            Chatterbot.SaveChatters();
-            Chatterbot.SaveBlacklist();
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes
-            restClient.LogoutAsync();
         }
 
         private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
@@ -163,7 +157,6 @@ namespace MothBot
             client.Log += Logging.Log;
             client.Ready += Ready;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
-            await restClient.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
 
             await Data.Program_SetStatus();
             await client.StartAsync();

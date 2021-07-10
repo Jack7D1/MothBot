@@ -16,6 +16,7 @@ namespace MothBot.modules
             Program.client.ChannelDestroyed += ChannelDestroyed;
             Program.client.LeftGuild += LeftGuild;
             Program.client.MessageReceived += MessageRecieved;
+            Program.client.Ready += Ready;
             try
             {
                 string fileData = Data.Files_Read_String(Data.PATH_PORTALS);
@@ -34,19 +35,19 @@ namespace MothBot.modules
             }
         }
 
+        public static bool IsPortal(IMessageChannel ch)
+        {
+            if (GetPortal(ch.Id) is Portal && !(ch as ITextChannel).IsNsfw)
+                return true;
+            return false;
+        }
+
         public static async Task MessageRecieved(SocketMessage msg)
         {
             if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX))
             {
                 await BroadcastAsync(msg);
             }
-        }
-
-        public static bool IsPortal(IMessageChannel ch)
-        {
-            if (GetPortal(ch.Id) is Portal && !(ch as ITextChannel).IsNsfw)
-                return true;
-            return false;
         }
 
         public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal", 'args' is expected to be everything following keyword, minus space.
@@ -98,6 +99,12 @@ namespace MothBot.modules
                 }
             else
                 await msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [ManageChannels]");
+        }
+
+        public static Task Ready()
+        {
+            CheckPortals();
+            return Task.CompletedTask;
         }
 
         public static void SavePortals()
@@ -169,6 +176,7 @@ namespace MothBot.modules
                     return true;
             return false;
         }
+
         private static Task LeftGuild(SocketGuild arg)
         {
             CheckPortals();
@@ -209,12 +217,12 @@ namespace MothBot.modules
 
             public IMessageChannel GetChannel() //returns null if not found
             {
-                return Program.restClient.GetChannelAsync(channelId).Result as IMessageChannel;
+                return Program.client.Rest.GetChannelAsync(channelId).Result as IMessageChannel;
             }
 
             public IGuild GetGuild()    //returns null if not found
             {
-                return Program.restClient.GetGuildAsync(guildId).Result;
+                return Program.client.Rest.GetGuildAsync(guildId).Result;
             }
         }
     }

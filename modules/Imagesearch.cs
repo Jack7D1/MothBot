@@ -19,7 +19,7 @@ namespace MothBot.modules
             string webData, link = "";
             int linkPtr = -1;
             byte maxretries = 255;
-            for (byte retries = maxretries; retries > 0; retries--)
+            for (byte retries = 255; retries > 0; retries--)
             {
                 webData = Encoding.UTF8.GetString(raw);
                 int randNum = Program.rand.Next(1, 128);
@@ -35,12 +35,15 @@ namespace MothBot.modules
                     link = webData.Substring(linkPtr + 31, 7);
                     webData = webData.Substring(linkPtr + 32);
                 }
-                if (!EOF && CheckValid(link))
+                if (EOF)
+                    break;
+                else if (CheckValid(link))
                 {
                     Console.WriteLine($"Image found, took {maxretries - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
-                webData = webData.Substring(linkPtr + 32);
+                else
+                    webData = webData.Substring(linkPtr + 32);
             }
             //Last ditch effort to find *something*! Shooting for the top result.
             webData = Encoding.UTF8.GetString(raw);

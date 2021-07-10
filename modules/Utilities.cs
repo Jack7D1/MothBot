@@ -79,7 +79,7 @@ namespace MothBot.modules
                     {
                         string outStr = "```CURRENT JOINED SERVERS:\n";
                         foreach (SocketGuild guild in Program.client.Guilds)
-                            outStr += $"{guild.Name} [{guild.Id}], owned by {Program.restClient.GetUserAsync(guild.OwnerId).Result.Username} [{guild.OwnerId}]\n";
+                            outStr += $"{guild.Name} [{guild.Id}], owned by {Program.client.Rest.GetUserAsync(guild.OwnerId).Result.Username} [{guild.OwnerId}]\n";
                         await src.Channel.SendMessageAsync(outStr + "```");
                     }
                     break;
