@@ -35,23 +35,6 @@ namespace MothBot.modules
 
                 whitelists = JsonConvert.DeserializeObject<Dictionary<ulong, Server>>(fileData);
                 Dictionary<ulong, Server> whitelistscopy = whitelists;
-
-                foreach (Server server in whitelistscopy.Values)
-                {
-                    bool absent = true;
-                    foreach (IGuild guild in Program.client.Guilds)
-                        if (server.ID == guild.Id)
-                        {
-                            absent = false;
-                            break;
-                        }
-
-                    if (absent)
-                    {
-                        whitelists.Remove(server.ID);
-                        Logging.LogtoConsoleandFile($"Server {server.ID} no longer connected, removing from whitelist.");
-                    }
-                }
             }
             catch (Exception ex) when (ex.Message == "NO FILEDATA")
             {
