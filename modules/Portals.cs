@@ -10,7 +10,7 @@ namespace MothBot.modules
     internal class Portals
     {
         private static readonly List<Portal> portals = new List<Portal>();
-
+        public const string PATH_PORTALS = "../../data/portals.json";
         public Portals()
         {
             Program.client.ChannelDestroyed += ChannelDestroyed;
@@ -19,7 +19,7 @@ namespace MothBot.modules
             Program.client.Ready += Ready;
             try
             {
-                string fileData = Data.Files_Read_String(Data.PATH_PORTALS);
+                string fileData = Data.Files_Read_String(PATH_PORTALS);
                 if (fileData == null || fileData.Length == 0)
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -29,7 +29,7 @@ namespace MothBot.modules
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
-                Logging.LogtoConsoleandFile($"No portal data found at {Data.PATH_PORTALS}, running with empty list of portals.");
+                Logging.LogtoConsoleandFile($"No portal data found at {PATH_PORTALS}, running with empty list of portals.");
                 portals.Clear();
                 return;
             }
@@ -109,7 +109,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            Data.Files_Write(Data.PATH_PORTALS, outStr);
+            Data.Files_Write(PATH_PORTALS, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.

@@ -44,6 +44,7 @@ namespace MothBot.modules
                 args = "";
             }
             args = args.ToLower();
+            keyword = keyword.ToLower();
             if (keyword == "")
                 keyword = "commands";
 
@@ -62,17 +63,17 @@ namespace MothBot.modules
                 //Data/debug
                 case "dumpchatters":
                     await src.Channel.SendMessageAsync("Dumping chatters file...");
-                    await src.Channel.SendFileAsync(Data.PATH_CHATTERS);
+                    await src.Channel.SendFileAsync(Chatterbot.PATH_CHATTERS);
                     break;
 
                 case "dumplogs":
                     await src.Channel.SendMessageAsync("Dumping logs file...");
-                    await src.Channel.SendFileAsync(Data.PATH_LOGS);
+                    await src.Channel.SendFileAsync(Logging.PATH_LOGS);
                     break;
 
                 case "dumpportals":
                     await src.Channel.SendMessageAsync("Dumping portals file...");
-                    await src.Channel.SendFileAsync(Data.PATH_PORTALS);
+                    await src.Channel.SendFileAsync(Portals.PATH_PORTALS);
                     break;
 
                 case "listservers":

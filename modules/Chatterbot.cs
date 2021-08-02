@@ -12,6 +12,9 @@ namespace MothBot.modules
 {
     internal class Chatterbot
     {
+        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
+        public const string PATH_CHATTERS = "../../data/chatters.json";
+        public const string PATH_CHATTERS_BACKUP = "../../resources/backupchatters.txt";
         private const ushort CHATTERS_CHANCE_TO_CHAT = 96;
 
         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
@@ -28,10 +31,10 @@ namespace MothBot.modules
             Program.client.ReactionRemoved += ReactionRemoved;
             try
             {
-                foreach (string blacklister in Data.Files_Read(Data.PATH_CHATTERS_BLACKLIST))
+                foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
                     blacklist.Add(Sanitize.Dealias(blacklister));
                 chatters = new List<Chatter>();
-                string fileData = File.ReadAllText(Data.PATH_CHATTERS, Encoding.UTF8);
+                string fileData = File.ReadAllText(PATH_CHATTERS, Encoding.UTF8);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
                     throw new Exception("NO FILEDATA");
 
@@ -42,7 +45,7 @@ namespace MothBot.modules
             }
             catch (Exception ex) when (ex.Message == "NO FILEDATA")
             {
-                Logging.LogtoConsoleandFile($"No chatters found at {Data.PATH_CHATTERS}, running with empty...");
+                Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
                 chatters.Clear();
                 return;
             }
@@ -252,7 +255,7 @@ namespace MothBot.modules
 
                         for (int i = 0; i < 3; i++)
                         {
-                            string username = "Anonymous";
+                            string username = "Unknown";
                             if (places[i].Author() is IUser usr)
                                 username = usr.Username;
 
@@ -282,7 +285,7 @@ namespace MothBot.modules
         public static void PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<Chatter> chatterstoprepend = new List<Chatter>();
-            List<string> backupchatters = Data.Files_Read(Data.PATH_CHATTERS_BACKUP);
+            List<string> backupchatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
             int overshoot = chatters.Count + backupchatters.Count - CHATTERS_MAX_COUNT;
             if (overshoot > 0)
             {
@@ -311,14 +314,14 @@ namespace MothBot.modules
             }
             blacklist.Clear();
             blacklist.AddRange(newBlacklist);
-            Data.Files_Write(Data.PATH_CHATTERS_BLACKLIST, newBlacklist);
+            Data.Files_Write(PATH_CHATTERS_BLACKLIST, newBlacklist);
         }
 
         public static void SaveChatters()
         {
             CleanupChatters();
             string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
-            File.WriteAllText(Data.PATH_CHATTERS, outStr, Encoding.UTF8);
+            File.WriteAllText(PATH_CHATTERS, outStr, Encoding.UTF8);
         }
 
         private static void CleanupChatters()

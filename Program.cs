@@ -11,8 +11,8 @@ namespace MothBot
     {
         //See data module for parameters
         public static DiscordSocketClient client = new DiscordSocketClient();
-
-        public static Random rand = new Random(DateTime.Now.Hour + DateTime.Now.Millisecond - DateTime.Now.Month);
+        public const string PATH_TOKEN = "../../data/token.txt";
+        public static Random rand = new Random((int)(DateTime.Now.Ticks % int.MaxValue));
 
         public static void Main(string[] args)  //Initialization
         {
@@ -21,7 +21,7 @@ namespace MothBot
 
             _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
-
+            _ = new Whitelist();
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Start Runtime
         }
@@ -136,7 +136,9 @@ namespace MothBot
                 case "portals":
                     await Portals.PortalManagement(msg, args);
                     break;
-
+                case "whitelist":
+                    await Whitelist.CommandHandler(msg, args);
+                    break;
                 //Below are not listed in the commands block.
                 case "dealias":
                     await msg.Channel.SendMessageAsync(Sanitize.Dealias(args));
@@ -156,7 +158,7 @@ namespace MothBot
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
             client.Ready += Ready;
-            await client.LoginAsync(TokenType.Bot, File.ReadAllText(Data.PATH_TOKEN));
+            await client.LoginAsync(TokenType.Bot, File.ReadAllText(PATH_TOKEN));
 
             await Data.Program_SetStatus();
             await client.StartAsync();

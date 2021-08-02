@@ -17,12 +17,6 @@ namespace MothBot.modules
         //END PARAMS
 
         //PATHS
-        public const string PATH_LOGS = "../../data/log.txt";
-        public const string PATH_PORTALS = "../../data/portals.json";
-        public const string PATH_TOKEN = "../../data/token.txt";
-        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
-        public const string PATH_CHATTERS = "../../data/chatters.json";
-        public const string PATH_CHATTERS_BACKUP = "../../resources/backupchatters.txt";
         public const string PATH_GAYBEE = "../../resources/yougaybee.png";
         //END PATHS
 
@@ -157,8 +151,9 @@ namespace MothBot.modules
                 $"{PREFIX} minesweeper  - Play a game of minesweeper!\n" +
                 $"{PREFIX} give [text]  - Searches the input on imgur and posts the image!\n" +
                 $"{PREFIX} roll [x]d[y] - Rolls x dice, each with y sides\n" +
-                $"{PREFIX} portal       - Deletes or designates this channel as a portal, requires administrator.\n" +
-                $"{PREFIX} chatter [v]  - Say chatter good or chatter bad to vote on the most recent chatter\n" +
+                $"{PREFIX} portal       - Access the portals module\n" +
+                $"{PREFIX} chatter [v]  - Access the chatters module\n" +
+                $"{PREFIX} whitelist    - Access the whitelists module\n" +
                 $"{PREFIX} ping         - You know what this does.\n" +
                 "```";
         }
