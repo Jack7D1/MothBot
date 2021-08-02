@@ -218,6 +218,7 @@ namespace MothBot.modules
         {
             if (whitelists.TryGetValue(user.Guild.Id, out Server server) && (!server.whitelistedIDs.Contains(user.Id)))
             {
+                user.KickAsync("User not whitelisted.");
             }
             return Task.CompletedTask;
         }
