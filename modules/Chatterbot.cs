@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Chatterbot
+    internal static class Chatterbot
     {
-        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
         public const string PATH_CHATTERS = "../../data/chatters.json";
         public const string PATH_CHATTERS_BACKUP = "../../resources/backupchatters.txt";
-        private const ushort CHATTERS_CHANCE_TO_CHAT = 96;
+        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
+        private const ushort CHATTERS_CHANCE_TO_CHAT = 128;
 
-        //Value is an inverse, (1 out of CHANCE_TO_CHAT chance)
+        //Value is an inverse, (1 out of CHANCE_TO_CHAT chance), similar for CHANCE_TO_SAVE
         private const ushort CHATTERS_CHANCE_TO_SAVE = 8;
 
         private const ushort CHATTERS_MAX_COUNT = 2048;
@@ -158,16 +158,18 @@ namespace MothBot.modules
 
         public static async Task ChatterHandler(SocketMessage src)
         {
+            if (src.Author.IsBot)
+                return;
             bool mentionsMe = false, doNotSave = false;
             if (src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw)
                 doNotSave = true;
             foreach (SocketUser mention in src.MentionedUsers)
             {
-                if (mention.IsBot)
-                    if (mention.Id == Data.MY_ID)
-                        mentionsMe = true;
-                    else
-                        return;
+                if (mention.Id == Data.MY_ID)
+                {
+                    mentionsMe = true;
+                    break;
+                }
             }
 
             if (mentionsMe || (Program.rand.Next(CHATTERS_CHANCE_TO_CHAT) == 0))
@@ -256,8 +258,10 @@ namespace MothBot.modules
                         for (int i = 0; i < 3; i++)
                         {
                             string username = "Unknown";
-                            if (places[i].Author() is IUser usr)
-                                username = usr.Username;
+                            if (places[i].Author() != null)
+                            {
+                                username = places[i].Author().Username;
+                            }
 
                             string creditstr = $"Accreddited to {username}.\n";
                             outmsgs.Add($"{ribbon[i]} \nChatter: \" {places[i].Content} \" \n{creditstr}Which scored a rating of {places[i].Rating()} out of {places[i].Votes.Count} total votes.");
@@ -503,10 +507,11 @@ namespace MothBot.modules
                 return true;
             }
 
-            public IUser Author()   //Returns null if NA
+            public RestUser Author()   //Returns null if NA
             {
                 if (Origin_author == 0)
                     return null;
+
                 return Program.client.Rest.GetUserAsync(Origin_author).Result;
             }
 
@@ -537,7 +542,7 @@ namespace MothBot.modules
                 return false;
             }
 
-            public IGuild OriginGuild() //Returns null if NA
+            public RestGuild OriginGuild() //Returns null if NA
             {
                 if (Origin_guild == 0)
                     return null;

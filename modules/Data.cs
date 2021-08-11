@@ -13,12 +13,11 @@ namespace MothBot.modules
     {
         //PARAMS
         public const ulong MY_ID = 765202973495656538;
-        public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
-        //END PARAMS
 
         //PATHS
         public const string PATH_GAYBEE = "../../resources/yougaybee.png";
-        //END PATHS
+
+        public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
 
         public static string Chatterbot_GetBlacklistCommands()
         {

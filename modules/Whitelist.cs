@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Whitelist
+    internal static class Whitelist
     {
         public const string PATH_WHITELISTS = "../../data/whitelists.json";
 
@@ -24,7 +24,6 @@ namespace MothBot.modules
 
         static Whitelist()
         {
-            Program.client.UserJoined += UserJoined;
             Program.client.LeftGuild += Client_LeftGuild;
             try
             {
@@ -190,19 +189,19 @@ namespace MothBot.modules
             Data.Files_Write(PATH_WHITELISTS, outStr);
         }
 
-        private static Task Client_LeftGuild(SocketGuild guild)
-        {
-            whitelists.Remove(guild.Id);
-            Logging.LogtoConsoleandFile($"Left server {guild.Name}, removing from whitelists.");
-            return Task.CompletedTask;
-        }
-
-        private static Task UserJoined(SocketGuildUser user)
+        public static Task UserJoined(SocketGuildUser user)
         {
             if (whitelists.TryGetValue(user.Guild.Id, out Server server) && (!server.whitelistedIDs.Contains(user.Id)))
             {
                 user.KickAsync("User not whitelisted.");
             }
+            return Task.CompletedTask;
+        }
+
+        private static Task Client_LeftGuild(SocketGuild guild)
+        {
+            whitelists.Remove(guild.Id);
+            Logging.LogtoConsoleandFile($"Left server {guild.Name}, removing from whitelists.");
             return Task.CompletedTask;
         }
 

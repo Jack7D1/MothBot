@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Logging
+    internal static class Logging
     {
         public const string PATH_LOGS = "../../data/log.txt";
         private static readonly StreamWriter log = new StreamWriter(PATH_LOGS, true);
 
-        public Logging()
+        static Logging()
         {
             if (!Directory.Exists(PATH_LOGS))
                 Directory.CreateDirectory(PATH_LOGS.Substring(0, PATH_LOGS.LastIndexOf('/')));

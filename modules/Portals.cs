@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
-    internal class Portals
+    internal static class Portals
     {
-        private static readonly List<Portal> portals = new List<Portal>();
         public const string PATH_PORTALS = "../../data/portals.json";
-        public Portals()
+        private static readonly List<Portal> portals = new List<Portal>();
+
+        static Portals()
         {
             Program.client.ChannelDestroyed += ChannelDestroyed;
             Program.client.LeftGuild += LeftGuild;
-            Program.client.MessageReceived += MessageRecieved;
             Program.client.Ready += Ready;
             try
             {
@@ -25,7 +25,6 @@ namespace MothBot.modules
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
                 foreach (Portal portal in filePortals)
                     portals.Add(portal);
-                CheckPortals();
             }
             catch (Exception e) when (e.Message == "NO FILEDATA")
             {
@@ -46,7 +45,6 @@ namespace MothBot.modules
         {
             if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot)
                 await BroadcastAsync(msg);
-            
         }
 
         public static async Task PortalManagement(SocketMessage msg, string args)    //Expects to be called when the keyword is "portal", 'args' is expected to be everything following keyword, minus space.

@@ -9,9 +9,11 @@ namespace MothBot
 {
     internal class Program
     {
+        public const string PATH_TOKEN = "../../data/token.txt";
+
         //See data module for parameters
         public static DiscordSocketClient client = new DiscordSocketClient();
-        public const string PATH_TOKEN = "../../data/token.txt";
+
         public static Random rand = new Random((int)(DateTime.Now.Ticks % int.MaxValue));
 
         public static void Main(string[] args)  //Initialization
@@ -19,9 +21,7 @@ namespace MothBot
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExit);
             Console.CancelKeyPress += new ConsoleCancelEventHandler(ProcessExit);
 
-            _ = new Logging();
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
-            _ = new Whitelist();
             //Keep at bottom of init
             new Program().MainAsync().GetAwaiter().GetResult();    //Start Runtime
         }
@@ -42,20 +42,11 @@ namespace MothBot
                 {
                     await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
                 }
-            else if (!Portals.IsPortal(msg.Channel))
-                await Chatterbot.ChatterHandler(msg);
         }
 
         private static void ProcessExit(object sender, EventArgs e)
         {
             client.LogoutAsync(); //So mothbot doesn't hang out as a ghost for a few minutes
-        }
-
-        private static Task Ready()  //Init any objects here that are dependant on the client having logged in.
-        {
-            _ = new Chatterbot();
-            _ = new Portals();
-            return Task.CompletedTask;
         }
 
         private static async Task RootCommandHandler(SocketMessage msg)
@@ -136,6 +127,7 @@ namespace MothBot
                 case "portals":
                     await Portals.PortalManagement(msg, args);
                     break;
+
                 case "whitelist":
                     await Whitelist.CommandHandler(msg, args);
                     break;
@@ -157,7 +149,9 @@ namespace MothBot
         {
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
-            client.Ready += Ready;
+            client.MessageReceived += Portals.MessageRecieved;
+            client.UserJoined += Whitelist.UserJoined;
+            client.MessageReceived += Chatterbot.ChatterHandler;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(PATH_TOKEN));
 
             await Data.Program_SetStatus();
