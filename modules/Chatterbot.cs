@@ -29,34 +29,29 @@ namespace MothBot.modules
         {
             Program.client.ReactionAdded += ReactionAdded;
             Program.client.ReactionRemoved += ReactionRemoved;
-            try
-            {
+
                 foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
                     blacklist.Add(Sanitize.Dealias(blacklister));
                 chatters = new List<Chatter>();
                 string fileData = File.ReadAllText(PATH_CHATTERS, Encoding.UTF8);
                 if (fileData == null || fileData.Length == 0 || fileData == "[]")
-                    throw new Exception("NO FILEDATA");
+                {
+                    Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
+                    chatters.Clear();
+                }
+                else
+                {
+                    chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
+                    CleanupChatters();
+                    if (chatters.Count > CHATTERS_MAX_COUNT)
+                    {
+                        int overflow = chatters.Count - CHATTERS_MAX_COUNT;
+                        Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
+                        for (int i = overflow; i > 0; i--)
+                            RemoveLowestRated();
+                    }
+                }
 
-                chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
-                CleanupChatters();
-                if (chatters.Count > CHATTERS_MAX_COUNT)
-                    throw new Exception("CHATTER OVERFLOW");
-            }
-            catch (Exception ex) when (ex.Message == "NO FILEDATA")
-            {
-                Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
-                chatters.Clear();
-                return;
-            }
-            catch (Exception ex) when (ex.Message == "CHATTER OVERFLOW")
-            {
-                int overflow = chatters.Count - CHATTERS_MAX_COUNT;
-                Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
-                for (int i = overflow; i > 0; i--)
-                    RemoveLowestRated();
-                return;
-            }
         }
 
         public static bool AcceptableChatter(string inStr)
@@ -161,7 +156,7 @@ namespace MothBot.modules
             if (src.Author.IsBot)
                 return;
             bool mentionsMe = false, doNotSave = false;
-            if (src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw)
+            if ((src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw) || Utilities.IsBanned(src.Author))
                 doNotSave = true;
             foreach (SocketUser mention in src.MentionedUsers)
             {
@@ -286,7 +281,7 @@ namespace MothBot.modules
             return false;
         }
 
-        public static void PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
+        public static async Task PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<Chatter> chatterstoprepend = new List<Chatter>();
             List<string> backupchatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
@@ -294,7 +289,7 @@ namespace MothBot.modules
             if (overshoot > 0)
             {
                 if (ch != null)
-                    ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max count [{CHATTERS_MAX_COUNT}] by {overshoot}. Deleting excess from prepend before saving.");
+                    await ch.SendMessageAsync($"Warning: Prepending with {backupchatters.Count} lines overshot the max count [{CHATTERS_MAX_COUNT}] by {overshoot}. Deleting excess from prepend before saving.");
                 backupchatters.RemoveRange(0, overshoot);
             }
             foreach (string chatter in backupchatters)
@@ -303,8 +298,8 @@ namespace MothBot.modules
             chatters.InsertRange(0, chatterstoprepend);
 
             if (ch != null)
-                ch.SendMessageAsync("Prepend successful");
-            Logging.LogtoConsoleandFile($"CHATTERS: Prepend Completed with {overshoot} items removed due to limit of {CHATTERS_MAX_COUNT} entries.");
+                await ch.SendMessageAsync("Prepend successful");
+            await Logging.LogtoConsoleandFile($"CHATTERS: Prepend Completed with {overshoot} items removed due to limit of {CHATTERS_MAX_COUNT} entries.");
             SaveChatters();
         }
 

@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ namespace MothBot.modules
         public const string PATH_WHITELISTS = "../../data/whitelists.json";
 
         private static readonly string COMMANDS = "**Whitelist Commands:**\n```" +
-            "Summary: The whitelist is used to prevent non whitelisted users from joining the current server. Whitelists can only be operated by server administrators.\n" +
+                    "Summary: The whitelist is used to prevent non whitelisted users from joining the current server. Whitelists can only be operated by server administrators.\n" +
             $"{Data.PREFIX} whitelist add [userID]    - Adds user to whitelist in current server\n" +
             $"{Data.PREFIX} whitelist remove [userID] - Removes user from whitelist in current server\n" +
             $"{Data.PREFIX} whitelist populate        - Adds all current users to the whitelist in current server\n" +
@@ -20,29 +19,24 @@ namespace MothBot.modules
             $"{Data.PREFIX} whitelist toggle          - Toggles the enable state of whitelist enforcement\n" +
             "```";
 
-        private static readonly Dictionary<ulong, Server> whitelists;    //Ulong key is server ID
+        private static readonly Dictionary<ulong, Server> whitelists;
 
         static Whitelist()
         {
             Program.client.LeftGuild += Client_LeftGuild;
-            try
+
+            string fileData = Data.Files_Read_String(PATH_WHITELISTS);
+            if (fileData == null || fileData.Length == 0 || fileData == "[]")
             {
                 whitelists = new Dictionary<ulong, Server>();
-                string fileData = Data.Files_Read_String(PATH_WHITELISTS);
-                if (fileData == null || fileData.Length == 0 || fileData == "[]")
-                    throw new Exception("NO FILEDATA");
-
-                whitelists = JsonConvert.DeserializeObject<Dictionary<ulong, Server>>(fileData);
-                Dictionary<ulong, Server> whitelistscopy = whitelists;
             }
-            catch (Exception ex) when (ex.Message == "NO FILEDATA")
+            else
             {
-                Logging.LogtoConsoleandFile($"No whitelists found at {PATH_WHITELISTS}, running with empty...");
-                whitelists.Clear();
-                return;
+                whitelists = new Dictionary<ulong, Server>(JsonConvert.DeserializeObject<Dictionary<ulong, Server>>(fileData));
             }
         }
 
+        //Ulong key is server ID
         public static async Task CommandHandler(SocketMessage msg, string command)    //Expects to be called from main command tree with the keyword whitelist.
         {
             SocketGuildUser user = msg.Author as SocketGuildUser;
@@ -189,20 +183,18 @@ namespace MothBot.modules
             Data.Files_Write(PATH_WHITELISTS, outStr);
         }
 
-        public static Task UserJoined(SocketGuildUser user)
+        public static async Task UserJoined(SocketGuildUser user)
         {
             if (whitelists.TryGetValue(user.Guild.Id, out Server server) && (!server.whitelistedIDs.Contains(user.Id)))
             {
-                user.KickAsync("User not whitelisted.");
+                await user.KickAsync("User not whitelisted.");
             }
-            return Task.CompletedTask;
         }
 
-        private static Task Client_LeftGuild(SocketGuild guild)
+        private static async Task Client_LeftGuild(SocketGuild guild)
         {
             whitelists.Remove(guild.Id);
-            Logging.LogtoConsoleandFile($"Left server {guild.Name}, removing from whitelists.");
-            return Task.CompletedTask;
+            await Logging.LogtoConsoleandFile($"Left server {guild.Name}, removing from whitelists.");
         }
 
         private class Server

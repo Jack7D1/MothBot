@@ -49,9 +49,9 @@ namespace MothBot.modules
             await LogAsync(str);
         }
 
-        private static void ProcessExit(object sender, EventArgs e)
+        private static async void ProcessExit(object sender, EventArgs e)
         {
-            Log($"System shutdown at [{System.DateTime.UtcNow}]");
+            await Log($"System shutdown at [{System.DateTime.UtcNow}]");
         }
     }
 }

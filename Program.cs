@@ -152,6 +152,7 @@ namespace MothBot
             client.MessageReceived += Portals.MessageRecieved;
             client.UserJoined += Whitelist.UserJoined;
             client.MessageReceived += Chatterbot.ChatterHandler;
+            client.JoinedGuild += Utilities.Client_JoinedGuild;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(PATH_TOKEN));
 
             await Data.Program_SetStatus();

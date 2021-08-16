@@ -181,32 +181,9 @@ namespace MothBot.modules
             }
         }
 
-        public static Task Program_SetStatus()
+        public static async Task Program_SetStatus()
         {
-            Program.client.SetGameAsync($"Say '{PREFIX} help' for commands! Invite to your server at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
-            return Task.CompletedTask;
-        }
-
-        public static string Utilities_GetCommandList()
-        {
-            string prefix = $"{PREFIX} utility";
-            return
-                "**Utility Command List:**\n" +
-                "```" +
-                "general:\n" +
-                $"{prefix} blacklist [command]\n" +
-                $"{prefix} prependbackupchatters\n" +
-                "``````" +
-                "data/debug:\n" +
-                $"{prefix} dumpchatters\n" +
-                $"{prefix} dumplogs\n" +
-                $"{prefix} dumpportals\n" +
-                $"{prefix} listservers\n" +
-                "``````" +
-                "dangerous:\n" +
-                $"{prefix} leaveserver [ID]\n" +
-                $"{prefix} shutdown\n" +
-                "```";
+            await Program.client.SetGameAsync($"Say '{PREFIX} help' for commands! Invite to your server at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace MothBot.modules
 
         public static async Task MessageRecieved(SocketMessage msg)
         {
-            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot)
+            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot && !Utilities.IsBanned(msg.Author))
                 await BroadcastAsync(msg);
         }
 
@@ -98,10 +98,9 @@ namespace MothBot.modules
                 await msg.Channel.SendMessageAsync("You lack the required permissions to manage portals for this server! [ManageChannels]");
         }
 
-        public static Task Ready()
+        public static async Task Ready()
         {
-            CheckPortals();
-            return Task.CompletedTask;
+            await CheckPortals();
         }
 
         public static void SavePortals()
@@ -136,10 +135,9 @@ namespace MothBot.modules
             }
         }
 
-        private static Task ChannelDestroyed(SocketChannel arg)
+        private static async Task ChannelDestroyed(SocketChannel arg)
         {
-            CheckPortals();
-            return Task.CompletedTask;
+            await CheckPortals();
         }
 
         private static Task CheckPortals()
@@ -174,15 +172,14 @@ namespace MothBot.modules
             return false;
         }
 
-        private static Task LeftGuild(SocketGuild arg)
+        private static async Task LeftGuild(SocketGuild arg)
         {
-            CheckPortals();
-            return Task.CompletedTask;
+            await CheckPortals();
         }
 
-        private static Task ListPortals(ISocketMessageChannel ch)
+        private static async Task ListPortals(ISocketMessageChannel ch)
         {
-            CheckPortals();
+            await CheckPortals();
             if (portals.Count > 0)
             {
                 string outStr = "**OPEN PORTALS:** ```";
@@ -192,11 +189,10 @@ namespace MothBot.modules
                     IGuild portalGuild = portals[i].GetGuild();
                     outStr += $"{i + 1}: \"{portalCh.Name}\" in {portalGuild.Name}.\n";
                 }
-                ch.SendMessageAsync(outStr + "```");
+                await ch.SendMessageAsync(outStr + "```");
             }
             else
-                ch.SendMessageAsync("No portals found!");
-            return Task.CompletedTask;
+                await ch.SendMessageAsync("No portals found!");
         }
 
         private class Portal

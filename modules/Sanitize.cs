@@ -80,13 +80,14 @@ namespace MothBot.modules
 
         public static string ReplaceAllMentionsWithID(string inStr, ulong ID)   //regex saves the day
         {
-            if (inStr.Length < (18 + "<@>").Length || !Regex.IsMatch(inStr, @"<@\d{18}>"))
+            const string pingRegex = @"(<@\d{18}>)|(<@!\d{18}>)";
+            if (inStr == null || !Regex.IsMatch(inStr, pingRegex))
                 return ScrubEveryoneandHereMentions(inStr);
 
-            MatchCollection mentions = Regex.Matches(inStr, @"<@\d{18}>");
+            MatchCollection mentions = Regex.Matches(inStr, pingRegex);
             string outStr = inStr;
             foreach (Match mention in mentions)
-                outStr = outStr.Replace(mention.Value, $"<@{ID}>");
+                outStr = outStr.Replace(mention.Value, $"<@!{ID}>");
             return ScrubEveryoneandHereMentions(outStr);
         }
 
