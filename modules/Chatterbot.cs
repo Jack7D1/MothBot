@@ -151,14 +151,12 @@ namespace MothBot.modules
                 }
             }
             //Save Chatter
-            Chatter candidate = new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId);
-
-            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(candidate))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
+            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id)))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
                 if (chatters.Count >= CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
                 else
-                    chatters.Add(candidate);
+                    chatters.Add(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
                 SaveChatters();
             }
         }
