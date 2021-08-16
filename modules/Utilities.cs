@@ -143,6 +143,10 @@ namespace MothBot.modules
         {
             return banIDs.Contains(user.Id);
         }
+        public static bool IsBanned(ulong userID)
+        {
+            return banIDs.Contains(userID);
+        }
 
         public static bool IsOperator(SocketUser user)
         {

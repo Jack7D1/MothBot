@@ -30,57 +30,27 @@ namespace MothBot.modules
             Program.client.ReactionAdded += ReactionAdded;
             Program.client.ReactionRemoved += ReactionRemoved;
 
-                foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
-                    blacklist.Add(Sanitize.Dealias(blacklister));
-                chatters = new List<Chatter>();
-                string fileData = File.ReadAllText(PATH_CHATTERS, Encoding.UTF8);
-                if (fileData == null || fileData.Length == 0 || fileData == "[]")
-                {
-                    Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
-                    chatters.Clear();
-                }
-                else
-                {
-                    chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
-                    CleanupChatters();
-                    if (chatters.Count > CHATTERS_MAX_COUNT)
-                    {
-                        int overflow = chatters.Count - CHATTERS_MAX_COUNT;
-                        Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
-                        for (int i = overflow; i > 0; i--)
-                            RemoveLowestRated();
-                    }
-                }
-
-        }
-
-        public static bool AcceptableChatter(string inStr)
-        {
-            inStr = inStr.ToLower();
-            if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0)     //Catch empty strings
-                return false;
-
+            foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
+                blacklist.Add(Sanitize.Dealias(blacklister));
+            chatters = new List<Chatter>();
+            string fileData = File.ReadAllText(PATH_CHATTERS, Encoding.UTF8);
+            if (fileData == null || fileData.Length == 0 || fileData == "[]")
             {
-                ushort uniqueChars = 0;
-                string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
-                if (clearChars.Length != 0)
-                    uniqueChars++;
-                while (clearChars.Length != 0)
-                {
-                    clearChars = clearChars.Replace(clearChars[0].ToString(), "");
-                    uniqueChars++;
-                }
-                if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
-                    return false;
+                Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
+                chatters.Clear();
             }
+            else
             {
-                char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~', '\'' };
-                if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
-                    return false;
+                chatters = JsonConvert.DeserializeObject<List<Chatter>>(fileData.Replace("☼", "").Replace("™️", "(tm)").Normalize(NormalizationForm.FormKC));
+                CleanupChatters();
+                if (chatters.Count > CHATTERS_MAX_COUNT)
+                {
+                    int overflow = chatters.Count - CHATTERS_MAX_COUNT;
+                    Logging.LogtoConsoleandFile($"CHATTERS: Chatter overflow found, deleting {overflow} lowest rated entries.");
+                    for (int i = overflow; i > 0; i--)
+                        RemoveLowestRated();
+                }
             }
-            if (ContentsBlacklisted(inStr))
-                return false;
-            return true;
         }
 
         public static bool AddBlacklister(string entry)  //Returns false if already present
@@ -156,7 +126,7 @@ namespace MothBot.modules
             if (src.Author.IsBot)
                 return;
             bool mentionsMe = false, doNotSave = false;
-            if ((src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw) || Utilities.IsBanned(src.Author))
+            if ((src.Channel is ITextChannel && (src.Channel as ITextChannel).IsNsfw))
                 doNotSave = true;
             foreach (SocketUser mention in src.MentionedUsers)
             {
@@ -181,12 +151,14 @@ namespace MothBot.modules
                 }
             }
             //Save Chatter
-            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(src.Content))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
+            Chatter candidate = new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId);
+
+            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(candidate))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
                 if (chatters.Count >= CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
                 else
-                    chatters.Add(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id, src.Id, src.Channel.Id, (src.Author as IGuildUser).GuildId));
+                    chatters.Add(candidate);
                 SaveChatters();
             }
         }
@@ -323,12 +295,41 @@ namespace MothBot.modules
             File.WriteAllText(PATH_CHATTERS, outStr, Encoding.UTF8);
         }
 
+        private static bool AcceptableChatter(Chatter chatter)
+        {
+            string inStr = chatter.Content.ToLower();
+            if (inStr.Length < 2 || inStr.Replace(" ", "").Length == 0)     //Catch empty strings
+                return false;
+
+            {
+                ushort uniqueChars = 0;
+                string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
+                if (clearChars.Length != 0)
+                    uniqueChars++;
+                while (clearChars.Length != 0)
+                {
+                    clearChars = clearChars.Replace(clearChars[0].ToString(), "");
+                    uniqueChars++;
+                }
+                if (uniqueChars < 5)    //A message with less than five unique characters is probably just keyboard mash or a single word.
+                    return false;
+            }
+            {
+                char[] firstCharBlacklist = { '!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '\\', '^', '`', '|', '~', '\'' };
+                if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
+                    return false;
+            }
+            if (Utilities.IsBanned(chatter.Origin_author) || ContentsBlacklisted(inStr))
+                return false;
+            return true;
+        }
+
         private static void CleanupChatters()
         {
             List<Chatter> chattersout = new List<Chatter>();
             List<string> chattersContents = new List<string>();
             foreach (Chatter chatter in chatters)                //Test every entry for acceptableness and kill possible duplicates
-                if (AcceptableChatter(chatter.Content) && !chattersContents.Contains(chatter.Content))
+                if (!chattersContents.Contains(chatter.Content) && AcceptableChatter(chatter))
                 {
                     chattersout.Add(chatter);
                     chattersContents.Add(chatter.Content);
