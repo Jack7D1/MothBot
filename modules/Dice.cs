@@ -93,7 +93,7 @@ namespace MothBot.modules
         {
             byte[] outresults = new byte[quantity];
             for (byte i = 0; i < quantity; i++)
-                outresults[i] = (byte)Program.rand.Next(1, sides + 1);
+                outresults[i] = (byte)Master.rand.Next(1, sides + 1);
             return outresults;
         }
 

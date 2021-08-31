@@ -1,7 +1,6 @@
 ﻿using Discord;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -70,72 +69,16 @@ namespace MothBot.modules
             }
         }
 
-        public static string Files_Read_String(string path)    //Returns null if file not found
-        {
-            try
-            {
-                StreamReader reader = new StreamReader(path);
-                List<byte> inChars = new List<byte>();
-                while (!reader.EndOfStream)
-                    inChars.Add((byte)reader.Read());
-                reader.Close();
-                reader.Dispose();
-                return Encoding.UTF8.GetString(inChars.ToArray());
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
-                _ = new StreamWriter(path, false);
-                return null;
-            }
-            catch (FileNotFoundException)
-            {
-                _ = new StreamWriter(path, false);
-                return null;
-            }
-        }
-
         public static Task Files_Write(string path, List<string> data, bool append = false)
         {
-            try
+            StreamWriter writer = new StreamWriter(path, append);
+            if (data.Count > 0 && path != "")
             {
-                StreamWriter writer = new StreamWriter(path, append);
-                if (data.Count > 0 && path != "")
-                {
-                    foreach (string line in data)
-                        writer.WriteLine(line);
-                }
-                writer.Close();
-                writer.Dispose();
+                foreach (string line in data)
+                    writer.WriteLine(line);
             }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
-                Task.Delay(500);
-                Files_Write(path, data, append);
-            }
-            return Task.CompletedTask;
-        }
-
-        public static Task Files_Write(string path, string data, bool append = false)
-        {
-            try
-            {
-                StreamWriter writer = new StreamWriter(path, append);
-                if (data.Length > 0 && path != "")
-                {
-                    for (int i = 0; i < data.Length; i++)
-                        writer.Write(data[i]);
-                }
-                writer.Close();
-                writer.Dispose();
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
-                Task.Delay(250);
-                Files_Write(path, data, append);
-            }
+            writer.Close();
+            writer.Dispose();
             return Task.CompletedTask;
         }
 
@@ -159,7 +102,7 @@ namespace MothBot.modules
 
         public static string Program_GetLaws()
         {
-            if (Program.rand.Next() % 100 != 0)
+            if (Master.rand.Next() % 100 != 0)
             {
                 return
                     "**Current active laws:**\n" +
@@ -183,7 +126,7 @@ namespace MothBot.modules
 
         public static async Task Program_SetStatus()
         {
-            await Program.client.SetGameAsync($"Say '{PREFIX} help' for commands! Invite to your server at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
+            await Master.client.SetGameAsync($"Say '{PREFIX} help' for commands! Invite to your server at https://tinyurl.com/MOFFBOT1111", null, ActivityType.Playing);
         }
     }
 }

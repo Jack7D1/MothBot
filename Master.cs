@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MothBot
 {
-    internal class Program
+    internal class Master
     {
         public const string PATH_TOKEN = "../../data/token.txt";
 
@@ -23,7 +23,7 @@ namespace MothBot
 
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
-            new Program().MainAsync().GetAwaiter().GetResult();    //Start Runtime
+            new Master().MainAsync().GetAwaiter().GetResult();    //Start Runtime
         }
 
         private static async Task Client_MessageRecieved(SocketMessage msg)
@@ -149,10 +149,10 @@ namespace MothBot
         {
             client.MessageReceived += Client_MessageRecieved;
             client.Log += Logging.Log;
+            client.Ready += Users.Client_Ready;
             client.MessageReceived += Portals.MessageRecieved;
             client.UserJoined += Whitelist.UserJoined;
             client.MessageReceived += Chatterbot.ChatterHandler;
-            client.JoinedGuild += Utilities.Client_JoinedGuild;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(PATH_TOKEN));
 
             await Data.Program_SetStatus();

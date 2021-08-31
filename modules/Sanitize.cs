@@ -96,7 +96,7 @@ namespace MothBot.modules
             if (!(usermentions || rolementions))
                 return ScrubEveryoneandHereMentions(inStr);
 
-            foreach (SocketGuild guild in Program.client.Guilds)
+            foreach (SocketGuild guild in Master.client.Guilds)
             {
                 if (usermentions)
                     foreach (SocketUser user in guild.Users)

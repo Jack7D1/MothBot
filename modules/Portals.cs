@@ -3,6 +3,8 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -14,12 +16,12 @@ namespace MothBot.modules
 
         static Portals()
         {
-            Program.client.ChannelDestroyed += ChannelDestroyed;
-            Program.client.LeftGuild += LeftGuild;
-            Program.client.Ready += Ready;
+            Master.client.ChannelDestroyed += ChannelDestroyed;
+            Master.client.LeftGuild += LeftGuild;
+            Master.client.Ready += Ready;
             try
             {
-                string fileData = Data.Files_Read_String(PATH_PORTALS);
+                string fileData = File.ReadAllText(PATH_PORTALS, Encoding.UTF8);
                 if (fileData == null || fileData.Length == 0)
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -43,7 +45,7 @@ namespace MothBot.modules
 
         public static async Task MessageRecieved(SocketMessage msg)
         {
-            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot && !Utilities.IsBanned(msg.Author))
+            if (IsPortal(msg.Channel) && !msg.Content.StartsWith(Data.PREFIX) && !msg.Author.IsBot && !Users.IsBanned(msg.Author))
                 await BroadcastAsync(msg);
         }
 
@@ -106,7 +108,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            Data.Files_Write(PATH_PORTALS, outStr);
+            File.WriteAllText(PATH_PORTALS, outStr, Encoding.UTF8);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.
@@ -210,12 +212,12 @@ namespace MothBot.modules
 
             public IMessageChannel GetChannel() //returns null if not found
             {
-                return Program.client.Rest.GetChannelAsync(channelId).Result as IMessageChannel;
+                return Master.client.Rest.GetChannelAsync(channelId).Result as IMessageChannel;
             }
 
             public IGuild GetGuild()    //returns null if not found
             {
-                return Program.client.Rest.GetGuildAsync(guildId).Result;
+                return Master.client.Rest.GetGuildAsync(guildId).Result;
             }
         }
     }

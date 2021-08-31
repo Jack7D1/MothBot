@@ -27,8 +27,8 @@ namespace MothBot.modules
 
         static Chatterbot()
         {
-            Program.client.ReactionAdded += ReactionAdded;
-            Program.client.ReactionRemoved += ReactionRemoved;
+            Master.client.ReactionAdded += ReactionAdded;
+            Master.client.ReactionRemoved += ReactionRemoved;
 
             foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
                 blacklist.Add(Sanitize.Dealias(blacklister));
@@ -137,7 +137,7 @@ namespace MothBot.modules
                 }
             }
 
-            if (mentionsMe || (Program.rand.Next(CHATTERS_CHANCE_TO_CHAT) == 0))
+            if (mentionsMe || (Master.rand.Next(CHATTERS_CHANCE_TO_CHAT) == 0))
             {
                 //Send Chatter
                 Chatter outChatter = GetChatter();
@@ -151,7 +151,7 @@ namespace MothBot.modules
                 }
             }
             //Save Chatter
-            if (!doNotSave && Program.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id)))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
+            if (!doNotSave && Master.rand.Next(CHATTERS_CHANCE_TO_SAVE) == 0 && AcceptableChatter(new Chatter(Sanitize.ScrubMentions(Encoding.UTF8.GetString(Encoding.Convert(Encoding.Unicode, Encoding.UTF8, Encoding.Unicode.GetBytes(src.Content))), false).Replace('\n', ' '), src.Author.Id)))  //checks to see if it's a valid and acceptable chatter then saves if applicable.
             {
                 if (chatters.Count >= CHATTERS_MAX_COUNT)
                     RemoveLowestRated();
@@ -317,7 +317,7 @@ namespace MothBot.modules
                 if (inStr.IndexOf(Data.PREFIX) == 0 || inStr.IndexOfAny(firstCharBlacklist) < 3)    //Check for characters in the char blacklist appearing too early int he straing, likely denoting a bot command
                     return false;
             }
-            if (Utilities.IsBanned(chatter.Origin_author) || ContentsBlacklisted(inStr))
+            if (Users.IsBanned(chatter.Origin_author) || ContentsBlacklisted(inStr))
                 return false;
             return true;
         }
@@ -343,7 +343,7 @@ namespace MothBot.modules
             if (chatters.Count == 0)
                 return null;
             else
-                return chatters[Program.rand.Next(0, chatters.Count)];
+                return chatters[Master.rand.Next(0, chatters.Count)];
         }
 
         private static Chatter GetChatterFromMessage(IUserMessage msg)
@@ -395,7 +395,7 @@ namespace MothBot.modules
         private static Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
-            IUser usr = Program.client.Rest.GetUserAsync(reaction.UserId).Result;
+            IUser usr = Master.client.Rest.GetUserAsync(reaction.UserId).Result;
             Chatter chatter = GetChatterFromMessage(msg);
             if (chatter == null || usr.IsBot)
                 return Task.CompletedTask;
@@ -420,7 +420,7 @@ namespace MothBot.modules
         private static Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
-            IUser usr = Program.client.Rest.GetUserAsync(reaction.UserId).Result;
+            IUser usr = Master.client.Rest.GetUserAsync(reaction.UserId).Result;
             Chatter chatter = GetChatterFromMessage(msg);
             if (chatter == null || usr.IsBot)
                 return Task.CompletedTask;
@@ -461,7 +461,7 @@ namespace MothBot.modules
                     candidates.Add(chatter);
             }
 
-            chatters.Remove(candidates[Program.rand.Next(candidates.Count)]);
+            chatters.Remove(candidates[Master.rand.Next(candidates.Count)]);
         }
 
         private class Chatter
@@ -506,7 +506,7 @@ namespace MothBot.modules
                 if (Origin_author == 0)
                     return null;
 
-                return Program.client.Rest.GetUserAsync(Origin_author).Result;
+                return Master.client.Rest.GetUserAsync(Origin_author).Result;
             }
 
             public bool ClearVote(ulong voterID)    //Returns true or false based on if voter was found.
@@ -540,14 +540,14 @@ namespace MothBot.modules
             {
                 if (Origin_guild == 0)
                     return null;
-                return Program.client.Rest.GetGuildAsync(Origin_guild).Result;
+                return Master.client.Rest.GetGuildAsync(Origin_guild).Result;
             }
 
             public IMessage OriginMsg() //Returns null if NA
             {
                 if (Origin_msg == 0)
                     return null;
-                return (Program.client.Rest.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
+                return (Master.client.Rest.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating

@@ -2,6 +2,8 @@
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -23,9 +25,9 @@ namespace MothBot.modules
 
         static Whitelist()
         {
-            Program.client.LeftGuild += Client_LeftGuild;
+            Master.client.LeftGuild += Client_LeftGuild;
 
-            string fileData = Data.Files_Read_String(PATH_WHITELISTS);
+            string fileData = File.ReadAllText(PATH_WHITELISTS, Encoding.UTF8);
             if (fileData == null || fileData.Length == 0 || fileData == "[]")
             {
                 whitelists = new Dictionary<ulong, Server>();
@@ -79,7 +81,7 @@ namespace MothBot.modules
                     {
                         if (server.whitelistedIDs.Contains(ulong.Parse(args)))
                         {
-                            await msg.Channel.SendMessageAsync($"User {Program.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} already in the whitelist.");
+                            await msg.Channel.SendMessageAsync($"User {Master.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} already in the whitelist.");
                             break;
                         }
                         else
@@ -89,7 +91,7 @@ namespace MothBot.modules
                     {
                         whitelists.Add(guild.Id, new Server(guild.Id, new List<ulong> { ulong.Parse(args) }));
                     }
-                    await msg.Channel.SendMessageAsync($"User {Program.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} added to whitelist successfully.");
+                    await msg.Channel.SendMessageAsync($"User {Master.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} added to whitelist successfully.");
                     SaveWhitelists();
                     break;
 
@@ -100,7 +102,7 @@ namespace MothBot.modules
                         {
                             server.whitelistedIDs.Remove(ulong.Parse(args));
                             SaveWhitelists();
-                            await msg.Channel.SendMessageAsync($"User {Program.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} removed from whitelist successfully.");
+                            await msg.Channel.SendMessageAsync($"User {Master.client.Rest.GetUserAsync(ulong.Parse(args)).Result.Username} removed from whitelist successfully.");
                         }
                         else
                             await msg.Channel.SendMessageAsync("Invalid input or user not in whitelist");
@@ -180,7 +182,7 @@ namespace MothBot.modules
         public static void SaveWhitelists()
         {
             string outStr = JsonConvert.SerializeObject(whitelists, Formatting.Indented);
-            Data.Files_Write(PATH_WHITELISTS, outStr);
+            File.WriteAllText(PATH_WHITELISTS, outStr, Encoding.UTF8);
         }
 
         public static async Task UserJoined(SocketGuildUser user)

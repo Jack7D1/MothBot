@@ -22,7 +22,7 @@ namespace MothBot.modules
             for (byte retries = 255; retries > 0; retries--)
             {
                 webData = Encoding.UTF8.GetString(raw);
-                int randNum = Program.rand.Next(1, 128);
+                int randNum = Master.rand.Next(1, 128);
                 bool EOF = false;
                 for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {

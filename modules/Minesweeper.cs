@@ -116,8 +116,8 @@ namespace MothBot.modules
                 byte xRand, yRand;
                 do
                 { //Program can get stuck here if it is placing too many bombs that cannot fit in the grid
-                    xRand = (byte)(Program.rand.Next(0, gridWidth));
-                    yRand = (byte)(Program.rand.Next(0, gridHeight));
+                    xRand = (byte)(Master.rand.Next(0, gridWidth));
+                    yRand = (byte)(Master.rand.Next(0, gridHeight));
                 } while (bombSpace[xRand, yRand]);
                 bombSpace[xRand, yRand] = true;
             }
