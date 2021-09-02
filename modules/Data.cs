@@ -1,6 +1,7 @@
 ﻿using Discord;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -44,42 +45,38 @@ namespace MothBot.modules
                 "```";
         }
 
-        public static List<string> Files_Read(string path)    //Returns null if file not found
+        public static string Files_Read(string path)
         {
             try
             {
-                StreamReader reader = new StreamReader(path);
-                List<string> outList = new List<string>();
-                while (!reader.EndOfStream)
-                    outList.Add(reader.ReadLine());
-                reader.Close();
-                reader.Dispose();
-                return outList;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
-                _ = new StreamWriter(path, false);
-                return null;
+                return File.ReadAllText(path, Encoding.UTF8);
             }
             catch (FileNotFoundException)
             {
-                _ = new StreamWriter(path, false);
                 return null;
             }
         }
 
-        public static Task Files_Write(string path, List<string> data, bool append = false)
+        public static List<string> Files_ReadList(string path)
         {
-            StreamWriter writer = new StreamWriter(path, append);
-            if (data.Count > 0 && path != "")
+            try
             {
-                foreach (string line in data)
-                    writer.WriteLine(line);
+                return new List<string>(File.ReadAllLines(path, Encoding.UTF8));
             }
-            writer.Close();
-            writer.Dispose();
-            return Task.CompletedTask;
+            catch (FileNotFoundException)
+            {
+                return null;
+            }
+        }
+
+        public static void Files_Write(string path, string data)
+        {
+            File.WriteAllText(path, data, Encoding.UTF8);
+        }
+
+        public static void Files_Write(string path, List<string> data)
+        {
+            File.WriteAllLines(path, data, Encoding.UTF8);
         }
 
         public static string Program_GetCommandList()

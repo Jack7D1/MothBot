@@ -2,8 +2,6 @@
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -27,7 +25,7 @@ namespace MothBot.modules
         {
             Master.client.LeftGuild += Client_LeftGuild;
 
-            string fileData = File.ReadAllText(PATH_WHITELISTS, Encoding.UTF8);
+            string fileData = Data.Files_Read(PATH_WHITELISTS);
             if (fileData == null || fileData.Length == 0 || fileData == "[]")
             {
                 whitelists = new Dictionary<ulong, Server>();
@@ -182,7 +180,7 @@ namespace MothBot.modules
         public static void SaveWhitelists()
         {
             string outStr = JsonConvert.SerializeObject(whitelists, Formatting.Indented);
-            File.WriteAllText(PATH_WHITELISTS, outStr, Encoding.UTF8);
+            Data.Files_Write(PATH_WHITELISTS, outStr);
         }
 
         public static async Task UserJoined(SocketGuildUser user)

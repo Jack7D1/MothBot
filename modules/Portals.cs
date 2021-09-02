@@ -3,8 +3,6 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -21,7 +19,7 @@ namespace MothBot.modules
             Master.client.Ready += Ready;
             try
             {
-                string fileData = File.ReadAllText(PATH_PORTALS, Encoding.UTF8);
+                string fileData = Data.Files_Read(PATH_PORTALS);
                 if (fileData == null || fileData.Length == 0)
                     throw new Exception("NO FILEDATA");
                 List<Portal> filePortals = JsonConvert.DeserializeObject<List<Portal>>(fileData);
@@ -108,7 +106,7 @@ namespace MothBot.modules
         public static void SavePortals()
         {
             string outStr = JsonConvert.SerializeObject(portals, Formatting.Indented);
-            File.WriteAllText(PATH_PORTALS, outStr, Encoding.UTF8);
+            Data.Files_Write(PATH_PORTALS, outStr);
         }
 
         private static async Task BroadcastAsync(SocketMessage msg) //Passing a socketmessage to here will cause it to be relayed to every portal channel instance.

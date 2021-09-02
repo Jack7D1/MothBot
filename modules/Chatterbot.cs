@@ -4,7 +4,6 @@ using Discord.WebSocket;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,10 +29,10 @@ namespace MothBot.modules
             Master.client.ReactionAdded += ReactionAdded;
             Master.client.ReactionRemoved += ReactionRemoved;
 
-            foreach (string blacklister in Data.Files_Read(PATH_CHATTERS_BLACKLIST))
+            foreach (string blacklister in Data.Files_ReadList(PATH_CHATTERS_BLACKLIST))
                 blacklist.Add(Sanitize.Dealias(blacklister));
             chatters = new List<Chatter>();
-            string fileData = File.ReadAllText(PATH_CHATTERS, Encoding.UTF8);
+            string fileData = Data.Files_Read(PATH_CHATTERS);
             if (fileData == null || fileData.Length == 0 || fileData == "[]")
             {
                 Logging.LogtoConsoleandFile($"No chatters found at {PATH_CHATTERS}, running with empty...");
@@ -254,7 +253,7 @@ namespace MothBot.modules
         public static async Task PrependBackupChatters(IMessageChannel ch = null)    //Does what it says, this can mess with the chatters length however so it should only be called by operators
         {
             List<Chatter> chatterstoprepend = new List<Chatter>();
-            List<string> backupchatters = Data.Files_Read(PATH_CHATTERS_BACKUP);
+            List<string> backupchatters = Data.Files_ReadList(PATH_CHATTERS_BACKUP);
             int overshoot = chatters.Count + backupchatters.Count - CHATTERS_MAX_COUNT;
             if (overshoot > 0)
             {
@@ -290,7 +289,7 @@ namespace MothBot.modules
         {
             CleanupChatters();
             string outStr = JsonConvert.SerializeObject(chatters, Formatting.Indented);
-            File.WriteAllText(PATH_CHATTERS, outStr, Encoding.UTF8);
+            Data.Files_Write(PATH_CHATTERS, outStr);
         }
 
         private static bool AcceptableChatter(Chatter chatter)

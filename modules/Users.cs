@@ -2,8 +2,6 @@
 using Discord.WebSocket;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -15,7 +13,7 @@ namespace MothBot.modules
 
         static Users()
         {
-            string fileData = File.ReadAllText(PATH_USERS, Encoding.UTF8);
+            string fileData = Data.Files_Read(PATH_USERS);
             if (fileData == null || fileData.Length == 0)
             {
                 Logging.LogtoConsoleandFile($"No user data found at {PATH_USERS}, running with empty list of users.");
@@ -99,7 +97,7 @@ namespace MothBot.modules
             }
             users.Clear();
             users.AddRange(newUsers);
-            File.WriteAllText(PATH_USERS, JsonConvert.SerializeObject(users, Formatting.Indented), Encoding.UTF8);
+            Data.Files_Write(PATH_USERS, JsonConvert.SerializeObject(users, Formatting.Indented));
         }
 
         private static bool AddUser(IUser user)
