@@ -1,6 +1,9 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MothBot.modules
@@ -22,10 +25,8 @@ namespace MothBot.modules
            $"{Data.PREFIX} utility prependbackupchatters\n" +
             "``````" +
             "data/debug:\n" +
-           $"{Data.PREFIX} utility dumpchatters\n" +
+           $"{Data.PREFIX} utility dumpdata\n" +
            $"{Data.PREFIX} utility dumplogs\n" +
-           $"{Data.PREFIX} utility dumpportals\n" +
-           $"{Data.PREFIX} utility listservers\n" +
             "``````" +
             "dangerous:\n" +
            $"{Data.PREFIX} utility ban [command]" +
@@ -58,23 +59,7 @@ namespace MothBot.modules
                 return;
             }
 
-            string keyword, args;
-            if (command.IndexOf(' ') == 0)
-                command = command.Substring(1);
-            if (command.Contains(' '))
-            {
-                keyword = command.Substring(0, command.IndexOf(' '));
-                args = command.Substring(command.IndexOf(' ') + 1);
-            }
-            else
-            {
-                keyword = command;
-                args = "";
-            }
-            args = args.ToLower();
-            keyword = keyword.ToLower();
-            if (keyword == "")
-                keyword = "commands";
+            Data.CommandSplitter(command, out string keyword, out string args);
 
             switch (keyword)    //Ensure switch is ordered similarly to command list
             {
@@ -89,19 +74,22 @@ namespace MothBot.modules
                     break;
 
                 //Data/debug
-                case "dumpchatters":
-                    await src.Channel.SendMessageAsync("Dumping chatters file...");
-                    await src.Channel.SendFileAsync(Chatterbot.PATH_CHATTERS);
+                case "dumpdata":
+                    {
+                        const string PATH_DATAZIP = "../../data.zip";
+                        await src.Channel.SendMessageAsync("Zipping data files...");
+                        if (File.Exists(PATH_DATAZIP))
+                            File.Delete(PATH_DATAZIP);
+                        ZipFile.CreateFromDirectory("../../data/", PATH_DATAZIP, CompressionLevel.Optimal, false);
+                        await src.Channel.SendMessageAsync("Uploading...");
+                        await src.Channel.SendFileAsync(PATH_DATAZIP);
+                            File.Delete(PATH_DATAZIP);
+                    }
                     break;
 
                 case "dumplogs":
                     await src.Channel.SendMessageAsync("Dumping logs file...");
                     await src.Channel.SendFileAsync(Logging.PATH_LOGS);
-                    break;
-
-                case "dumpportals":
-                    await src.Channel.SendMessageAsync("Dumping portals file...");
-                    await src.Channel.SendFileAsync(Portals.PATH_PORTALS);
                     break;
 
                 case "listservers":
@@ -185,19 +173,7 @@ namespace MothBot.modules
 
         private static async Task BanHandler(SocketMessage msg, string command) //Expects to be called from the utilities chain with the keyword 'ban'.
         {
-            string keyword, args;
-            if (command.IndexOf(' ') == 0)
-                command = command.Substring(1);
-            if (command.Contains(' '))
-            {
-                keyword = command.Substring(0, command.IndexOf(' '));
-                args = command.Substring(command.IndexOf(' ') + 1);
-            }
-            else
-            {
-                keyword = command;
-                args = "";
-            }
+            Data.CommandSplitter(command, out string keyword, out string args);
 
             switch (keyword)
             {

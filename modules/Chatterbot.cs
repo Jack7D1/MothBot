@@ -22,7 +22,24 @@ namespace MothBot.modules
         private const ushort CHATTERS_MAX_COUNT = 2048;
         private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links. Also used for filtering mature materials from bot output.
 
+        private static readonly string blacklistCommands =
+                "**Chatters Blacklist Management Commands:**\n" +
+                "```" +
+                $"{Data.PREFIX} utility blacklist add       Adds an entry to the blacklist\n" +
+                $"{Data.PREFIX} utility blacklist remove    Removes a matching entry from the blacklist\n" +
+                $"{Data.PREFIX} utility blacklist list      Lists the current blacklist\n" +
+                "```";
+
         private static readonly List<Chatter> chatters;
+
+        private static readonly string votingCommands =
+                "**Voting Commands:**\n" +
+                "```" +
+                $"{Data.PREFIX} chatter clearvote    - Removes your vote.\n" +
+                $"{Data.PREFIX} chatter rating       - Returns the rating of the most recently said chatter\n" +
+                $"{Data.PREFIX} chatter myvote       - Tells you what you voted on the most recent chatter\n" +
+                $"{Data.PREFIX} chatter leaderboard  - Lists the top 3 highest rated chatters." +
+                "```";
 
         static Chatterbot()
         {
@@ -68,19 +85,7 @@ namespace MothBot.modules
 
         public static async Task BlacklistHandler(SocketMessage msg, string command) //Expects to be called from the utilities chain with the keyword 'blacklist'.
         {
-            string keyword, args;
-            if (command.IndexOf(' ') == 0)
-                command = command.Substring(1);
-            if (command.Contains(' '))
-            {
-                keyword = command.Substring(0, command.IndexOf(' '));
-                args = command.Substring(command.IndexOf(' ') + 1);
-            }
-            else
-            {
-                keyword = command;
-                args = "";
-            }
+            Data.CommandSplitter(command, out string keyword, out string args);
 
             switch (keyword)
             {
@@ -115,7 +120,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetBlacklistCommands());
+                    await msg.Channel.SendMessageAsync(blacklistCommands);
                     break;
             }
         }
@@ -236,7 +241,7 @@ namespace MothBot.modules
                     break;
 
                 default:
-                    await msg.Channel.SendMessageAsync(Data.Chatterbot_GetVotingCommands());
+                    await msg.Channel.SendMessageAsync(votingCommands);
                     break;
             }
         }
@@ -533,20 +538,6 @@ namespace MothBot.modules
                     if (voter.VoterID == userID)
                         return true;
                 return false;
-            }
-
-            public RestGuild OriginGuild() //Returns null if NA
-            {
-                if (Origin_guild == 0)
-                    return null;
-                return Master.client.Rest.GetGuildAsync(Origin_guild).Result;
-            }
-
-            public IMessage OriginMsg() //Returns null if NA
-            {
-                if (Origin_msg == 0)
-                    return null;
-                return (Master.client.Rest.GetChannelAsync(Origin_channel) as IMessageChannel).GetMessageAsync(Origin_msg).Result;
             }
 
             public int Rating()   //Calculates and returns rating

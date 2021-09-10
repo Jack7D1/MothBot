@@ -54,23 +54,7 @@ namespace MothBot.modules
                 await msg.Channel.SendMessageAsync("You do not have permission to manage the whitelist here! [Bot Operator]");
                 return;
             }
-            string keyword, args;
-            if (command.IndexOf(' ') == 0)
-                command = command.Substring(1);
-            if (command.Contains(' '))
-            {
-                keyword = command.Substring(0, command.IndexOf(' '));
-                args = command.Substring(command.IndexOf(' ') + 1);
-            }
-            else
-            {
-                keyword = command;
-                args = "";
-            }
-            args = args.ToLower();
-            keyword = keyword.ToLower();
-            if (keyword == "")
-                keyword = "commands";
+            Data.CommandSplitter(command, out string keyword, out string args);
 
             switch (keyword)
             {

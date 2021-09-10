@@ -23,7 +23,15 @@ namespace MothBot
 
             Logging.Log($"System rebooted at [{DateTime.UtcNow}] {args}");
             //Keep at bottom of init
-            new Master().MainAsync().GetAwaiter().GetResult();    //Start Runtime
+            try
+            {
+                new Master().MainAsync().GetAwaiter().GetResult();    //Start Runtime
+            }
+            catch (Exception e)
+            {
+                Logging.LogtoConsoleandFile($"**********\nPROGRAM CRASH: \n{e.Message}\n**********");
+                throw e;
+            }
         }
 
         private static async Task Client_MessageRecieved(SocketMessage msg)
@@ -40,7 +48,9 @@ namespace MothBot
                 }
                 catch (Exception ex)
                 {
-                    await msg.Channel.SendMessageAsync($"**Command Failed!** Error: \"{ex.Message}\"");
+                    string errmsg = $"**Command Failed!** Error: \"{ex.Message}\"";
+                    await msg.Channel.SendMessageAsync(errmsg);
+                    await Logging.LogtoConsoleandFileAsync(errmsg);
                 }
         }
 
@@ -58,19 +68,7 @@ namespace MothBot
             await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}][{msg.Author.Id}] said ({msg.Content}) in #{msg.Channel}{guildid}");
             await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
 
-            //Begin Command Parser
-            string command, keyword, args;
-            command = msg.Content.ToLower().Substring(Data.PREFIX.Length + 1); //We now have all text that follows the prefix.
-            if (command.Contains(' '))
-            {
-                keyword = command.Substring(0, command.IndexOf(' '));
-                args = command.Substring(command.IndexOf(' ') + 1);
-            }
-            else
-            {
-                keyword = command;
-                args = "";
-            }
+            Data.CommandSplitter(msg.Content.Substring($"{Data.PREFIX} ".Length), out string keyword, out string args);
 
             //It is extremely important that any free field directives like 'say' sanitize out role pings such as @everyone using ScrubAnyRolePings
             switch (keyword)

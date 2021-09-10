@@ -19,30 +19,24 @@ namespace MothBot.modules
 
         public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
 
-        public static string Chatterbot_GetBlacklistCommands()
+        public static void CommandSplitter(string command, out string keyword, out string args)
         {
-            string prefix = $"{PREFIX} utility blacklist";
-            return
-                "**Chatters Blacklist Management Commands:**\n" +
-                "```" +
-                $"{prefix} add       Adds an entry to the blacklist\n" +
-                $"{prefix} remove    Removes a matching entry from the blacklist\n" +
-                $"{prefix} list      Lists the current blacklist\n" +
-                "```";
-        }
-
-        public static string Chatterbot_GetVotingCommands()
-        {
-            string prefix = $"{PREFIX} chatter";
-            return
-                "**Voting Commands:**\n" +
-                $"Summary: There is a limited amount of chatters, by saying {prefix} good or {prefix} bad you can change the rating of the most recent chatter. Chatters with the lowest ratings are removed first when the list fills up.\n" +
-                "```" +
-                $"{prefix} clearvote    - Removes your vote.\n" +
-                $"{prefix} rating       - Returns the rating of the most recently said chatter\n" +
-                $"{prefix} myvote       - Tells you what you voted on the most recent chatter\n" +
-                $"{prefix} leaderboard  - Lists the top 3 highest rated chatters." +
-                "```";
+            if (command.IndexOf(' ') == 0)
+                command = command.Substring(1);
+            if (command.Contains(' '))
+            {
+                keyword = command.Substring(0, command.IndexOf(' '));
+                args = command.Substring(command.IndexOf(' ') + 1);
+            }
+            else
+            {
+                keyword = command;
+                args = "";
+            }
+            args = args.ToLower();
+            keyword = keyword.ToLower();
+            if (keyword == "")
+                keyword = "commands";
         }
 
         public static string Files_Read(string path)
