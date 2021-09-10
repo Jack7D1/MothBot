@@ -27,9 +27,11 @@ namespace MothBot.modules
             "data/debug:\n" +
            $"{Data.PREFIX} utility dumpdata\n" +
            $"{Data.PREFIX} utility dumplogs\n" +
+           $"{Data.PREFIX} utility listservers\n" +
+           $"{Data.PREFIX} utility whois\n" +
             "``````" +
             "dangerous:\n" +
-           $"{Data.PREFIX} utility ban [command]" +
+           $"{Data.PREFIX} utility ban [command]\n" +
            $"{Data.PREFIX} utility leaveserver [ID]\n" +
            $"{Data.PREFIX} utility shutdown\n" +
             "```";
