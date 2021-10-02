@@ -22,13 +22,13 @@ namespace MothBot.modules
 
         public static Task Log(string str)
         {
-            File.AppendAllText(PATH_LOGS, str);
+            File.AppendAllText(PATH_LOGS, $"{str}\n");
             return Task.CompletedTask;
         }
 
         public static async Task LogAsync(string str)
         {
-            await File.AppendAllTextAsync(PATH_LOGS, str);
+            await File.AppendAllTextAsync(PATH_LOGS, $"{str}\n");
         }
 
         public static Task LogtoConsoleandFile(string str)
