@@ -143,15 +143,6 @@ namespace MothBot
             }
         }
 
-        private Task Client_Disconnected(Exception arg)
-        {
-            //When this happens assume is discord heartbeat issue. Wait 10 secs and reconnect.
-            client.StopAsync();
-            Task.Delay(10000);
-            client.StartAsync();
-            return Task.CompletedTask;
-        }
-
         private async Task MainAsync()
         {
             client.MessageReceived += Client_MessageRecieved;
@@ -160,7 +151,6 @@ namespace MothBot
             client.MessageReceived += Portals.MessageRecieved;
             client.UserJoined += Whitelist.UserJoined;
             client.MessageReceived += Chatterbot.ChatterHandler;
-            client.Disconnected += Client_Disconnected;
             await client.LoginAsync(TokenType.Bot, File.ReadAllText(PATH_TOKEN));
 
             await Data.Program_SetStatus();
