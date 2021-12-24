@@ -29,9 +29,9 @@ namespace MothBot.modules
             }
             else
             {
-                byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
+                int[] rolls = DiceMaster(quantity, sides);
 
-                await channel.SendMessageAsync(StringBuilder(rolls, (sbyte)offset));
+                await channel.SendMessageAsync(StringBuilder(rolls, offset));
             }
         }
 
@@ -54,7 +54,7 @@ namespace MothBot.modules
             }
             else
             {
-                byte[] rolls = DiceMaster((byte)quantity, (byte)sides);
+                int[] rolls = DiceMaster(quantity, sides);
 
                 await channel.SendMessageAsync(StringBuilder(rolls, 0));
             }
@@ -89,23 +89,23 @@ namespace MothBot.modules
             }
         }
 
-        private static byte[] DiceMaster(byte quantity, byte sides)
+        private static int[] DiceMaster(int quantity, int sides)
         {
-            byte[] outresults = new byte[quantity];
-            for (byte i = 0; i < quantity; i++)
-                outresults[i] = (byte)Master.rand.Next(1, sides + 1);
+            int[] outresults = new int[quantity];
+            for (int i = 0; i < quantity; i++)
+                outresults[i] = Master.rand.Next(1, sides + 1);
             return outresults;
         }
 
-        private static string StringBuilder(byte[] results, sbyte offset)
+        private static string StringBuilder(int[] results, int offset)
         {
             string outstring = $"{results[0]}";
-            byte count = (byte)results.Length;
+            int count = results.Length;
             if (count == 1 && offset == 0)
                 return outstring;
 
-            ushort sum = results[0];
-            for (byte i = 1; i < count; i++)
+            int sum = results[0];
+            for (int i = 1; i < count; i++)
             {
                 outstring += $" + {results[i]}";
                 sum += results[i];

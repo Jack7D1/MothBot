@@ -14,12 +14,12 @@ namespace MothBot.modules
         public const string PATH_CHATTERS = "../data/chatters.json";
         public const string PATH_CHATTERS_BACKUP = "../resources/backupchatters.txt";
         public const string PATH_CHATTERS_BLACKLIST = "../data/blacklist.txt";
-        private const ushort CHATTERS_CHANCE_TO_CHAT = 192;
+        private const int CHATTERS_CHANCE_TO_CHAT = 192;
 
         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance), similar for CHANCE_TO_SAVE
-        private const ushort CHATTERS_CHANCE_TO_SAVE = 8;
+        private const int CHATTERS_CHANCE_TO_SAVE = 8;
 
-        private const ushort CHATTERS_MAX_COUNT = 2048;
+        private const int CHATTERS_MAX_COUNT = 2048;
         private static readonly List<string> blacklist = new List<string>();  //Contains strings that will be filtered out of chatters, such as discord invite links. Also used for filtering mature materials from bot output.
 
         private static readonly string blacklistCommands =
@@ -304,7 +304,7 @@ namespace MothBot.modules
                 return false;
 
             {
-                ushort uniqueChars = 0;
+                int uniqueChars = 0;
                 string clearChars = inStr.Replace(inStr[0].ToString(), "");     //One unique character deleted
                 if (clearChars.Length != 0)
                     uniqueChars++;
