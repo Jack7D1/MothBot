@@ -11,9 +11,9 @@ namespace MothBot.modules
 {
     internal static class Chatterbot
     {
-        public const string PATH_CHATTERS = "../../data/chatters.json";
-        public const string PATH_CHATTERS_BACKUP = "../../resources/backupchatters.txt";
-        public const string PATH_CHATTERS_BLACKLIST = "../../data/blacklist.txt";
+        public const string PATH_CHATTERS = "../data/chatters.json";
+        public const string PATH_CHATTERS_BACKUP = "../resources/backupchatters.txt";
+        public const string PATH_CHATTERS_BLACKLIST = "../data/blacklist.txt";
         private const ushort CHATTERS_CHANCE_TO_CHAT = 128;
 
         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance), similar for CHANCE_TO_SAVE
@@ -396,7 +396,7 @@ namespace MothBot.modules
             return places;
         }
 
-        private static Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
+        private static Task ReactionAdded(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
             IUser usr = Master.client.Rest.GetUserAsync(reaction.UserId).Result;
@@ -421,7 +421,7 @@ namespace MothBot.modules
             return Task.CompletedTask;
         }
 
-        private static Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel ch, SocketReaction reaction)
+        private static Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> ch, SocketReaction reaction)
         {
             IUserMessage msg = message.DownloadAsync().Result;
             IUser usr = Master.client.Rest.GetUserAsync(reaction.UserId).Result;

@@ -9,7 +9,7 @@ namespace MothBot.modules
 {
     internal static class Portals
     {
-        public const string PATH_PORTALS = "../../data/portals.json";
+        public const string PATH_PORTALS = "../data/portals.json";
         private static readonly List<Portal> portals = new List<Portal>();
 
         static Portals()

@@ -8,7 +8,7 @@ namespace MothBot.modules
 {
     internal static class Users
     {
-        public const string PATH_USERS = "../../data/users.json";
+        public const string PATH_USERS = "../data/users.json";
         private static readonly List<User> users = new List<User>();
 
         static Users()

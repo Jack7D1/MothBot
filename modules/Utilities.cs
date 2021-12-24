@@ -78,11 +78,11 @@ namespace MothBot.modules
                 //Data/debug
                 case "dumpdata":
                     {
-                        const string PATH_DATAZIP = "../../data.zip";
+                        const string PATH_DATAZIP = "../data.zip";
                         await src.Channel.SendMessageAsync("Zipping data files...");
                         if (File.Exists(PATH_DATAZIP))
                             File.Delete(PATH_DATAZIP);
-                        ZipFile.CreateFromDirectory("../../data/", PATH_DATAZIP, CompressionLevel.Optimal, false);
+                        ZipFile.CreateFromDirectory("../data/", PATH_DATAZIP, CompressionLevel.Optimal, false);
                         await src.Channel.SendMessageAsync("Uploading...");
                         await src.Channel.SendFileAsync(PATH_DATAZIP);
                             File.Delete(PATH_DATAZIP);

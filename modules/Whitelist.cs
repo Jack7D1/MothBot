@@ -8,7 +8,7 @@ namespace MothBot.modules
 {
     internal static class Whitelist
     {
-        public const string PATH_WHITELISTS = "../../data/whitelists.json";
+        public const string PATH_WHITELISTS = "../data/whitelists.json";
 
         private static readonly string COMMANDS = "**Whitelist Commands:**\n```" +
                     "Summary: The whitelist is used to prevent non whitelisted users from joining the current server. Whitelists can only be operated by server administrators.\n" +

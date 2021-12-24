@@ -7,7 +7,7 @@ namespace MothBot.modules
 {
     internal static class Logging
     {
-        public const string PATH_LOGS = "../../data/log.txt";
+        public const string PATH_LOGS = "../data/log.txt";
 
         static Logging()
         {

@@ -15,7 +15,7 @@ namespace MothBot.modules
         public const ulong MY_ID = 765202973495656538;
 
         //PATHS
-        public const string PATH_GAYBEE = "../../resources/yougaybee.png";
+        public const string PATH_GAYBEE = "../resources/yougaybee.png";
 
         public const string PREFIX = "ai";          //What should the bots attention prefix be? MUST be lowercase.
 

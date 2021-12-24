@@ -9,7 +9,7 @@ namespace MothBot
 {
     internal class Master
     {
-        public const string PATH_TOKEN = "../../data/token.txt";
+        public const string PATH_TOKEN = "../data/token.txt";
 
         //See data module for parameters
         public static DiscordSocketClient client = new DiscordSocketClient();
