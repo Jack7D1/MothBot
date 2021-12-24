@@ -14,7 +14,7 @@ namespace MothBot.modules
         public const string PATH_CHATTERS = "../data/chatters.json";
         public const string PATH_CHATTERS_BACKUP = "../resources/backupchatters.txt";
         public const string PATH_CHATTERS_BLACKLIST = "../data/blacklist.txt";
-        private const ushort CHATTERS_CHANCE_TO_CHAT = 128;
+        private const ushort CHATTERS_CHANCE_TO_CHAT = 192;
 
         //Value is an inverse, (1 out of CHANCE_TO_CHAT chance), similar for CHANCE_TO_SAVE
         private const ushort CHATTERS_CHANCE_TO_SAVE = 8;
