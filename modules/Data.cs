@@ -1,8 +1,5 @@
 ﻿using Discord;
-using System.Collections.Generic;
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MothBot.modules
 {

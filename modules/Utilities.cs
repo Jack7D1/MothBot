@@ -1,10 +1,5 @@
 ﻿using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
@@ -85,7 +80,7 @@ namespace MothBot.modules
                         ZipFile.CreateFromDirectory("../data/", PATH_DATAZIP, CompressionLevel.Optimal, false);
                         await src.Channel.SendMessageAsync("Uploading...");
                         await src.Channel.SendFileAsync(PATH_DATAZIP);
-                            File.Delete(PATH_DATAZIP);
+                        File.Delete(PATH_DATAZIP);
                     }
                     break;
 

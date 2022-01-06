@@ -1,9 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using MothBot.modules;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace MothBot
 {
@@ -66,7 +63,6 @@ namespace MothBot
                 guildid = $", {(msg.Channel as ITextChannel).Guild.Name} [{(msg.Channel as ITextChannel).GuildId}]";
 
             await Logging.LogtoConsoleandFileAsync($@"[{msg.Timestamp.UtcDateTime}][{msg.Author}][{msg.Author.Id}] said ({msg.Content}) in #{msg.Channel}{guildid}");
-            await Logging.LogtoConsoleandFileAsync($@"Message size: {msg.Content.Length}");
 
             Data.CommandSplitter(msg.Content.Substring($"{Data.PREFIX} ".Length), out string keyword, out string args);
 

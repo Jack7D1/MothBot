@@ -1,7 +1,4 @@
 ﻿using Discord;
-using System;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MothBot.modules
 {
@@ -17,34 +14,30 @@ namespace MothBot.modules
             searchTerm = (linkSearch + searchTerm).Replace(' ', '+');
             string webData = _webClient.GetStringAsync(searchTerm).Result, link = "";
             int linkPtr = -1;
-            int maxretries = 255;
-            for (int retries = 255; retries > 0; retries--)
+            int maxretries = 1024;
+            for (int retries = maxretries; retries > 0; retries--)
             {
-                string webDatatemp = webData;
-                int randNum = Master.rand.Next(1, 128);
                 bool EOF = false;
+                string webDatatemp = webData;
+                int randNum = Master.rand.Next(1, retries);
                 for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
                 {
                     linkPtr = webDatatemp.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
                     if (linkPtr == -1 || linkPtr + 7 >= webDatatemp.Length)
-                    {
+                    {    
                         EOF = true;
                         break;
                     }
                     link = webDatatemp.Substring(linkPtr + 31, 7);
                     webDatatemp = webDatatemp.Substring(linkPtr + 32);
                 }
-                if (EOF)
-                    break;
-                else if (CheckValid(link))
+                if (!EOF && CheckValid(link))
                 {
                     Console.WriteLine($"Image found, took {maxretries - retries} tries.");
                     return linkHeader + link + linkFooter;
                 }
                 else
                     webDatatemp = webDatatemp.Substring(linkPtr + 32);
-
-               
             }
              Console.WriteLine("No valid results found, returning null.");
                 return null;
