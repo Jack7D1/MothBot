@@ -1,4 +1,5 @@
 ﻿using Discord;
+using System.Text.RegularExpressions;
 
 namespace MothBot.modules
 {
@@ -12,35 +13,17 @@ namespace MothBot.modules
         public static string ImageSearch(string searchTerm)   //Finds a random imgur photo that matches search term, returns null if no valid photos can be found.
         {
             searchTerm = (linkSearch + searchTerm).Replace(' ', '+');
-            string webData = _webClient.GetStringAsync(searchTerm).Result, link = "";
-            int linkPtr = -1;
-            int maxretries = 1024;
-            for (int retries = maxretries; retries > 0; retries--)
+            string webData = _webClient.GetStringAsync(searchTerm).Result, link;
+            MatchCollection results = Regex.Matches(webData, "<img alt=\"\" src=\"\\/\\/i\\.imgur\\.com\\/(\\w{7})");
+            if (results.Count == 0) { return null; }
+            int retries = 100;
+            do
             {
-                bool EOF = false;
-                string webDatatemp = webData;
-                int randNum = Master.rand.Next(1, retries);
-                for (int i = 0; i < randNum; i++)   //Get random image link. (Links can start breaking if method cant find enough images!)
-                {
-                    linkPtr = webDatatemp.IndexOf(@"<img alt="""" src=""//i.imgur.com/");
-                    if (linkPtr == -1 || linkPtr + 7 >= webDatatemp.Length)
-                    {    
-                        EOF = true;
-                        break;
-                    }
-                    link = webDatatemp.Substring(linkPtr + 31, 7);
-                    webDatatemp = webDatatemp.Substring(linkPtr + 32);
-                }
-                if (!EOF && CheckValid(link))
-                {
-                    Console.WriteLine($"Image found, took {maxretries - retries} tries.");
-                    return linkHeader + link + linkFooter;
-                }
-                else
-                    webDatatemp = webDatatemp.Substring(linkPtr + 32);
-            }
-             Console.WriteLine("No valid results found, returning null.");
-                return null;
+                link = results[Master.rand.Next(0, results.Count)].Groups[1].Value;
+                retries--;
+            } while (!CheckValid(link) && retries > 0);
+            if (retries > 0) { return linkHeader + link + linkFooter; }
+            return null;
         }
 
         public static async Task ImageSearchHandlerAsync(IMessageChannel channel, string searchquery)

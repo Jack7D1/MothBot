@@ -27,7 +27,6 @@ namespace MothBot
             catch (Exception e)
             {
                 Logging.LogtoConsoleandFile($"**********\nPROGRAM CRASH: \n{e.Message}\n**********");
-                throw e;
             }
         }
 
